@@ -136,18 +136,80 @@ retakeBtn.addEventListener('click', function () {
     confirmBtn.classList.add('d-none');
 });
 
+// confirmBtn.addEventListener('click', function () {
+//     const photoDataUrl = canvas.toDataURL('image/png');
+//     const photoDataBase64 = photoDataUrl.replace(/^data:image\/(png|jpg);base64,/, "");
+
+//     // console.log(photoDataBase64);
+//     console.log(currentLatitude);
+//     console.log(currentLongitude);
+//     console.log(currentPhotoType);
+//     cameraPopup.classList.remove('visible');
+//     if (currentPhotoType == 'on') {
+//         toggleInput.checked = true;
+//     } else {
+//         toggleInput.checked = false;
+//     }
+// });
+
+
 confirmBtn.addEventListener('click', function () {
     const photoDataUrl = canvas.toDataURL('image/png');
     const photoDataBase64 = photoDataUrl.replace(/^data:image\/(png|jpg);base64,/, "");
 
-    // console.log(photoDataBase64);
-    console.log(currentLatitude);
-    console.log(currentLongitude);
-    console.log(currentPhotoType);
+    const requestData = {
+        latitude: currentLatitude,
+        longitude: currentLongitude,
+        photo: photoDataBase64,
+        type: currentPhotoType, // 'on' or 'off'
+        datetime: new Date().toISOString(),
+        _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    };
+
+    // Send data to the backend
+    $.ajax({
+        url: '/duty-status',
+        type: 'POST',
+        data: requestData,
+        success: function (response) {
+            console.log(response.message);
+
+            // Update the toggle state and local storage
+            toggleInput.checked = currentPhotoType === 'on';
+            localStorage.setItem('dutyStatus', currentPhotoType);
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+            alert('An error occurred while updating duty status.');
+        }
+    });
+
+    // Close the camera popup immediately
     cameraPopup.classList.remove('visible');
-    if (currentPhotoType == 'on') {
-        toggleInput.checked = true;
-    } else {
-        toggleInput.checked = false;
-    }
 });
+
+// On page load, fetch the current state
+document.addEventListener('DOMContentLoaded', function () {
+    const storedStatus = localStorage.getItem('dutyStatus');
+
+    if (storedStatus) {
+        // Use stored status for immediate display
+        toggleInput.checked = storedStatus === 'on';
+    }
+
+    // Fetch the latest state from the server
+    $.ajax({
+        url: '/duty-status',
+        type: 'GET',
+        success: function (response) {
+            toggleInput.checked = response.type === 'on';
+
+            // Update local storage with the latest status
+            localStorage.setItem('dutyStatus', response.type);
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
+});
+
