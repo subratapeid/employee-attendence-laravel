@@ -111,6 +111,7 @@
                 display: block;
             }
 
+
             button,
             select,
             input {
@@ -142,6 +143,14 @@
                 height: 20px;
                 border-radius: 3px;
                 display: inline-block;
+            }
+
+            /* Hide the tooltip for empty cells (cells without data-info) */
+            #calendar #dates div.empty:hover::after,
+            #calendar #dates div:not([data-info]):empty:hover::after {
+                content: none;
+                display: none;
+                cursor: not-allowed;
             }
         </style>
     </head>
@@ -288,19 +297,23 @@
                         cell.classList.add('attended');
                         cell.setAttribute('data-info', 'Attended');
                     }
-
                     // Increment Saturday count if the day is Saturday
                     if (date.getDay() === 6) {
                         saturdayCount++;
                     }
 
                     calendar_dates.append(cell);
+                    // If there's no event data, add the 'empty' class
+                    if (!cell.hasAttribute('data-info')) {
+                        cell.classList.add('empty');
+                    }
                 }
             }
 
             function createCell(content = '') {
                 let cell = document.createElement('div');
                 cell.textContent = content;
+
                 return cell;
             }
 
