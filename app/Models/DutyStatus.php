@@ -11,9 +11,13 @@ class DutyStatus extends Model
 
     protected $fillable = [
         'user_id',
-        'latitude',
-        'longitude',
-        'photo',
-        'type',
+        'start_latitude',
+        'start_longitude',
+        'start_photo',
+        'end_latitude',
+        'end_longitude',
+        'end_photo',
+        'end_time',
+        'end_channel',
     ];
 }

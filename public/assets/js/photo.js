@@ -72,6 +72,30 @@ function openCaptureModal(type) {
     canvas.style.display = 'none';
 };
 
+// captureBtn.addEventListener('click', function () {
+//     // toggleCameraBtn.classList.add('d-none');
+//     captureBtn.classList.add('d-none');
+//     retakeBtn.classList.remove('d-none');
+//     confirmBtn.classList.remove('d-none');
+//     confirmBtn.disabled = true;
+
+//     const context = canvas.getContext('2d');
+//     canvas.width = video.videoWidth;
+//     canvas.height = video.videoHeight;
+//     context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+//     const now = new Date(); // Get the current local date and time
+//     console.log(now);
+
+//     const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+//     const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+
+//     const formattedDate = now.toLocaleDateString('en-IN', dateOptions);
+//     const formattedTime = now.toLocaleTimeString('en-IN', timeOptions);
+
+//     drawOnCanvas(formattedDate, formattedTime);
+// });
+
+
 captureBtn.addEventListener('click', function () {
     // toggleCameraBtn.classList.add('d-none');
     captureBtn.classList.add('d-none');
@@ -83,16 +107,27 @@ captureBtn.addEventListener('click', function () {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-    const now = new Date(); // Get the current local date and time
 
-    const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
-    const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+    // Fetch current time from the backend
+    fetch('/current-time')
+        .then((response) => response.json())
+        .then((data) => {
+            const serverTime = new Date(data.current_time); // Parse server time
+            // console.log("Server Time:", serverTime);
 
-    const formattedDate = now.toLocaleDateString('en-IN', dateOptions);
-    const formattedTime = now.toLocaleTimeString('en-IN', timeOptions);
+            const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+            const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
 
-    drawOnCanvas(formattedDate, formattedTime);
+            const formattedDate = serverTime.toLocaleDateString('en-IN', dateOptions);
+            const formattedTime = serverTime.toLocaleTimeString('en-IN', timeOptions);
+
+            drawOnCanvas(formattedDate, formattedTime);
+        })
+        .catch((error) => {
+            console.error("Error fetching server time:", error);
+        });
 });
+
 
 function drawOnCanvas(dateString, timeString) {
     const context = canvas.getContext('2d');
@@ -176,7 +211,6 @@ confirmBtn.addEventListener('click', function () {
 
             // Update the toggle state and local storage
             toggleInput.checked = currentPhotoType === 'on';
-            localStorage.setItem('dutyStatus', currentPhotoType);
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseText);
@@ -188,28 +222,157 @@ confirmBtn.addEventListener('click', function () {
     cameraPopup.classList.remove('visible');
 });
 
-// On page load, fetch the current state
-document.addEventListener('DOMContentLoaded', function () {
-    const storedStatus = localStorage.getItem('dutyStatus');
+// // On page load, fetch the current state
+// document.addEventListener('DOMContentLoaded', function () {
+//     const storedStatus = localStorage.getItem('dutyStatus');
 
-    if (storedStatus) {
-        // Use stored status for immediate display
-        toggleInput.checked = storedStatus === 'on';
-    }
+//     if (storedStatus) {
+//         // Use stored status for immediate display
+//         toggleInput.checked = storedStatus === 'on';
+//     }
+
+//     // Fetch the latest state from the server
+//     $.ajax({
+//         url: '/duty-status',
+//         type: 'GET',
+//         success: function (response) {
+//             toggleInput.checked = response.type === 'on';
+//             console.log(response);
+
+//             // Update local storage with the latest status
+//             localStorage.setItem('dutyStatus', response.type);
+//         },
+//         error: function (xhr, status, error) {
+//             console.error(xhr.responseText);
+//         }
+//     });
+// });
+
+
+
+
+// JavaScript Logic
+
+document.addEventListener('DOMContentLoaded', function () {
+    const toggleInput = document.getElementById('toggle'); // Correct input ID
 
     // Fetch the latest state from the server
     $.ajax({
         url: '/duty-status',
         type: 'GET',
         success: function (response) {
-            toggleInput.checked = response.type === 'on';
+            console.log(response);
 
-            // Update local storage with the latest status
-            localStorage.setItem('dutyStatus', response.type);
+            if (response.type === 'unresolved') {
+                // Show the popup for unresolved duty
+                showUnresolvedDutyPopup(response.unresolved_duty);
+            } else {
+                // Update the toggle based on the current status
+                toggleInput.checked = response.type === 'on';
+
+            }
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseText);
         }
     });
 });
+
+// Function to show the unresolved duty popup
+function showUnresolvedDutyPopup(unresolvedDuty) {
+    // Create the popup HTML
+    const popup = document.createElement('div');
+    popup.id = 'unresolvedDutyPopup';
+    popup.classList.add('popup-overlay'); // Optional CSS class for styling
+    popup.innerHTML = `
+        <div class="unresolved-popup-content">
+            <h2>Unresolved Duty</h2>
+            <p>You have an unresolved duty from <strong>${unresolvedDuty.created_at}</strong>.</p>
+            <p><img src="${unresolvedDuty.start_photo}" alt="Start Photo" style="max-width: 100%;"></p>
+
+            <form id="resolveDutyForm">
+        <label for="manualLogoutTime">Enter Logout Time</label>
+        <div class="custom-time-input">
+            <!-- Hour Dropdown -->
+            <select id="hours" class="time-dropdown" name="hours">
+                <option value="" disabled selected>Hour</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+
+            <!-- Minutes Dropdown -->
+            <select id="minutes" class="time-dropdown" name="minutes">
+                <option value="" disabled selected>Minutes</option>
+                <option value="00">00</option>
+                <option value="15">15</option>
+                <option value="30">30</option>
+                <option value="45">45</option>
+            </select>
+
+            <!-- AM/PM Dropdown -->
+            <select id="ampm" class="time-dropdown" name="ampm">
+                <option value="" disabled selected>AM/PM</option>
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+            </select>
+        </div>
+        <button type="submit" class="submit-btn">Submit</button>
+    </form>
+</div>
+        </div>
+    `;
+
+
+    // Append the popup to the body
+    document.body.appendChild(popup);
+    const timeform = document.getElementById('resolveDutyForm');
+    timeform.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        // Get values from dropdowns
+        const hour = document.getElementById('hours').value;
+        const minutes = document.getElementById('minutes').value;
+        const ampm = document.getElementById('ampm').value;
+
+        // Validate if all dropdowns are selected
+        if (!hour || !minutes || !ampm) {
+            alert('Please select all fields: Hour, Minutes, and AM/PM.');
+            return;
+        }
+
+        // Format the time to HH:mm format
+        const manualLogoutTime = `${hour}:${minutes} ${ampm}`;
+
+        $.ajax({
+            url: '/resolve-duty',
+            type: 'POST',
+            data: {
+                manual_logout_time: manualLogoutTime,
+                type: 'off',
+                _token: document.querySelector('meta[name="csrf-token"]').content, // CSRF token for security
+            },
+            success: function (response) {
+                alert(response.message);
+                // Remove the popup
+                document.body.removeChild(popup);
+                // Reload the page or update the status
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                alert('Error: ' + xhr.responseText);
+            }
+        });
+    });
+}
+
 

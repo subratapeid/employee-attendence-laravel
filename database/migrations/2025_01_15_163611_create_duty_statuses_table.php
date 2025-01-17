@@ -13,10 +13,14 @@ return new class extends Migration {
         Schema::create('duty_statuses', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->decimal('latitude', 10, 8);
-            $table->decimal('longitude', 11, 8);
-            $table->text('photo');
-            $table->enum('type', ['on', 'off']);
+            $table->decimal('start_latitude', 10, 8);
+            $table->decimal('start_longitude', 11, 8);
+            $table->text('start_photo');
+            $table->decimal('end_latitude', 10, 8)->nullable();
+            $table->decimal('end_longitude', 11, 8)->nullable();
+            $table->text('end_photo')->nullable();
+            $table->timestamp('end_time')->nullable();
+            $table->text('end_channel')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
