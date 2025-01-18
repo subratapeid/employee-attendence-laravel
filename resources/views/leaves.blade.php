@@ -1,32 +1,7 @@
 <x-app-layout>
     <style>
         .container {
-            padding: 20px;
-        }
-
-        .balance-section {
-            display: flex;
-            justify-content: space-between;
-            background-color: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 15px;
-        }
-
-        .balance-section div {
-            text-align: center;
-        }
-
-        .balance-section div p {
-            margin: 5px 0;
-            font-size: 14px;
-        }
-
-        .balance-section div span {
-            font-size: 24px;
-            font-weight: bold;
-            color: #27ae60;
+            padding: 10px;
         }
 
         .transactions {
@@ -34,11 +9,16 @@
             padding: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            min-height: 400px;
+            overflow-x: auto;
+            /* Enable horizontal scrolling */
         }
 
         .transactions table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 600px;
+            /* Ensure minimum width for the table */
         }
 
         .transactions th,
@@ -46,6 +26,8 @@
             text-align: left;
             padding: 10px;
             border-bottom: 1px solid #ddd;
+            white-space: nowrap;
+            /* Prevent text from wrapping */
         }
 
         .transactions th {
@@ -60,6 +42,7 @@
             font-size: 12px;
             text-align: center;
         }
+
 
         /* Popup Styles */
         .leave-popup {
@@ -126,68 +109,120 @@
             border-radius: 5px;
             cursor: pointer;
         }
+    </style>
 
-        .apply-leave-btn {
-            background-color: #e74c3c;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            float: right;
+    <style>
+        .leave-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        .leave-card .leave-type {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            width: 80px;
+            text-align: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .leave-card .btn {
+            margin-left: auto;
+        }
+
+        @media (max-width: 768px) {
+            .leave-card {
+                flex-direction: row;
+                font-size: 15px;
+            }
+
+
+            .leave-card .btn {
+                font-size: 15px;
+                margin-left: 0;
+                align-self: center;
+            }
         }
     </style>
     <div class="pagetitle">
         <h1>Leaves</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                 <li class="breadcrumb-item active">Leaves</li>
             </ol>
         </nav>
     </div>
 
     <section class="section dashboard">
-        <div class="container">
-            <div class="balance-section">
-                <div>
-                    <p>CL</p>
-                    <span>3</span>
-                </div>
-                <div>
-                    <p>PL</p>
-                    <span>42</span>
-                </div>
-                <button class="apply-leave-btn" id="applyBtn" onclick="openPopup()">Apply Leave</button>
-            </div>
 
-            <h4>Leave Transactions</h4>
-            <div class="transactions">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Type</th>
-                            <th>Duration</th>
-                            <th>Days</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>EL</td>
-                            <td>02-11-2024 - 02-11-2024</td>
-                            <td>1</td>
-                            <td><span class="status">Approved</span></td>
-                        </tr>
-                        <tr>
-                            <td>CL</td>
-                            <td>31-10-2024 - 31-10-2024</td>
-                            <td>1</td>
-                            <td><span class="status">Approved</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+        {{-- <div class="container mt-4"> --}}
+        <div class="leave-card">
+            <div class="leave-type">
+                <span>CL</span>
+                <span>10/25</span>
             </div>
+            <div class="leave-type">
+                <span>PL</span>
+                <span>0/12</span>
+            </div>
+            <div class="leave-type">
+                <span>ML</span>
+                <span>2/70</span>
+            </div>
+            <button class="btn btn-primary" id="applyBtn" onclick="openPopup()">Apply Leave</button>
+        </div>
+
+
+
+
+
+        {{-- <div class="container"> --}}
+        <div class="transactions mt-4">
+            <h4>Leave Transactions</h4>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>SL No</th>
+                        <th>Type</th>
+                        <th>Duration</th>
+                        <th>Days</th>
+                        <th>Remarks</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>EL</td>
+                        <td>02-11-2024 - 02-11-2024</td>
+                        <td>1 Day</td>
+                        <td>Personal</td>
+                        <td><span class="status">Approved</span></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>CL</td>
+                        <td>31-10-2024 - 31-10-2024</td>
+                        <td>3 Days</td>
+                        <td>Personal</td>
+                        <td><span class="status">Approved</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         </div>
 
         <!-- Popup -->

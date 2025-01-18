@@ -10,11 +10,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('company_leaves', function (Blueprint $table) {
-            $table->id(); // Primary key
-            $table->date('leave_date'); // Date of the leave
-            $table->text('reason'); // Reason for the leave
-            $table->timestamps(); // created_at and updated_at columns for tracking
+        Schema::create('offices', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->decimal('latitude', 10, 8);
+            $table->decimal('longitude', 11, 8);
+            $table->timestamps();
         });
 
     }
@@ -24,6 +25,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('company_leaves');
+        Schema::dropIfExists('offices');
+
     }
 };

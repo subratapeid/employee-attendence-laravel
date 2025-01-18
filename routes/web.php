@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\ProfileController;
@@ -48,6 +49,9 @@ Route::get('/attendance/overtime', [AttendanceController::class, 'getOvertime'])
 
 // get leave Data for Calenders
 Route::get('/attendance/data', [LeavesController::class, 'getCalendarData']);
+
+Route::get('/activity', [ActivityController::class, 'getDuties'])->name('duties.get');
+Route::get('/activity/available-options', [ActivityController::class, 'getAvailableOptions']);
 
 
 Route::middleware('auth')->group(function () {

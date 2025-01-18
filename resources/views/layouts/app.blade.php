@@ -114,7 +114,6 @@
     <script src="assets/js/main.js"></script>
     <script src="assets/js/toggle.js"></script>
     <script src="assets/js/photo.js"></script>
-    <script src="assets/js/getDashboardData.js"></script>
 </body>
 
 </html>

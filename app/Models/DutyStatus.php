@@ -20,4 +20,8 @@ class DutyStatus extends Model
         'end_time',
         'end_channel',
     ];
+    protected $casts = [
+        'created_at' => 'datetime',
+        'end_time' => 'datetime',
+    ];
 }
