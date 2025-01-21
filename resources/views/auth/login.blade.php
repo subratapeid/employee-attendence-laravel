@@ -35,7 +35,7 @@
                                             <label for="yourUsername" class="form-label">Email</label>
                                             <div class="input-group has-validation">
                                                 <span class="input-group-text" id="inputGroupPrepend"><i
-                                                        class="bx bxs-user"></i></span>
+                                                        class="fas fa-envelope"></i></span>
                                                 <input type="text" name="email" class="form-control"
                                                     id="yourUsername" placeholder="enter registered email id" required>
                                                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
@@ -56,19 +56,25 @@
                                         </div>
 
 
-                                        <div class="col-12">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="remember"
-                                                    value="true" id="rememberMe">
-                                                <label class="form-check-label" for="rememberMe">Remember me</label>
+                                        <div class="col-12 pt-2 mb-2">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="remember"
+                                                        value="true" id="rememberMe">
+                                                    <label class="form-check-label" for="rememberMe">Remember me</label>
+                                                </div>
+                                                <p class="small mb-0">
+                                                    <a href="{{ route('password.request') }}">Forgot Password?</a>
+                                                </p>
                                             </div>
                                         </div>
+
                                         <div class="col-12">
                                             <button class="btn btn-primary w-100" type="submit">Login</button>
                                         </div>
                                         <div class="col-12">
-                                            <p class="small mb-0">Forget Password? <a
-                                                    href="{{ route('password.request') }}">Reset
+                                            <p class="small mb-0">Don't have account? <a
+                                                    href="{{ route('register') }}">Register
                                                     Now</a></p>
                                         </div>
                                     </form>

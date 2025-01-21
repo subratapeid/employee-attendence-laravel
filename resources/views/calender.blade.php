@@ -300,7 +300,7 @@
             function fetchCalendarData(year, month) {
                 return new Promise((resolve, reject) => {
                     $.ajax({
-                        url: '/attendance/data', // Adjust as per route
+                        url: '/attendance/data',
                         method: 'GET',
                         data: {
                             year: year,
@@ -394,10 +394,9 @@
                     }
 
                     // Check for employee leaves
-                    let employeeLeave = calendarData.employeeLeaves.find(item => item.leave_date === dateStr);
-                    if (employeeLeave) {
+                    if (calendarData.employeeLeaves.includes(dateStr)) {
                         cell.classList.add('employee-leave');
-                        cell.setAttribute('data-info', `Absent: ${employeeLeave.leave_type}`);
+                        cell.setAttribute('data-info', 'Absent');
                     }
 
                     // Check for attendance

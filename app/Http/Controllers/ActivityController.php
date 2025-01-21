@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DutyStatus;
 use App\Models\Office;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ActivityController extends Controller
 {
@@ -13,6 +14,7 @@ class ActivityController extends Controller
         // Get current month and year if not provided
         $month = $request->get('month', now()->month);
         $year = $request->get('year', now()->year);
+
         // Fetch the fixed office location
         $office = Office::first(); // Assuming there's only one office
 
@@ -56,7 +58,60 @@ class ActivityController extends Controller
 
     private function getLocation($latitude, $longitude)
     {
-        return $latitude && $longitude ? sprintf('%.2f, %.2f', $latitude, $longitude) : 'Unknown';
+        if (!$latitude || !$longitude) {
+            return 'Unknown';
+        }
+
+        // Check if the location is already cached
+        $cacheKey = "location_{$latitude}_{$longitude}";
+        $cachedLocation = Cache::get($cacheKey);
+
+        if ($cachedLocation) {
+            return $cachedLocation;
+        }
+
+        // Fetch location from OpenCage API
+        $apiKey = '1c26876625af485dbcdb8f8200f31ba7'; // Replace with your actual API key
+        $url = sprintf(
+            'https://api.opencagedata.com/geocode/v1/json?q=%.6f,%.6f&key=%s',
+            $latitude,
+            $longitude,
+            $apiKey
+        );
+
+        $response = file_get_contents($url);
+
+        if ($response) {
+            $data = json_decode($response, true);
+
+            if (!empty($data['results'][0]['formatted'])) {
+                $location = $data['results'][0]['formatted'];
+
+                // Remove unwanted parts
+                $location = $this->sanitizeLocation($location);
+
+                // Cache the location for 30 days
+                Cache::put($cacheKey, $location, now()->addDays(30));
+
+                return $location;
+            }
+        }
+
+        return 'Location not found';
+    }
+
+
+
+    private function sanitizeLocation($location)
+    {
+        // Remove "Unnamed Road"
+        $location = preg_replace('/Unnamed Road,? ?/i', '', $location);
+
+        // Remove everything after the first occurrence of a hyphen
+        $location = preg_replace('/-\s?.*/', '', $location);
+
+        // Trim any trailing commas or whitespace
+        return trim($location, ', ');
     }
 
     private function calculateDisparity($startLat, $startLng, $officeLat, $officeLng)
@@ -74,8 +129,13 @@ class ActivityController extends Controller
             sin($dLng / 2) * sin($dLng / 2);
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
         $distance = $earthRadius * $c; // Distance in kilometers
-
-        return sprintf('%.2f km', $distance);
+        $allowedDistance = env('OFFICE_RADIUS_KM', 0.5);
+        // Check if distance is within 1 km
+        if ($distance <= $allowedDistance) {
+            return 'Office';
+        } else {
+            return 'Outside Office';
+        }
     }
 
 
@@ -85,7 +145,15 @@ class ActivityController extends Controller
             ['value' => 1, 'label' => 'January'],
             ['value' => 2, 'label' => 'February'],
             ['value' => 3, 'label' => 'March'],
-            // Add all months here
+            ['value' => 4, 'label' => 'April'],
+            ['value' => 5, 'label' => 'May'],
+            ['value' => 6, 'label' => 'June'],
+            ['value' => 7, 'label' => 'July'],
+            ['value' => 8, 'label' => 'August'],
+            ['value' => 9, 'label' => 'September'],
+            ['value' => 10, 'label' => 'October'],
+            ['value' => 11, 'label' => 'November'],
+            ['value' => 12, 'label' => 'December'],
         ];
 
         $years = DutyStatus::selectRaw('YEAR(created_at) as year')
@@ -95,6 +163,4 @@ class ActivityController extends Controller
 
         return response()->json(['months' => $months, 'years' => $years]);
     }
-
-
 }

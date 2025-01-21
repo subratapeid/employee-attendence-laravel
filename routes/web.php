@@ -1,12 +1,13 @@
 <?php
 
 use App\Http\Controllers\ActivityController;
-use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\LeavesController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CalenderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DutyStatusController;
 use App\Http\Controllers\DateTimeController;
+use App\Http\Controllers\UserImportController;
 
 
 Route::get('/', function () {
@@ -38,20 +39,25 @@ Route::post('/resolve-duty', [DutyStatusController::class, 'resolveUnresolvedDut
 Route::get('/duty-status', [DutyStatusController::class, 'getStatus']);
 
 // get statics data
-Route::get('/dashboard/data', [AttendanceController::class, 'getDashboardData']);
-Route::get('/attendance/hours', [AttendanceController::class, 'getTotalWorkingHours']);
-Route::get('/attendance/count', [AttendanceController::class, 'getAttendanceCount']);
-Route::get('/attendance/leave', [AttendanceController::class, 'getTotalLeaves']);
-Route::get('/attendance/late-arrival', [AttendanceController::class, 'getLateArrivals']);
-Route::get('/attendance/early-left', [AttendanceController::class, 'getEarlyDepartures']);
-Route::get('/attendance/overtime', [AttendanceController::class, 'getOvertime']);
+Route::get('/dashboard/data', [DashboardController::class, 'getDashboardData']);
+Route::get('/attendance/hours', [DashboardController::class, 'getTotalWorkingHours']);
+Route::get('/attendance/count', [DashboardController::class, 'getAttendanceCount']);
+Route::get('/attendance/leave', [DashboardController::class, 'getTotalLeaves']);
+Route::get('/attendance/late-arrival', [DashboardController::class, 'getLateArrivals']);
+Route::get('/attendance/early-left', [DashboardController::class, 'getEarlyDepartures']);
+Route::get('/attendance/overtime', [DashboardController::class, 'getOvertime']);
 
 
 // get leave Data for Calenders
-Route::get('/attendance/data', [LeavesController::class, 'getCalendarData']);
+Route::get('/attendance/data', [CalenderController::class, 'getCalendarData']);
 
 Route::get('/activity', [ActivityController::class, 'getDuties'])->name('duties.get');
 Route::get('/activity/available-options', [ActivityController::class, 'getAvailableOptions']);
+
+// Create User
+Route::get('/user-import', [UserImportController::class, 'index'])->name('user.import');
+Route::post('/user-import', [UserImportController::class, 'importUsers'])->name('user.import.store');
+Route::get('/user-import/progress', [UserImportController::class, 'getProgress'])->name('user.import.progress');
 
 
 Route::middleware('auth')->group(function () {

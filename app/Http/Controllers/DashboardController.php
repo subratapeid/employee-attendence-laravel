@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CompanyLeave;
 use Illuminate\Http\Request;
 use App\Models\Attendance;
 use Carbon\Carbon;
 
-class AttendanceController extends Controller
+class DashboardController extends Controller
 {
     public function getTotalWorkingHours(Request $request)
     {
@@ -118,11 +119,68 @@ class AttendanceController extends Controller
     }
 
 
-    // get leave count
+    // // get leave count
+    // public function getTotalLeaves(Request $request)
+    // {
+    //     $filter = $request->input('filter', 'this_week'); // Default filter is 'this_week'
+    //     $userId = auth()->id(); // Assuming the user is authenticated
+
+    //     // Get the start and end dates based on the filter
+    //     $startDate = null;
+    //     $endDate = Carbon::now();
+
+    //     switch ($filter) {
+    //         case 'this_week':
+    //             $startDate = Carbon::now()->startOfWeek();
+    //             break;
+
+    //         case 'this_month':
+    //             $startDate = Carbon::now()->startOfMonth();
+    //             break;
+
+    //         case 'this_year':
+    //             $startDate = Carbon::now()->startOfYear();
+    //             break;
+
+    //         default:
+    //             return response()->json(['error' => 'Invalid filter'], 400);
+    //     }
+
+    //     // Generate an array of dates between start and end dates
+    //     $dates = [];
+    //     $currentDate = $startDate->copy();
+    //     while ($currentDate <= $endDate) {
+    //         $dates[] = $currentDate->format('Y-m-d');
+    //         $currentDate->addDay();
+    //     }
+
+    //     // Count the days that have no attendance records for the user
+    //     $leaveCount = 0;
+    //     foreach ($dates as $date) {
+    //         $attendanceRecord = Attendance::where('user_id', $userId)
+    //             ->whereDate('created_at', $date)
+    //             ->first();
+
+    //         if (!$attendanceRecord) {
+    //             $leaveCount++; // Increment leave count if no attendance record is found
+    //         }
+    //     }
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'leave_count' => $leaveCount,
+    //     ]);
+    // }
+
+
+    // Get leave count
     public function getTotalLeaves(Request $request)
     {
         $filter = $request->input('filter', 'this_week'); // Default filter is 'this_week'
         $userId = auth()->id(); // Assuming the user is authenticated
+
+        // Get the application start date from .env
+        $appStartDate = Carbon::parse(env('APP_START_DATE', '2025-01-01'));
 
         // Get the start and end dates based on the filter
         $startDate = null;
@@ -145,6 +203,11 @@ class AttendanceController extends Controller
                 return response()->json(['error' => 'Invalid filter'], 400);
         }
 
+        // Ensure the start date is not before the application start date
+        if ($startDate < $appStartDate) {
+            $startDate = $appStartDate;
+        }
+
         // Generate an array of dates between start and end dates
         $dates = [];
         $currentDate = $startDate->copy();
@@ -153,9 +216,27 @@ class AttendanceController extends Controller
             $currentDate->addDay();
         }
 
+        // Remove Sundays and 2nd & 4th Saturdays
+        $filteredDates = array_filter($dates, function ($date) {
+            $carbonDate = Carbon::parse($date);
+            $dayOfWeek = $carbonDate->dayOfWeek;
+            $weekOfMonth = ceil($carbonDate->day / 7);
+
+            // Exclude Sundays (dayOfWeek = 0) and 2nd & 4th Saturdays (dayOfWeek = 6)
+            return !($dayOfWeek == 0 || ($dayOfWeek == 6 && ($weekOfMonth == 2 || $weekOfMonth == 4)));
+        });
+
+        // Fetch company leave dates from the database
+        $companyLeaves = CompanyLeave::whereBetween('leave_date', [$startDate, $endDate])
+            ->pluck('leave_date')
+            ->toArray();
+
+        // Remove company leaves from the filtered dates
+        $availableDates = array_diff($filteredDates, $companyLeaves);
+
         // Count the days that have no attendance records for the user
         $leaveCount = 0;
-        foreach ($dates as $date) {
+        foreach ($availableDates as $date) {
             $attendanceRecord = Attendance::where('user_id', $userId)
                 ->whereDate('created_at', $date)
                 ->first();
@@ -170,6 +251,7 @@ class AttendanceController extends Controller
             'leave_count' => $leaveCount,
         ]);
     }
+
 
 
     public function getLateArrivals(Request $request)
@@ -289,6 +371,60 @@ class AttendanceController extends Controller
     }
 
     // Get Overtime duty
+    // public function getOvertime(Request $request)
+    // {
+    //     $filter = $request->get('filter', 'this_week');
+
+    //     // Determine the start and end dates for the filter
+    //     $startDate = Carbon::now()->startOfWeek();
+    //     $endDate = Carbon::now()->endOfWeek();
+
+    //     if ($filter === 'this_month') {
+    //         $startDate = Carbon::now()->startOfMonth();
+    //         $endDate = Carbon::now()->endOfMonth();
+    //     } elseif ($filter === 'this_year') {
+    //         $startDate = Carbon::now()->startOfYear();
+    //         $endDate = Carbon::now()->endOfYear();
+    //     } elseif ($filter === 'custom') {
+    //         $startDate = Carbon::parse($request->get('start_date'));
+    //         $endDate = Carbon::parse($request->get('end_date'));
+    //     }
+
+    //     // Fetch attendance records within the date range
+    //     $attendanceRecords = Attendance::where('user_id', auth()->id())
+    //         ->whereDate('created_at', '>=', $startDate)
+    //         ->whereDate('created_at', '<=', $endDate)
+    //         ->get();
+
+    //     $totalOvertimeMinutes = 0;
+    //     $standardDutyMinutes = 8 * 60 + 30; // 8 hours 30 minutes in minutes
+
+    //     foreach ($attendanceRecords as $record) {
+    //         $startTime = Carbon::parse($record->created_at);
+    //         $endTime = Carbon::parse($record->end_time);
+
+    //         // Calculate total worked minutes
+    //         $workedMinutes = $startTime->diffInMinutes($endTime);
+
+    //         // Calculate overtime only if worked minutes exceed standard duty minutes
+    //         if ($workedMinutes > $standardDutyMinutes) {
+    //             $overtimeMinutes = $workedMinutes - $standardDutyMinutes;
+    //             $totalOvertimeMinutes += $overtimeMinutes;
+    //         }
+    //     }
+
+    //     // Convert total overtime minutes to hours and minutes
+    //     $overtimeHours = floor($totalOvertimeMinutes / 60);
+    //     $overtimeRemainingMinutes = $totalOvertimeMinutes % 60;
+
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'total_overtime' => "{$overtimeHours} hours, {$overtimeRemainingMinutes} minutes"
+
+    //     ]);
+    // }
+
+
     public function getOvertime(Request $request)
     {
         $filter = $request->get('filter', 'this_week');
@@ -317,16 +453,29 @@ class AttendanceController extends Controller
         $totalOvertimeMinutes = 0;
         $standardDutyMinutes = 8 * 60 + 30; // 8 hours 30 minutes in minutes
 
-        foreach ($attendanceRecords as $record) {
-            $startTime = Carbon::parse($record->created_at);
-            $endTime = Carbon::parse($record->end_time);
+        // Group attendance records by date
+        $attendanceGroupedByDate = $attendanceRecords->groupBy(function ($attendance) {
+            return Carbon::parse($attendance->created_at)->toDateString();
+        });
 
-            // Calculate total worked minutes
-            $workedMinutes = $startTime->diffInMinutes($endTime);
+        // Iterate through each group (by day) to calculate total worked minutes
+        foreach ($attendanceGroupedByDate as $date => $records) {
+            $totalWorkedMinutesForDay = 0;
 
-            // Calculate overtime only if worked minutes exceed standard duty minutes
-            if ($workedMinutes > $standardDutyMinutes) {
-                $overtimeMinutes = $workedMinutes - $standardDutyMinutes;
+            foreach ($records as $record) {
+                $startTime = Carbon::parse($record->created_at);
+                $endTime = Carbon::parse($record->end_time);
+
+                // Calculate total worked minutes for the record
+                $workedMinutes = $startTime->diffInMinutes($endTime);
+
+                // Add to the total worked minutes for the day
+                $totalWorkedMinutesForDay += $workedMinutes;
+            }
+
+            // Calculate overtime only if total worked minutes exceed standard duty minutes
+            if ($totalWorkedMinutesForDay > $standardDutyMinutes) {
+                $overtimeMinutes = $totalWorkedMinutesForDay - $standardDutyMinutes;
                 $totalOvertimeMinutes += $overtimeMinutes;
             }
         }
@@ -338,7 +487,6 @@ class AttendanceController extends Controller
         return response()->json([
             'status' => 'success',
             'total_overtime' => "{$overtimeHours} hours, {$overtimeRemainingMinutes} minutes"
-
         ]);
     }
 

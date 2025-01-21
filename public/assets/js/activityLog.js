@@ -59,6 +59,8 @@ function renderDuties(duties) {
     }
 
     duties.forEach(duty => {
+        // ${duty.start_timestamp.split(' ')[0]}<br>${duty.duration}
+
         const dutyCard = `
             <div class="duty-card">
                 <div class="duty-label">
@@ -71,7 +73,7 @@ function renderDuties(duties) {
                             <h4 class="duty-start-label">Duty Start</h4>
                             <div>Timestamp: <span class="end-date">${duty.start_timestamp}</span></div>
                             <div>Location: <span class="end-location">${duty.start_location}</span></div>
-                            <div>Disparity: <span class="start-disparity">${duty.start_disparity}</span></div>
+                            <div>Login From: <span class="end-disparity ${duty.start_disparity === 'Office' ? 'text-success' : 'text-danger'}">${duty.start_disparity}</span></div>
                         </div>
                     </div>
                     <div class="duty-section">
@@ -80,7 +82,7 @@ function renderDuties(duties) {
                             <h4 class="duty-end-label">Duty End</h4>
                             <div>Timestamp: <span class="end-date">${duty.end_timestamp}</span></div>
                             <div>Location: <span class="end-location">${duty.end_location}</span></div>
-                            <div>Disparity: <span class="end-disparity">${duty.end_disparity}</span></div>
+                            <div>Logout From: <span class="end-disparity ${duty.end_disparity === 'Office' ? 'text-success' : 'text-danger'}">${duty.end_disparity}</span></div>
                         </div>
                     </div>
                 </div>
