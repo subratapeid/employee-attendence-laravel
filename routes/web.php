@@ -3,7 +3,10 @@
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CalenderController;
+use App\Http\Controllers\EmployeesController;
+use App\Http\Controllers\ExportUserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DutyStatusController;
 use App\Http\Controllers\DateTimeController;
@@ -50,15 +53,39 @@ Route::get('/attendance/overtime', [DashboardController::class, 'getOvertime']);
 
 // get leave Data for Calenders
 Route::get('/attendance/data', [CalenderController::class, 'getCalendarData']);
-
 Route::get('/activity', [ActivityController::class, 'getDuties'])->name('duties.get');
 Route::get('/activity/available-options', [ActivityController::class, 'getAvailableOptions']);
 
-// Create User
+// Employees Page Data
+Route::get('/employees', [EmployeesController::class, 'index'])->name('employees.index');
+Route::get('/employee/{id}', [EmployeesController::class, 'show'])->name('employees.single');
+Route::post('/employees', [EmployeesController::class, 'store'])->name('employees.store');
+Route::delete('/employees/{id}', [EmployeesController::class, 'destroy'])->name('employees.destroy');
+Route::put('/employees/{id}', [EmployeesController::class, 'update'])->name('employees.update');
+Route::post('/employees/reset-password/{id}', [EmployeesController::class, 'resetPassword'])->name('employees.resetPassword');
+
+// Reports Page Data
+Route::get('/reports', [ReportsController::class, 'index'])->name('reports');
+
+Route::get('/reports/attendance/export', [ReportsController::class, 'exportAttendance'])->name('reports.attendance.export');
+Route::get('/reports/activity/export', [ReportsController::class, 'exportActivity'])->name('reports.activity.export');
+Route::get('/reports/late/export', [ReportsController::class, 'exportLateArrival'])->name('reports.late.export');
+Route::get('/reports/absenteeism/export', [ReportsController::class, 'exportAbsenteeism'])->name('reports.absenteeism.export');
+
+
+// Import Data
 Route::get('/user-import', [UserImportController::class, 'index'])->name('user.import');
 Route::post('/user-import', [UserImportController::class, 'importUsers'])->name('user.import.store');
 Route::get('/user-import/progress', [UserImportController::class, 'getProgress'])->name('user.import.progress');
 
+// export Data
+Route::get('/export-users', [ExportUserController::class, 'exportUsers'])->name('export.users');
+Route::get('/employees/export', [EmployeesController::class, 'export'])->name('employees.export');
+
+// Route for exporting the report
+Route::get('/export/csv', [ReportsController::class, 'exportCSV'])->name('report.export');
+// Route for fetching filtered report data (if needed)
+Route::get('/reports/filter', [ReportsController::class, 'getFilteredReport'])->name('report.filtered');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

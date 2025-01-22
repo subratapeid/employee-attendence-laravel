@@ -107,13 +107,33 @@
             </a>
         </li>
         <!-- End activity-log Page Nav -->
+
+        <!-- Calender Page Nav -->
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('calender') ? '' : 'collapsed' }}"
                 href="{{ route('calender') }}">
                 <i class="fa-regular fa-calendar-days"></i>
                 <span>Calender</span>
             </a>
-        </li><!-- End my-attendence Page Nav -->
+        </li>
+
+        <!-- End my-attendence Page Nav -->
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('employees') ? '' : 'collapsed' }}"
+                href="{{ route('employees.index') }}">
+                <i class="fas fa-users"></i>
+                <span>Employees</span>
+            </a>
+        </li>
+        <!-- End my-attendence Page Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('reports') ? '' : 'collapsed' }}" href="{{ route('reports') }}">
+                <i class="fa-regular fa-calendar-days"></i>
+                <span>Reports</span>
+            </a>
+        </li>
+        <!-- End my-attendence Page Nav -->
 
     </ul>
 
