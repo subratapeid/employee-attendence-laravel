@@ -366,6 +366,18 @@ h6 {
   max-height: 66px;
 }
 
+#permission-message {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+#permission-message img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+
 @media (min-width: 1200px) {
   .logo {
     margin-right: 30px;

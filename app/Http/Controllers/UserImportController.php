@@ -16,7 +16,7 @@ class UserImportController extends Controller
 {
     public function index()
     {
-        return view('user-import');
+        return view('admin-pages.user-import');
     }
 
     public function importUsers(Request $request)

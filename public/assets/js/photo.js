@@ -38,7 +38,7 @@ function handlePermissionDenied() {
     video.style.display = 'none';
     container.innerHTML = '';
     const gif = document.createElement('img');
-    gif.src = 'assets/images/cameraAccess.gif';
+    gif.src = 'assets/img/access-denied.png';
     gif.alt = 'Permission Denied';
     container.appendChild(gif);
 }
@@ -189,6 +189,8 @@ retakeBtn.addEventListener('click', function () {
 
 
 confirmBtn.addEventListener('click', function () {
+    confirmBtn.disabled = 'true';
+    confirmBtn.textContent = 'Updating..';
     const photoDataUrl = canvas.toDataURL('image/png');
     const photoDataBase64 = photoDataUrl.replace(/^data:image\/(png|jpg);base64,/, "");
 
@@ -207,8 +209,10 @@ confirmBtn.addEventListener('click', function () {
         type: 'POST',
         data: requestData,
         success: function (response) {
+            toastr.success('Duty Status Updated Successfully!', 'Status Updated');
             console.log(response.message);
-
+            // Close the camera popup after success
+            cameraPopup.classList.remove('visible');
             // Update the toggle state and local storage
             toggleInput.checked = currentPhotoType === 'on';
         },
@@ -218,8 +222,6 @@ confirmBtn.addEventListener('click', function () {
         }
     });
 
-    // Close the camera popup immediately
-    cameraPopup.classList.remove('visible');
 });
 
 // // On page load, fetch the current state
@@ -287,55 +289,62 @@ function showUnresolvedDutyPopup(unresolvedDuty) {
     popup.innerHTML = `
         <div class="unresolved-popup-content">
             <h2>Unresolved Duty</h2>
-            <p>You have an unresolved duty from <strong>${unresolvedDuty.created_at}</strong>.</p>
-            <p><img src="${unresolvedDuty.start_photo}" alt="Start Photo" style="max-width: 100%;"></p>
+            <p class="mb-1">You have an unresolved duty on </br><strong>${unresolvedDuty.created_at}</strong>.</p>
+            <p class="mt-1 mb-1"><img src="${unresolvedDuty.start_photo}" alt="Start Photo" style="max-width: 100%;"></p>
 
             <form id="resolveDutyForm">
-        <label for="manualLogoutTime">Enter Logout Time</label>
-        <div class="custom-time-input">
-            <!-- Hour Dropdown -->
-            <select id="hours" class="time-dropdown" name="hours">
-                <option value="" disabled selected>Hour</option>
-                <option value="01">01</option>
-                <option value="02">02</option>
-                <option value="03">03</option>
-                <option value="04">04</option>
-                <option value="05">05</option>
-                <option value="06">06</option>
-                <option value="07">07</option>
-                <option value="08">08</option>
-                <option value="09">09</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-            </select>
+                <label for="manualLogoutTime">Enter Logout Time</label>
+                <div class="custom-time-input mt-2 mb-1" id="manualLogoutTime">
+                    <!-- Hour Dropdown -->
+                    <select id="hours" class="time-dropdown" name="hours">
+                        <option value="" disabled selected>Hour</option>
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                        <option value="03">03</option>
+                        <option value="04">04</option>
+                        <option value="05">05</option>
+                        <option value="06">06</option>
+                        <option value="07">07</option>
+                        <option value="08">08</option>
+                        <option value="09">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                    </select>
 
-            <!-- Minutes Dropdown -->
-            <select id="minutes" class="time-dropdown" name="minutes">
-                <option value="" disabled selected>Minutes</option>
-                <option value="00">00</option>
-                <option value="15">15</option>
-                <option value="30">30</option>
-                <option value="45">45</option>
-            </select>
+                    <!-- Minutes Dropdown -->
+                    <select id="minutes" class="time-dropdown" name="minutes">
+                        <option value="" disabled selected>Minutes</option>
+                        <option value="00">00</option>
+                        <option value="15">15</option>
+                        <option value="30">30</option>
+                        <option value="45">45</option>
+                    </select>
 
-            <!-- AM/PM Dropdown -->
-            <select id="ampm" class="time-dropdown" name="ampm">
-                <option value="" disabled selected>AM/PM</option>
-                <option value="AM">AM</option>
-                <option value="PM">PM</option>
-            </select>
-        </div>
-        <button type="submit" class="submit-btn">Submit</button>
-    </form>
-</div>
+                    <!-- AM/PM Dropdown -->
+                    <select id="ampm" class="time-dropdown" name="ampm">
+                        <option value="" disabled selected>AM/PM</option>
+                        <option value="AM">AM</option>
+                        <option value="PM">PM</option>
+                    </select>
+                </div>
+                <div class"mt-1">
+                <label for="remarks">Enter your remarks</label>
+                <textarea id="remarks" name="remarks" rows="2" style="width: 100%;" class="mt-1"></textarea> 
+                </div>
+                <button type="submit" id="submit-btn" class="submit-btn">Submit</button>
+                <div id="spinner" class="spinner" style="display:none;"></div>
+            </form>
         </div>
     `;
 
-
     // Append the popup to the body
     document.body.appendChild(popup);
+
     const timeform = document.getElementById('resolveDutyForm');
+    const submitBtn = document.getElementById('submit-btn');
+    const spinner = document.getElementById('spinner');
+
     timeform.addEventListener('submit', function (event) {
         event.preventDefault();
 
@@ -350,29 +359,66 @@ function showUnresolvedDutyPopup(unresolvedDuty) {
             return;
         }
 
-        // Format the time to HH:mm format
+        // Format the time to HH:mm AM/PM format
         const manualLogoutTime = `${hour}:${minutes} ${ampm}`;
 
-        $.ajax({
-            url: '/resolve-duty',
-            type: 'POST',
-            data: {
-                manual_logout_time: manualLogoutTime,
-                type: 'off',
-                _token: document.querySelector('meta[name="csrf-token"]').content, // CSRF token for security
-            },
-            success: function (response) {
-                alert(response.message);
-                // Remove the popup
-                document.body.removeChild(popup);
-                // Reload the page or update the status
-                location.reload();
-            },
-            error: function (xhr, status, error) {
-                alert('Error: ' + xhr.responseText);
-            }
-        });
+        // Disable the submit button and show the spinner
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Submitting...';
+        spinner.style.display = 'block';
+
+        // Get latitude and longitude using Geolocation API
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    // Send AJAX request with time and location data
+                    $.ajax({
+                        url: '/resolve-duty',
+                        type: 'POST',
+                        data: {
+                            manual_logout_time: manualLogoutTime,
+                            latitude: latitude,
+                            longitude: longitude,
+                            type: 'off',
+                            _token: document.querySelector('meta[name="csrf-token"]').content, // CSRF token for security
+                        },
+                        success: function (response) {
+                            alert(response.message);
+                            // Remove the popup
+                            document.body.removeChild(popup);
+                            // Reload the page or update the status
+                            location.reload();
+                        },
+                        error: function (xhr, status, error) {
+                            alert('Error: ' + xhr.responseJSON.message);
+                        },
+                        complete: function () {
+                            // Enable the button and hide the spinner
+                            submitBtn.disabled = false;
+                            submitBtn.innerText = 'Submit';
+                            spinner.style.display = 'none';
+                        }
+                    });
+                },
+                function (error) {
+                    console.log(error.message);
+                    alert('Geolocation error: Unable To Get Your Location');
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'Submit';
+                    spinner.style.display = 'none';
+                }
+            );
+        } else {
+            alert('Geolocation is not supported by your browser.');
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'Submit';
+            spinner.style.display = 'none';
+        }
     });
 }
+
 
 

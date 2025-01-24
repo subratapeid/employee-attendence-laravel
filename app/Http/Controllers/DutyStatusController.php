@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\DutyStatus;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
+
 
 class DutyStatusController extends Controller
 {
@@ -33,6 +35,7 @@ class DutyStatusController extends Controller
                 'user_id' => $userId,
                 'start_latitude' => $validatedData['latitude'],
                 'start_longitude' => $validatedData['longitude'],
+                'start_location' => $this->getLocation($validatedData['latitude'], $validatedData['longitude']),
                 'start_photo' => $photoUrl,
                 'created_at' => now(),
             ]);
@@ -49,6 +52,7 @@ class DutyStatusController extends Controller
                 $dutyStatus->update([
                     'end_latitude' => $validatedData['latitude'],
                     'end_longitude' => $validatedData['longitude'],
+                    'end_location' => $this->getLocation($validatedData['latitude'], $validatedData['longitude']),
                     'end_photo' => $photoUrl,
                     'end_time' => now(),
                     'end_channel' => 'system',
@@ -65,9 +69,12 @@ class DutyStatusController extends Controller
     // store unresolved duty send manualy by user
     public function resolveUnresolvedDuty(Request $request)
     {
-        // Validate the manual logout time
+        // Validate the incoming data
         $validatedData = $request->validate([
             'manual_logout_time' => 'required|date_format:h:i A', // Validate time in 12-hour am/pm format
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+
         ]);
 
         $userId = auth()->id();
@@ -95,7 +102,7 @@ class DutyStatusController extends Controller
         // Validate the logout time
         if ($manualLogoutDateTime < $unresolvedDuty->created_at) {
             return response()->json([
-                'message' => 'Logout time cannot be earlier than the duty start time.',
+                'message' => 'Logout time cannot be earlier than the Login time.',
             ], 422);
         }
 
@@ -108,6 +115,9 @@ class DutyStatusController extends Controller
         // Update the unresolved duty with the logout time
         $unresolvedDuty->update([
             'end_time' => $manualLogoutDateTime, // Save as timestamp in 24-hour format
+            'end_latitude' => $validatedData['latitude'],
+            'end_longitude' => $validatedData['longitude'],
+            'end_location' => $this->getLocation($validatedData['latitude'], $validatedData['longitude']),
             'end_channel' => 'manual',
             'updated_at' => now(),
         ]);
@@ -136,7 +146,7 @@ class DutyStatusController extends Controller
                 'type' => 'unresolved',
                 'message' => 'You have an unresolved duty from a previous day. Please log out before starting a new duty.',
                 'unresolved_duty' => [
-                    'created_at' => $unresolvedDuty->created_at->toDateTimeString(),
+                    'created_at' => $unresolvedDuty->created_at->format('d-m-Y h:i A'),
                     'start_latitude' => $unresolvedDuty->start_latitude,
                     'start_longitude' => $unresolvedDuty->start_longitude,
                     'start_photo' => $unresolvedDuty->start_photo,
@@ -180,5 +190,60 @@ class DutyStatusController extends Controller
         // Store the photo and return its URL
         Storage::disk('public')->put($filePath, $photoData);
         return Storage::url($filePath);
+    }
+
+    private function getLocation($latitude, $longitude)
+    {
+        if (!$latitude || !$longitude) {
+            return 'Unknown';
+        }
+
+        // Check if the location is already cached
+        $cacheKey = "location_{$latitude}_{$longitude}";
+        $cachedLocation = Cache::get($cacheKey);
+
+        if ($cachedLocation) {
+            return $cachedLocation;
+        }
+
+        // Fetch location from OpenCage API
+        $apiKey = '1c26876625af485dbcdb8f8200f31ba7'; // Replace with your actual API key
+        $url = sprintf(
+            'https://api.opencagedata.com/geocode/v1/json?q=%.6f,%.6f&key=%s',
+            $latitude,
+            $longitude,
+            $apiKey
+        );
+
+        $response = file_get_contents($url);
+
+        if ($response) {
+            $data = json_decode($response, true);
+
+            if (!empty($data['results'][0]['formatted'])) {
+                $location = $data['results'][0]['formatted'];
+
+                // Remove unwanted parts
+                $location = $this->sanitizeLocation($location);
+
+                // Cache the location for 30 days
+                Cache::put($cacheKey, $location, now()->addDays(30));
+
+                return $location;
+            }
+        }
+
+        return 'Location not found';
+    }
+    private function sanitizeLocation($location)
+    {
+        // Remove "Unnamed Road"
+        $location = preg_replace('/Unnamed Road,? ?/i', '', $location);
+
+        // Remove everything after the first occurrence of a hyphen
+        $location = preg_replace('/-\s?.*/', '', $location);
+
+        // Trim any trailing commas or whitespace
+        return trim($location, ', ');
     }
 }

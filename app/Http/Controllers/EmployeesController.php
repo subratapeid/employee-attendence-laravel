@@ -3,37 +3,202 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\DutyStatus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\EmployeesExport;
 
 class EmployeesController extends Controller
 {
+    // public function index(Request $request)
+    // {
+    //     $query = User::query();
+
+    //     // Search functionality
+    //     if ($request->filled('search')) {
+    //         $query->where('name', 'like', '%' . $request->search . '%')
+    //             ->orWhere('id', 'like', '%' . $request->search . '%')
+    //             ->orWhere('email', 'like', '%' . $request->search . '%');
+    //     }
+
+    //     // Filtering by department or designation
+    //     if ($request->filled('filter') && $request->filled('filter_value')) {
+    //         $query->where($request->filter, $request->filter_value);
+    //     }
+
+    //     // Paginate the results (15 per page)
+    //     $employees = $query->paginate(15);
+
+    //     // Calculate the serial number based on the current page
+    //     $sl_no = ($employees->currentPage() - 1) * $employees->perPage() + 1;
+
+    //     return view('pages.employees', compact('employees', 'sl_no'));
+    // }
+
     public function index(Request $request)
     {
         $query = User::query();
 
         // Search functionality
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%')
-                ->orWhere('id', 'like', '%' . $request->search . '%')
-                ->orWhere('email', 'like', '%' . $request->search . '%');
+            $searchKeyword = '%' . $request->search . '%';
+            $query->where('name', 'like', $searchKeyword)
+                ->orWhere('id', 'like', $searchKeyword)
+                ->orWhere('email', 'like', $searchKeyword);
         }
 
-        // Filtering by department or designation
+        // Filter by account status (active or inactive)
+        if ($request->filled('account_status')) {
+            $query->where('account_status', $request->account_status);
+        }
+
+        // Filter by department or designation (based on the given filter)
         if ($request->filled('filter') && $request->filled('filter_value')) {
             $query->where($request->filter, $request->filter_value);
         }
 
-        // Paginate the results (15 per page)
-        $employees = $query->paginate(15);
+        // Eager load duty status (latest for today) with select for specific columns
+        $employees = $query->with([
+            'dutyStatus' => function ($query) {
+                $query->whereDate('created_at', Carbon::today())
+                    ->latest()
+                    ->limit(1)
+                    ->select('id', 'user_id', 'start_location', 'end_location', 'end_time', 'created_at', 'start_latitude', 'start_longitude', 'end_latitude', 'end_longitude');
+            }
+        ])
+            ->paginate(15);
 
-        // Calculate the serial number based on the current page
+        // Initialize starting sl_no (assuming pagination starts from 1)
         $sl_no = ($employees->currentPage() - 1) * $employees->perPage() + 1;
 
-        return view('pages.employees', compact('employees', 'sl_no'));
+        // Process duty status and other information
+        $employees->getCollection()->transform(function ($employee) use (&$sl_no) {
+            $dutyStatus = $employee->dutyStatus->first();
+
+            // Determine login and logout locations
+            list($loginLocation, $logoutLocation) = $this->determineInOutLocations($employee, $dutyStatus);
+            $employee->login_from = $loginLocation;
+            $employee->logout_from = $logoutLocation;
+
+            // Determine duty status and duty hours (handle cases where dutyStatus is null)
+            $employee->duty_status = $dutyStatus ? $this->determineDutyStatus($dutyStatus) : 'Absent';
+            $employee->duty_hours = $dutyStatus ? $this->calculateDutyHours($dutyStatus) : 'N/A';
+
+            // Determine start time
+            $employee->start_time = $dutyStatus ? $dutyStatus->created_at->format('h:i A') : "N/A";
+
+            // Select only desired data for frontend
+            $data = [
+                'id' => $employee->id,
+                'sl_no' => $sl_no++, // Increment sl_no for each employee
+                'name' => $employee->name,
+                'email' => $employee->email,
+                'phone' => $employee->phone,
+                'state' => $employee->state,
+                'branch' => $employee->branch,
+                'account_status' => $employee->account_status,
+                'start_location' => $dutyStatus ? $dutyStatus->start_location : null,
+                'end_location' => $dutyStatus ? $dutyStatus->end_location : null,
+                'login_from' => $employee->login_from,
+                'logout_from' => $employee->logout_from,
+                'duty_status' => $employee->duty_status,
+                'duty_hours' => $employee->duty_hours,
+                'start_time' => $employee->start_time,
+                'end_time' => $dutyStatus && $dutyStatus->end_time ? $dutyStatus->end_time->format('h:i A') : "N/A",
+            ];
+
+            return $data;
+        });
+
+        // return response()->json($employees);
+        return view('pages.employees', compact('employees'));
+
     }
+
+    private function determineInOutLocations($employee, $dutyStatus)
+    {
+        $loginLocation = 'N/A';
+        $logoutLocation = 'N/A';
+
+        if ($dutyStatus && $dutyStatus->start_latitude && $dutyStatus->start_longitude) {
+            $loginDistance = $this->calculateDistance($employee, $dutyStatus, 'start');
+
+            if ($loginDistance <= 1) {
+                $loginLocation = 'Office Area';
+            } else {
+                $loginLocation = 'Outside Office';
+            }
+
+            if ($dutyStatus->end_latitude && $dutyStatus->end_longitude) {
+                $logoutDistance = $this->calculateDistance($employee, $dutyStatus, 'end');
+
+                if ($logoutDistance <= 1) {
+                    $logoutLocation = 'Office Area';
+                } else {
+                    $logoutLocation = 'Outside Office';
+                }
+            }
+        }
+
+        return [$loginLocation, $logoutLocation];
+    }
+
+    private function calculateDistance($employee, $dutyStatus, $type = 'start')
+    {
+        if (!$employee || !$employee->latitude || !$employee->longitude) {
+            return null;
+        }
+
+        $earthRadius = 6371; // Radius of the Earth in kilometers
+        $lat1 = $type === 'start' ? $dutyStatus->start_latitude : $dutyStatus->end_latitude;
+        $lon1 = $type === 'start' ? $dutyStatus->start_longitude : $dutyStatus->end_longitude;
+        $lat2 = $employee->latitude;
+        $lon2 = $employee->longitude;
+
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+
+        $a = sin($dLat / 2) * sin($dLat / 2) +
+            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+            sin($dLon / 2) * sin($dLon / 2);
+
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+        $distance = $earthRadius * $c;
+
+        return $distance;
+    }
+
+    private function determineDutyStatus($dutyStatus)
+    {
+        if ($dutyStatus) {
+            if ($dutyStatus->end_time === null) {
+                return 'On Duty';
+            } else {
+                return 'Off Duty';
+            }
+        } else {
+            return 'Absent';
+        }
+    }
+
+    private function calculateDutyHours($dutyStatus)
+    {
+        if ($dutyStatus && $dutyStatus->end_time) {
+            $diff = Carbon::parse($dutyStatus->end_time)->diff(Carbon::parse($dutyStatus->created_at));
+        } elseif ($dutyStatus && !$dutyStatus->end_time) {
+            $diff = Carbon::now()->diff(Carbon::parse($dutyStatus->created_at));
+        } else {
+            return 'N/A';
+        }
+
+        $hours = str_pad($diff->h, 2, '0', STR_PAD_LEFT);
+        $minutes = str_pad($diff->i, 2, '0', STR_PAD_LEFT);
+
+        return "$hours hrs $minutes min";
+    }
+
     public function show($id)
     {
         $employee = User::find($id);

@@ -156,9 +156,10 @@
 
         select,
         input[type="number"] {
-            padding: 5px 10px;
-            font-size: 14px;
+            padding: 8px 10px;
+            font-size: 15px;
             border-radius: 5px;
+            border: 1px solid;
             outline: none;
             transition: border-color 0.3s ease;
             width: 100%;
@@ -215,7 +216,7 @@
     <section class="section dashboard">
         <div id="calendar">
 
-            <div class="color-indicator">
+            <div class="color-indicator d-flex flex-wrap gap-3 justify-content-center">
                 <div>
                     <span style="background-color: lightcoral;"></span> Holiday
                 </div>
@@ -233,7 +234,7 @@
                 </div>
             </div>
 
-            <div class="toprow">
+            <div class="toprow d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
                 <div class="select custom-select">
                     <select name="month" id="select_month">
                         <option value="0">January</option>
@@ -252,9 +253,9 @@
                     <input type="number" value="2020" id="select_year">
                 </div>
                 <div class="navigate">
-                    <button class="btn btn-primary btn-sm" id="prev_month"><i class="fas fa-chevron-left"></i></button>
-                    <button class="btn btn-secondary btn-sm" id="curr_month">Current</button>
-                    <button class="btn btn-primary btn-sm" id="next_month"><i class="fas fa-chevron-right"></i></button>
+                    <button class="btn btn-primary" id="prev_month"><i class="fas fa-chevron-left"></i></button>
+                    <button class="btn btn-secondary" id="curr_month">Current</button>
+                    <button class="btn btn-primary" id="next_month"><i class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
             <div class="days">

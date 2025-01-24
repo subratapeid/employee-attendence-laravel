@@ -40,6 +40,7 @@
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li class="dropdown-header">
                         <h6>{{ Auth::user()->name }}</h6>
+
                         <span>Web Designer</span>
                     </li>
                     <li>
@@ -119,22 +120,50 @@
 
         <!-- End my-attendence Page Nav -->
         <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('employees') ? '' : 'collapsed' }}"
+            <a class="nav-link {{ request()->routeIs('employees.index') ? '' : 'collapsed' }}"
                 href="{{ route('employees.index') }}">
                 <i class="fas fa-users"></i>
                 <span>Employees</span>
             </a>
         </li>
-        <!-- End my-attendence Page Nav -->
+        <!-- End Employees Page Nav -->
 
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('reports') ? '' : 'collapsed' }}" href="{{ route('reports') }}">
-                <i class="fa-regular fa-calendar-days"></i>
+                <i class="fas fa-chart-pie"></i>
                 <span>Reports</span>
             </a>
         </li>
-        <!-- End my-attendence Page Nav -->
-
+        <!-- End Report Page Nav -->
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('user.import') ? '' : 'collapsed' }}"
+                href="{{ route('permissions.index') }}">
+                <i class="far fa-address-book"></i>
+                <span>Permissions</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('user.import') ? '' : 'collapsed' }}"
+                href="{{ route('roles.index') }}">
+                <i class="far fa-address-book"></i>
+                <span>Roles</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('user.import') ? '' : 'collapsed' }}"
+                href="{{ route('users.index') }}">
+                <i class="far fa-address-book"></i>
+                <span>Users</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('user.import') ? '' : 'collapsed' }}"
+                href="{{ route('user.import') }}">
+                <i class="far fa-address-book"></i>
+                <span>Import Users</span>
+            </a>
+        </li>
+        <!-- End User Import Page Nav -->
     </ul>
 
 </aside><!-- End Sidebar-->

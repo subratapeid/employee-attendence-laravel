@@ -15,14 +15,15 @@ return new class extends Migration {
             $table->unsignedBigInteger('user_id');
             $table->decimal('start_latitude', 10, 8);
             $table->decimal('start_longitude', 11, 8);
+            $table->string('start_location');
             $table->text('start_photo');
             $table->decimal('end_latitude', 10, 8)->nullable();
             $table->decimal('end_longitude', 11, 8)->nullable();
+            $table->string('end_location')->nullable();
             $table->text('end_photo')->nullable();
             $table->timestamp('end_time')->nullable();
             $table->text('end_channel')->nullable();
             $table->timestamps();
-
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

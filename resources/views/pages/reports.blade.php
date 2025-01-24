@@ -10,137 +10,139 @@
     </div>
 
     <section class="section report mt-4 min-vh-100">
-        <div class="container">
-            <div class="row g-4">
-                <!-- Employee Attendance Report Card -->
-                <div class="col-12 col-md-6">
-                    <div class="card shadow-sm border-0 p-3 position-relative" id="attendance-card">
-                        <!-- Filter Dropdown for Employee Attendance -->
-                        <div class="filter position-absolute top-0 end-0 m-3">
-                            <a class="icon" href="#" data-bs-toggle="dropdown"><i
-                                    class="bi bi-three-dots"></i></a>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                <li class="dropdown-header text-start">
-                                    <h6>Filter</h6>
-                                </li>
-                                <li><a class="dropdown-item filter-option" data-filter="today" href="#"
-                                        data-report="attendance">Today</a></li>
-                                <li><a class="dropdown-item filter-option" data-filter="previous_day" href="#"
-                                        data-report="attendance">Previous Day</a></li>
-                                <li><a class="dropdown-item filter-option" data-filter="this_week" href="#"
-                                        data-report="attendance">This Week</a></li>
-                                <li><a class="dropdown-item filter-option" data-filter="previous_week" href="#"
-                                        data-report="attendance">Previous Week</a></li>
-                                <li><a class="dropdown-item filter-option" data-filter="this_month" href="#"
-                                        data-report="attendance">This Month</a></li>
-                                <li><a class="dropdown-item filter-option" data-filter="previous_month" href="#"
-                                        data-report="attendance">Previous Month</a></li>
-                                <li><a class="dropdown-item filter-option" data-filter="this_year" href="#"
-                                        data-report="attendance">This Year</a></li>
-                                <li><a class="dropdown-item filter-option" data-filter="previous_year" href="#"
-                                        data-report="attendance">Previous Year</a></li>
-                            </ul>
-                        </div>
-
-                        <h5 class="report-card-title text-center">Employee Attendance Report</h5>
-                        <h6 class="report-card-title text-center text-muted" id="selected-filter-attendance">This Month
-                        </h6>
-
-                        <div class="d-flex align-items-center justify-content-center gap-5 mb-4 mt-4">
-                            <!-- First Statistic -->
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon bg-primary text-white p-3 rounded-circle me-3">
-                                    <i class="bi bi-person-check" style="font-size: 2rem;"></i>
-                                </div>
-                                <div>
-                                    <h6 class="mb-0">Total Attendance</h6>
-                                    <h4 class="fw-bold" id="attendance-stat-1">150</h4>
-                                </div>
-                            </div>
-
-                            <!-- Second Statistic -->
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon bg-danger text-white p-3 rounded-circle me-3">
-                                    <i class="bi bi-person-dash" style="font-size: 2rem;"></i>
-                                </div>
-                                <div>
-                                    <h6 class="mb-0">Absent</h6>
-                                    <h4 class="fw-bold" id="attendance-stat-2">10</h4>
-                                </div>
-                            </div>
-                        </div>
-
-                        <a href="#" class="btn btn-primary w-100" id="attendance-export-btn">
-                            <i class="bi bi-download"></i> Download Report
-                        </a>
+        {{-- <div class="container"> --}}
+        <div class="row g-4">
+            <!-- Employee Attendance Report Card -->
+            <div class="col-12 col-md-6">
+                <div class="card shadow-sm border-0 p-3 position-relative" id="attendance-card">
+                    <!-- Filter Dropdown for Employee Attendance -->
+                    <div class="filter position-absolute top-0 end-0 m-3">
+                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <li class="dropdown-header text-start">
+                                <h6>Filter</h6>
+                            </li>
+                            <li><a class="dropdown-item filter-option" data-filter="today" href="#"
+                                    data-report="attendance">Today</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="previous_day" href="#"
+                                    data-report="attendance">Previous Day</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="this_week" href="#"
+                                    data-report="attendance">This Week</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="previous_week" href="#"
+                                    data-report="attendance">Previous Week</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="this_month" href="#"
+                                    data-report="attendance">This Month</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="previous_month" href="#"
+                                    data-report="attendance">Previous Month</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="this_year" href="#"
+                                    data-report="attendance">This Year</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="previous_year" href="#"
+                                    data-report="attendance">Previous Year</a></li>
+                        </ul>
                     </div>
-                </div>
 
-                <!-- Employee Activity Report Card -->
-                <div class="col-12 col-md-6">
-                    <div class="card shadow-sm border-0 p-3 position-relative" id="activity-card">
-                        <!-- Filter Dropdown for Employee Activity -->
-                        <div class="filter position-absolute top-0 end-0 m-3">
-                            <a class="icon" href="#" data-bs-toggle="dropdown"><i
-                                    class="bi bi-three-dots"></i></a>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                <li class="dropdown-header text-start">
-                                    <h6>Filter</h6>
-                                </li>
-                                <li><a class="dropdown-item filter-option" data-filter="today" href="#"
-                                        data-report="activity">Today</a></li>
-                                <li><a class="dropdown-item filter-option" data-filter="previous_day" href="#"
-                                        data-report="activity">Previous Day</a></li>
-                                <li><a class="dropdown-item filter-option" data-filter="this_week" href="#"
-                                        data-report="activity">This Week</a></li>
-                                <li><a class="dropdown-item filter-option" data-filter="previous_week" href="#"
-                                        data-report="activity">Previous Week</a></li>
-                                <li><a class="dropdown-item filter-option" data-filter="this_month" href="#"
-                                        data-report="activity">This Month</a></li>
-                                <li><a class="dropdown-item filter-option" data-filter="previous_month"
-                                        href="#" data-report="activity">Previous Month</a></li>
-                                <li><a class="dropdown-item filter-option" data-filter="this_year" href="#"
-                                        data-report="activity">This Year</a></li>
-                                <li><a class="dropdown-item filter-option" data-filter="previous_year" href="#"
-                                        data-report="activity">Previous Year</a></li>
-                            </ul>
-                        </div>
+                    <h5 class="report-card-title text-center pe-3">Employee Attendance Report</h5>
+                    <h6 class="report-card-title text-center text-muted" id="selected-filter-attendance">This Month
+                    </h6>
 
-                        <h5 class="report-card-title text-center">Employee Activity Report</h5>
-                        <h6 class="report-card-title text-center text-muted" id="selected-filter-activity">This Month
-                        </h6>
-
-                        <div class="d-flex align-items-center justify-content-center gap-5 mb-4 mt-4">
-                            <!-- First Statistic -->
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon bg-success text-white p-3 rounded-circle me-3">
-                                    <i class="bi bi-check-circle" style="font-size: 2rem;"></i>
-                                </div>
-                                <div>
-                                    <h6 class="mb-0">Total Activity</h6>
-                                    <h4 class="fw-bold" id="activity-stat-1">200</h4>
-                                </div>
+                    <div
+                        class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 mb-4 mt-3">
+                        <!-- First Statistic -->
+                        <div class="d-flex align-items-center w-100">
+                            <div class="card-icon bg-primary text-white p-3 rounded-circle me-3">
+                                <i class="bi bi-person-check" style="font-size: 2rem;"></i>
                             </div>
-
-                            <!-- Second Statistic -->
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon bg-warning text-white p-3 rounded-circle me-3">
-                                    <i class="bi bi-exclamation-circle" style="font-size: 2rem;"></i>
-                                </div>
-                                <div>
-                                    <h6 class="mb-0">Inactive</h6>
-                                    <h4 class="fw-bold" id="activity-stat-2">5</h4>
-                                </div>
+                            <div>
+                                <h6 class="mb-0">Total Attendance</h6>
+                                <h4 class="fw-bold" id="attendance-stat-1">150</h4>
                             </div>
                         </div>
 
-                        <a href="#" class="btn btn-primary w-100" id="activity-export-btn">
-                            <i class="bi bi-download"></i> Download Report
-                        </a>
+                        <!-- Second Statistic -->
+                        <div class="d-flex align-items-center w-100">
+                            <div class="card-icon bg-danger text-white p-3 rounded-circle me-3">
+                                <i class="bi bi-person-dash" style="font-size: 2rem;"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Absent</h6>
+                                <h4 class="fw-bold" id="attendance-stat-2">10</h4>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
+                    <a href="#" class="btn btn-primary w-100" id="attendance-export-btn">
+                        <i class="bi bi-download"></i> Download Report
+                    </a>
+                </div>
             </div>
+
+            <!-- Employee Activity Report Card -->
+            <div class="col-12 col-md-6">
+                <div class="card shadow-sm border-0 p-3 position-relative" id="activity-card">
+                    <!-- Filter Dropdown for Employee Activity -->
+                    <div class="filter position-absolute top-0 end-0 m-3">
+                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <li class="dropdown-header text-start">
+                                <h6>Filter</h6>
+                            </li>
+                            <li><a class="dropdown-item filter-option" data-filter="today" href="#"
+                                    data-report="activity">Today</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="previous_day" href="#"
+                                    data-report="activity">Previous Day</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="this_week" href="#"
+                                    data-report="activity">This Week</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="previous_week" href="#"
+                                    data-report="activity">Previous Week</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="this_month" href="#"
+                                    data-report="activity">This Month</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="previous_month" href="#"
+                                    data-report="activity">Previous Month</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="this_year" href="#"
+                                    data-report="activity">This Year</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="previous_year" href="#"
+                                    data-report="activity">Previous Year</a></li>
+                        </ul>
+                    </div>
+
+                    <h5 class="report-card-title text-center">Employee Activity Report</h5>
+                    <h6 class="report-card-title text-center text-muted" id="selected-filter-activity">This Month
+                    </h6>
+
+                    {{-- <div class="d-flex align-items-center justify-content-center gap-5 mb-4 mt-4"> --}}
+                    <div
+                        class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 mb-4 mt-3">
+
+                        <!-- First Statistic -->
+                        <div class="d-flex align-items-center w-100">
+                            <div class="card-icon bg-success text-white p-3 rounded-circle me-3">
+                                <i class="bi bi-check-circle" style="font-size: 2rem;"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Total Activity</h6>
+                                <h4 class="fw-bold" id="activity-stat-1">200</h4>
+                            </div>
+                        </div>
+
+                        <!-- Second Statistic -->
+                        <div class="d-flex align-items-center w-100">
+                            <div class="card-icon bg-warning text-white p-3 rounded-circle me-3">
+                                <i class="bi bi-exclamation-circle" style="font-size: 2rem;"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Inactive</h6>
+                                <h4 class="fw-bold" id="activity-stat-2">5</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="#" class="btn btn-primary w-100" id="activity-export-btn">
+                        <i class="bi bi-download"></i> Download Report
+                    </a>
+                </div>
+            </div>
+
+        </div>
         </div>
     </section>
 
