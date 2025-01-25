@@ -96,23 +96,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     // permission routes
-    Route::get('permissions-create', [PermissionController::class, 'create'])->name('permissions.create');
-    Route::post('permissions-create', [PermissionController::class, 'store'])->name('permissions.store');
+    Route::get('permission/create', [PermissionController::class, 'create'])->name('permissions.create');
+    Route::post('permission/store', [PermissionController::class, 'store'])->name('permissions.store');
     Route::get('permissions', [PermissionController::class, 'index'])->name('permissions.index');
-    Route::get('permissions-edit/{id}', [PermissionController::class, 'edit'])->name('permissions.edit');
-    Route::post('permissions-edit/{id}', [PermissionController::class, 'update'])->name('permissions.update');
-    // permission routes
-    Route::get('roles-create', [RoleController::class, 'create'])->name('roles.create');
-    Route::post('roles-create', [RoleController::class, 'store'])->name('roles.store');
+    Route::get('permission/edit/{id}', [PermissionController::class, 'edit'])->name('permissions.edit');
+    Route::post('permission/update/{id}', [PermissionController::class, 'update'])->name('permissions.update');
+    // roles routes
+    Route::get('role/create', [RoleController::class, 'create'])->name('roles.create');
+    Route::post('role/store', [RoleController::class, 'store'])->name('roles.store');
     Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
-    Route::get('roles-edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
-    Route::post('roles-edit/{id}', [RoleController::class, 'update'])->name('roles.update');
+    Route::get('role-edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
+    Route::post('role-update/{id}', [RoleController::class, 'update'])->name('roles.update');
     // Users Routes
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::get('/users-create', [UserController::class, 'create'])->name('users.create');
-    Route::post('/users', [UserController::class, 'store'])->name('users.store');
-    Route::get('/users-edit-{id}', [UserController::class, 'edit'])->name('users.edit');
-    Route::post('/users-{id}', [UserController::class, 'update'])->name('users.update');
+    Route::get('/user/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/user/store', [UserController::class, 'store'])->name('users.store');
+    Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('users.edit');
+    Route::post('/user/update/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users', [UserController::class, 'destroy'])->name('users.delete');
 
 

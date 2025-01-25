@@ -7,8 +7,22 @@ use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class RoleController extends Controller
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+
+
+class RoleController extends Controller implements HasMiddleware
 {
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view-role', only: ['index']),
+            new Middleware('permission:edit-role', only: ['edit']),
+            new Middleware('permission:create-role', only: ['create']),
+            new Middleware('permission:delete-role', only: ['destroy']),
+        ];
+    }
     //this method will show all Roles
     public function index()
     {
@@ -46,8 +60,14 @@ class RoleController extends Controller
             return redirect()->route('roles.create')->withInput()->withErrors($validator);
         }
     }
-    // This method will Updae role 
 
+    // This method will show edit role page 
+    public function edit()
+    {
+
+    }
+
+    // This method will Updae role 
     public function update()
     {
 

@@ -3,7 +3,7 @@
 
     <div class="d-flex align-items-center justify-content-between">
         <a href="{{ route('dashboard') }}" class="logo d-flex align-items-center">
-            <img src="assets/img/logo.png" alt="">
+            <img src="/assets/img/logo.png" alt="">
         </a>
         <i class="bi bi-list toggle-sidebar-btn"></i>
     </div>
@@ -33,7 +33,9 @@
             <li class="nav-item dropdown pe-3">
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                    <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+                    <img src="{{ Auth::user()->img ? asset(Auth::user()->img) : asset('assets/img/profile-img.jpg') }}"
+                        alt="Profile" class="rounded-circle">
+
                     <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->name }}</span>
                 </a><!-- End Profile Iamge Icon -->
 
@@ -41,7 +43,7 @@
                     <li class="dropdown-header">
                         <h6>{{ Auth::user()->name }}</h6>
 
-                        <span>Web Designer</span>
+                        <span>{{ Auth::user()->roles->pluck('name')->implode(', ') }}</span>
                     </li>
                     <li>
                         <hr class="dropdown-divider">
@@ -86,83 +88,101 @@
 <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
+        @can('view-attendance')
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('dashboard') ? '' : 'collapsed' }}"
+                    href="{{ route('dashboard') }}">
+                    <i class="fa-solid fa-gauge"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+        @endcan
+        @can('view-attendance')
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('leaves') ? '' : 'collapsed' }}" href="{{ route('leaves') }}">
+                    <i class="fa-solid fa-person-running"></i>
+                    <span>Leaves</span>
+                </a>
+            </li><!-- End Leaves Page Nav -->
+        @endcan
 
-        <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('dashboard') ? '' : 'collapsed' }}"
-                href="{{ route('dashboard') }}">
-                <i class="fa-solid fa-gauge"></i>
-                <span>Dashboard</span>
-            </a>
-        </li><!-- End Dashboard Nav -->
-        <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('leaves') ? '' : 'collapsed' }}" href="{{ route('leaves') }}">
-                <i class="fa-solid fa-person-running"></i>
-                <span>Leaves</span>
-            </a>
-        </li><!-- End Leaves Page Nav -->
-        <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('activity-log') ? '' : 'collapsed' }}"
-                href="{{ route('activity-log') }}">
-                <i class="fa-solid fa-list-check"></i>
-                <span>Activit Log</span>
-            </a>
-        </li>
+        @can('view-attendance')
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('activity-log') ? '' : 'collapsed' }}"
+                    href="{{ route('activity-log') }}">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>Activit Log</span>
+                </a>
+            </li>
+        @endcan
         <!-- End activity-log Page Nav -->
 
         <!-- Calender Page Nav -->
-        <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('calender') ? '' : 'collapsed' }}"
-                href="{{ route('calender') }}">
-                <i class="fa-regular fa-calendar-days"></i>
-                <span>Calender</span>
-            </a>
-        </li>
-
+        @can('view-attendance')
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('calender') ? '' : 'collapsed' }}"
+                    href="{{ route('calender') }}">
+                    <i class="fa-regular fa-calendar-days"></i>
+                    <span>Calender</span>
+                </a>
+            </li>
+        @endcan
         <!-- End my-attendence Page Nav -->
-        <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('employees.index') ? '' : 'collapsed' }}"
-                href="{{ route('employees.index') }}">
-                <i class="fas fa-users"></i>
-                <span>Employees</span>
-            </a>
-        </li>
+        @can('view-employee')
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('employees.index') ? '' : 'collapsed' }}"
+                    href="{{ route('employees.index') }}">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Employees</span>
+                </a>
+            </li>
+        @endcan
         <!-- End Employees Page Nav -->
-
-        <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('reports') ? '' : 'collapsed' }}" href="{{ route('reports') }}">
-                <i class="fas fa-chart-pie"></i>
-                <span>Reports</span>
-            </a>
-        </li>
+        @can('view-report')
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('reports') ? '' : 'collapsed' }}" href="{{ route('reports') }}">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+        @endcan
         <!-- End Report Page Nav -->
-        <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('user.import') ? '' : 'collapsed' }}"
-                href="{{ route('permissions.index') }}">
-                <i class="far fa-address-book"></i>
-                <span>Permissions</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('user.import') ? '' : 'collapsed' }}"
-                href="{{ route('roles.index') }}">
-                <i class="far fa-address-book"></i>
-                <span>Roles</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('user.import') ? '' : 'collapsed' }}"
-                href="{{ route('users.index') }}">
-                <i class="far fa-address-book"></i>
-                <span>Users</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('user.import') ? '' : 'collapsed' }}"
-                href="{{ route('user.import') }}">
-                <i class="far fa-address-book"></i>
-                <span>Import Users</span>
-            </a>
-        </li>
+        @can('view-permission')
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('user.import') ? '' : 'collapsed' }}"
+                    href="{{ route('permissions.index') }}">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Permissions</span>
+                </a>
+            </li>
+        @endcan
+        @can('view-roles')
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('user.import') ? '' : 'collapsed' }}"
+                    href="{{ route('roles.index') }}">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Roles</span>
+                </a>
+            </li>
+        @endcan
+        @can('view-user')
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('user.import') ? '' : 'collapsed' }}"
+                    href="{{ route('users.index') }}">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </a>
+            </li>
+        @endcan
+        @can('bulk-import')
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('user.import') ? '' : 'collapsed' }}"
+                    href="{{ route('user.import') }}">
+                    <i class="far fa-address-book"></i>
+                    <span>Import Users</span>
+                </a>
+            </li>
+        @endcan
         <!-- End User Import Page Nav -->
     </ul>
 

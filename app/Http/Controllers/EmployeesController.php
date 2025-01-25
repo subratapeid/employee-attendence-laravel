@@ -9,9 +9,22 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\EmployeesExport;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class EmployeesController extends Controller
+
+class EmployeesController extends Controller implements HasMiddleware
 {
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view-employee', only: ['index']),
+            new Middleware('permission:edit-employee', only: ['update']),
+            new Middleware('permission:create-employee', only: ['store']),
+            new Middleware('permission:delete-employee', only: ['destroy']),
+        ];
+    }
     // public function index(Request $request)
     // {
     //     $query = User::query();

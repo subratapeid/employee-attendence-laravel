@@ -8,9 +8,20 @@ use App\Exports\AttendanceExport;
 use App\Exports\ActivityExport;
 use Maatwebsite\Excel\Facades\Excel;
 
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class ReportsController extends Controller
+
+class ReportsController extends Controller implements HasMiddleware
 {
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view-reports', only: ['index']),
+            // new Middleware('permission:edit-reports', only: ['edit']),
+        ];
+    }
     // function to view the reports page
     public function index()
     {

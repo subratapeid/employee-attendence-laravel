@@ -12,8 +12,22 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
-class UserImportController extends Controller
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+
+
+class UserImportController extends Controller implements HasMiddleware
 {
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view-user-import', only: ['index']),
+            // new Middleware('permission:edit-user-import', only: ['edit']),
+            new Middleware('permission:create-user-import', only: ['importUsers']),
+            // new Middleware('permission:delete-user-import', only: ['destroy']),
+        ];
+    }
     public function index()
     {
         return view('admin-pages.user-import');
