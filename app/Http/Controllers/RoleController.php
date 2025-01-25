@@ -62,19 +62,56 @@ class RoleController extends Controller implements HasMiddleware
     }
 
     // This method will show edit role page 
-    public function edit()
+    public function edit($id)
     {
+        $role = Role::findOrFail($id);
+        $hasPermissions = $role->permissions->pluck('name');
+        $permissions = Permission::OrderBy('name', 'ASC')->get();
+        return view('roles.edit', [
+            'hasPermissions' => $hasPermissions,
+            'permissions' => $permissions,
+            'role' => $role
+        ]);
 
     }
 
     // This method will Updae role 
-    public function update()
+    public function update($id, Request $request)
     {
-
+        $role = Role::findOrFail($id);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:3|unique:roles,name,' . $id . ',id'
+        ]);
+        if ($validator->passes()) {
+            $role->name = $request->name;
+            $role->save();
+            if (!empty($request->permission)) {
+                $role->syncPermissions($request->permission);
+            } else {
+                $role->syncPermissions([]);
+            }
+            return redirect()->route('roles.index')->with('success', 'Role Updated Successfully.');
+        } else {
+            return redirect()->route('roles.edit', $id)->withInput()->withError($validator);
+        }
     }
-    // This method will Delete role From db
-    public function destroy()
+    // this methode will Delete permission from DB
+    public function destroy(Request $request)
     {
-
+        $id = $request->id;
+        $role = Role::find($id);
+        if ($role == null) {
+            session()->flash('error', 'Role not Found');
+            return response()->json([
+                'status' => false,
+                'error' => 'Role not Found'
+            ]);
+        }
+        $role->delete();
+        session()->flash('success', 'Role Deleted Successfully.');
+        return response()->json([
+            'status' => true,
+            'message' => 'Role Deleted Successfully'
+        ]);
     }
 }

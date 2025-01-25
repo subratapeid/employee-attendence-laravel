@@ -515,7 +515,12 @@ h6 {
 }
 
 .header-nav .nav-profile img {
-  max-height: 36px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  /* Makes the image round */
+  object-fit: cover;
+  /* max-height: 36px; */
 }
 
 .header-nav .nav-profile span {

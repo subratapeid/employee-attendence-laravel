@@ -71,32 +71,33 @@
         </div>
     </footer><!-- End Footer -->
 
-
-    <!-- On/Off-Duty camera Popup -->
-    <div id="camera-popup" class="popup hidden">
-        <div class="popup-content">
-            <button class="close-btn" id="popup-close">&times;</button>
-            <h3 id="popupTitle">Go On Duty</h3>
-            <form id="on-duty-form">
-                <div id="photoCaptureContent">
-                    <div id="permission-message">
+    @can('create-attendance')
+        <!-- On/Off-Duty camera Popup -->
+        <div id="camera-popup" class="popup hidden">
+            <div class="popup-content">
+                <button class="close-btn" id="popup-close">&times;</button>
+                <h3 id="popupTitle">Go On Duty</h3>
+                <form id="on-duty-form">
+                    <div id="photoCaptureContent">
+                        <div id="permission-message">
+                        </div>
+                        <video id="video" width="100%" height="auto" autoplay></video>
+                        <canvas id="canvas" class="d-none"></canvas>
+                        <img id="capturedPhoto" class="img-thumbnail d-none" src="default-image.png" alt="Captured photo">
                     </div>
-                    <video id="video" width="100%" height="auto" autoplay></video>
-                    <canvas id="canvas" class="d-none"></canvas>
-                    <img id="capturedPhoto" class="img-thumbnail d-none" src="default-image.png" alt="Captured photo">
-                </div>
-                <div class="popup-footer mt-3 d-flex justify-content-center">
-                    <button type="button" class="iconButtons btn btn-primary d-none" id="captureBtn"
-                        title="Capture">Capture</button>
-                    <button type="button" class="btn btn-danger d-none mx-4" id="retakeBtn"
-                        title="Retake">Retake</button>
-                    <button type="button" class="btn btn-success d-none" id="confirmBtn" title="Confirm">On
-                        Duty</button>
-                </div>
-            </form>
+                    <div class="popup-footer mt-3 d-flex justify-content-center">
+                        <button type="button" class="iconButtons btn btn-primary d-none" id="captureBtn"
+                            title="Capture">Capture</button>
+                        <button type="button" class="btn btn-danger d-none mx-4" id="retakeBtn"
+                            title="Retake">Retake</button>
+                        <button type="button" class="btn btn-success d-none" id="confirmBtn" title="Confirm">On
+                            Duty</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
-    <!-- Camera Popup End -->
+        <!-- Camera Popup End -->
+    @endcan
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
@@ -116,8 +117,10 @@
     <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script> -->
     <!-- Template Main JS File -->
     <script src="/assets/js/main.js"></script>
-    <script src="/assets/js/toggle.js"></script>
-    <script src="/assets/js/photo.js"></script>
+    @can('create-attendance')
+        <script src="/assets/js/toggle.js"></script>
+        <script src="/assets/js/photo.js"></script>
+    @endcan
 </body>
 
 </html>

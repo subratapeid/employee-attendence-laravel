@@ -8,17 +8,18 @@
         <i class="bi bi-list toggle-sidebar-btn"></i>
     </div>
     <!-- End Logo -->
-
-    <div class="d-flex allign-items-center justify-content-center" id="duty-btn">
-        <div class="toggle-container">
-            <input type="checkbox" id="toggle" class="toggle-input" />
-            <label for="toggle" class="toggle-label">
-                <span class="toggle-circle"></span>
-                <span class="toggle-text off">Off Duty</span>
-                <span class="toggle-text on">On Duty</span>
-            </label>
+    @can('create-attendance')
+        <div class="d-flex allign-items-center justify-content-center" id="duty-btn">
+            <div class="toggle-container">
+                <input type="checkbox" id="toggle" class="toggle-input" />
+                <label for="toggle" class="toggle-label">
+                    <span class="toggle-circle"></span>
+                    <span class="toggle-text off">Off Duty</span>
+                    <span class="toggle-text on">On Duty</span>
+                </label>
+            </div>
         </div>
-    </div>
+    @endcan
     <!-- <div class="search-bar">
       <form class="search-form d-flex align-items-center" method="POST" action="#">
         <input type="text" name="query" placeholder="Search" title="Enter search keyword">
@@ -34,7 +35,7 @@
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                     <img src="{{ Auth::user()->img ? asset(Auth::user()->img) : asset('assets/img/profile-img.jpg') }}"
-                        alt="Profile" class="rounded-circle">
+                        alt="Profile" class="nav-profile-img">
 
                     <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->name }}</span>
                 </a><!-- End Profile Iamge Icon -->
@@ -128,12 +129,12 @@
             </li>
         @endcan
         <!-- End my-attendence Page Nav -->
-        @can('view-employee')
+        @can('edit-user')
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('employees.index') ? '' : 'collapsed' }}"
                     href="{{ route('employees.index') }}">
-                    <i class="fas fa-user-tie"></i>
-                    <span>Employees</span>
+                    <i class="fas fa-user-check"></i>
+                    <span>Emp Attendance</span>
                 </a>
             </li>
         @endcan
@@ -147,9 +148,19 @@
             </li>
         @endcan
         <!-- End Report Page Nav -->
+        @can('view-attendance')
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('holiday.index') ? '' : 'collapsed' }}"
+                    href="{{ route('holiday.index') }}">
+                    <i class="far fa-calendar-times"></i>
+                    <span>Holiday List</span>
+                </a>
+            </li>
+        @endcan
+        <!-- End Report Page Nav -->
         @can('view-permission')
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('user.import') ? '' : 'collapsed' }}"
+                <a class="nav-link {{ request()->routeIs('permissions.index') ? '' : 'collapsed' }}"
                     href="{{ route('permissions.index') }}">
                     <i class="fas fa-shield-alt"></i>
                     <span>Permissions</span>
@@ -158,7 +169,7 @@
         @endcan
         @can('view-roles')
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('user.import') ? '' : 'collapsed' }}"
+                <a class="nav-link {{ request()->routeIs('roles.index') ? '' : 'collapsed' }}"
                     href="{{ route('roles.index') }}">
                     <i class="fas fa-user-shield"></i>
                     <span>Roles</span>
@@ -167,14 +178,14 @@
         @endcan
         @can('view-user')
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('user.import') ? '' : 'collapsed' }}"
+                <a class="nav-link {{ request()->routeIs('users.index') ? '' : 'collapsed' }}"
                     href="{{ route('users.index') }}">
                     <i class="fas fa-users"></i>
                     <span>Users</span>
                 </a>
             </li>
         @endcan
-        @can('bulk-import')
+        {{-- @can('bulk-import')
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('user.import') ? '' : 'collapsed' }}"
                     href="{{ route('user.import') }}">
@@ -182,7 +193,7 @@
                     <span>Import Users</span>
                 </a>
             </li>
-        @endcan
+        @endcan --}}
         <!-- End User Import Page Nav -->
     </ul>
 

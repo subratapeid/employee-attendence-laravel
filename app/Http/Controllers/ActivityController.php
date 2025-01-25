@@ -68,7 +68,8 @@ class ActivityController extends Controller
         $user = auth()->user();
 
         // Fetch duties
-        $duties = DutyStatus::whereYear('created_at', $year)
+        $duties = DutyStatus::where('user_id', $user->id)
+            ->whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
             ->orderBy('created_at', 'desc')
             ->get();

@@ -97,10 +97,10 @@ class EmployeesController extends Controller implements HasMiddleware
 
             // Determine duty status and duty hours (handle cases where dutyStatus is null)
             $employee->duty_status = $dutyStatus ? $this->determineDutyStatus($dutyStatus) : 'Absent';
-            $employee->duty_hours = $dutyStatus ? $this->calculateDutyHours($dutyStatus) : 'N/A';
+            $employee->duty_hours = $dutyStatus ? $this->calculateDutyHours($dutyStatus) : '-';
 
             // Determine start time
-            $employee->start_time = $dutyStatus ? $dutyStatus->created_at->format('h:i A') : "N/A";
+            $employee->start_time = $dutyStatus ? $dutyStatus->created_at->format('h:i A') : "-";
 
             // Select only desired data for frontend
             $data = [
@@ -108,18 +108,18 @@ class EmployeesController extends Controller implements HasMiddleware
                 'sl_no' => $sl_no++, // Increment sl_no for each employee
                 'name' => $employee->name,
                 'email' => $employee->email,
-                'phone' => $employee->phone,
-                'state' => $employee->state,
-                'branch' => $employee->branch,
-                'account_status' => $employee->account_status,
-                'start_location' => $dutyStatus ? $dutyStatus->start_location : null,
-                'end_location' => $dutyStatus ? $dutyStatus->end_location : null,
-                'login_from' => $employee->login_from,
-                'logout_from' => $employee->logout_from,
-                'duty_status' => $employee->duty_status,
-                'duty_hours' => $employee->duty_hours,
-                'start_time' => $employee->start_time,
-                'end_time' => $dutyStatus && $dutyStatus->end_time ? $dutyStatus->end_time->format('h:i A') : "N/A",
+                'phone' => $employee->phone ?? "-",
+                'state' => $employee->state ?? "-",
+                'branch' => $employee->branch ?? "-",
+                'account_status' => $employee->account_status ?? "-",
+                'start_location' => $dutyStatus->start_location ?? "-",
+                'end_location' => $dutyStatus->end_location ?? "-",
+                'login_from' => $employee->login_from ?? "-",
+                'logout_from' => $employee->logout_from ?? "-",
+                'duty_status' => $employee->duty_status ?? "-",
+                'duty_hours' => $employee->duty_hours ?? "-",
+                'start_time' => $employee->start_time ?? "-",
+                'end_time' => $dutyStatus && $dutyStatus->end_time ? $dutyStatus->end_time->format('h:i A') : "-",
             ];
 
             return $data;
@@ -132,8 +132,8 @@ class EmployeesController extends Controller implements HasMiddleware
 
     private function determineInOutLocations($employee, $dutyStatus)
     {
-        $loginLocation = 'N/A';
-        $logoutLocation = 'N/A';
+        $loginLocation = '-';
+        $logoutLocation = '-';
 
         if ($dutyStatus && $dutyStatus->start_latitude && $dutyStatus->start_longitude) {
             $loginDistance = $this->calculateDistance($employee, $dutyStatus, 'start');

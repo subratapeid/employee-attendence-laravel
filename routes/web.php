@@ -17,12 +17,8 @@ use App\Http\Controllers\UserImportController;
 use App\Http\Controllers\PermissionController;
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
+    Route::get('/', function () {
         return view('dashboard');
     })->name('dashboard');
 
@@ -94,7 +90,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-
+    // holiday routes
+    Route::get('holiday/create', [PermissionController::class, 'create'])->name('holiday.create');
+    Route::post('holiday/store', [PermissionController::class, 'store'])->name('holiday.store');
+    Route::get('holidays', [PermissionController::class, 'index'])->name('holiday.index');
+    Route::get('holiday/edit/{id}', [PermissionController::class, 'edit'])->name('holiday.edit');
+    Route::post('holiday/update/{id}', [PermissionController::class, 'update'])->name('holiday.update');
     // permission routes
     Route::get('permission/create', [PermissionController::class, 'create'])->name('permissions.create');
     Route::post('permission/store', [PermissionController::class, 'store'])->name('permissions.store');
