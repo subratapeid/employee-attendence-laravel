@@ -34,7 +34,7 @@
             <li class="nav-item dropdown pe-3">
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                    <img src="{{ Auth::user()->img ? asset(Auth::user()->img) : asset('assets/img/profile-img.jpg') }}"
+                    <img src="{{ Auth::user()->img ? asset(Auth::user()->img) : asset('assets/img/user.png') }}"
                         alt="Profile" class="nav-profile-img">
 
                     <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->name }}</span>
@@ -89,7 +89,7 @@
 <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
-        @can('view-attendance')
+        @can('create-attendance')
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('dashboard') ? '' : 'collapsed' }}"
                     href="{{ route('dashboard') }}">
@@ -98,7 +98,17 @@
                 </a>
             </li><!-- End Dashboard Nav -->
         @endcan
-        @can('view-attendance')
+        {{-- admin Dashboard --}}
+        @can('view-report')
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('dashboard') ? '' : 'collapsed' }}"
+                    href="{{ route('dashboard') }}">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+        @endcan
+        @can('create-attendance')
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('leaves') ? '' : 'collapsed' }}" href="{{ route('leaves') }}">
                     <i class="fa-solid fa-person-running"></i>
@@ -107,7 +117,7 @@
             </li><!-- End Leaves Page Nav -->
         @endcan
 
-        @can('view-attendance')
+        @can('create-attendance')
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('activity-log') ? '' : 'collapsed' }}"
                     href="{{ route('activity-log') }}">
@@ -119,7 +129,7 @@
         <!-- End activity-log Page Nav -->
 
         <!-- Calender Page Nav -->
-        @can('view-attendance')
+        @can('create-attendance')
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('calender') ? '' : 'collapsed' }}"
                     href="{{ route('calender') }}">
@@ -142,13 +152,13 @@
         @can('view-report')
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('reports') ? '' : 'collapsed' }}" href="{{ route('reports') }}">
-                    <i class="fas fa-chart-pie"></i>
+                    <i class="fas fa-chart-line"></i>
                     <span>Reports</span>
                 </a>
             </li>
         @endcan
         <!-- End Report Page Nav -->
-        @can('view-attendance')
+        @can('view-holiday')
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('holiday.index') ? '' : 'collapsed' }}"
                     href="{{ route('holiday.index') }}">
@@ -167,7 +177,7 @@
                 </a>
             </li>
         @endcan
-        @can('view-roles')
+        @can('view-role')
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('roles.index') ? '' : 'collapsed' }}"
                     href="{{ route('roles.index') }}">

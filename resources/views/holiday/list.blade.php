@@ -24,7 +24,7 @@
 
                 <!-- Create Button (4 columns) -->
                 <div class="col-4 col-md-2 text-md-end">
-                    <a href="{{ route('permissions.create') }}" class="btn btn-primary w-100 w-md-auto">+ Create</a>
+                    <a href="{{ route('holiday.create') }}" class="btn btn-primary w-100 w-md-auto">+ Create</a>
                 </div>
             </div>
         </div>
@@ -34,30 +34,33 @@
                 <thead class="table-secondary">
                     <tr>
                         <th>Sl</th>
-                        <th>Permissions</th>
+                        <th>Holiday Date</th>
+                        <th>Reason</th>
+                        <th>State</th>
                         <th>Created At</th>
-                        @canany(['Delete Permissions', 'Edit Permissions'])
+                        @canany(['delete-holiday', 'etit-holiday'])
                             <th>Actions</th>
                         @endcanany
                     </tr>
                 </thead>
                 <tbody>
-                    @if ($permissions->isNotEmpty())
-                        @foreach ($permissions as $permission)
+                    @if ($holidays->isNotEmpty())
+                        @foreach ($holidays as $holiday)
                             <tr>
-                                <td>{{ $permission->id }}</td>
-                                <td>{{ $permission->name }}</td>
-                                <td>{{ \Carbon\Carbon::parse($permission->created_at)->format('d-M-Y') }}
+                                <td>{{ $holiday->id }}</td>
+                                <td>{{ $holiday->leave_date }}</td>
+                                <td>{{ $holiday->reason }}</td>
+                                <td>{{ $holiday->state }}</td>
+                                <td>{{ \Carbon\Carbon::parse($holiday->created_at)->format('d-M-Y') }}
                                 </td>
-                                @canany(['Delete Permissions', 'Edit Permissions'])
+                                @canany(['delete-holiday', 'edit-holiday'])
                                     <td>
-                                        @can('Edit Permissions')
-                                            <a href="{{ route('permissions.edit', $permission->id) }}"
-                                                class="btn btn-primary">Edit</a>
+                                        @can('edit-holiday')
+                                            <a href="{{ route('holiday.edit', $holiday->id) }}" class="btn btn-primary">Edit</a>
                                         @endcan
-                                        @can('Delete Permissions')
+                                        @can('delete-holiday')
                                             <button type="button" class="btn btn-danger"
-                                                onclick="deletePermission({{ $permission->id }})">Delete</button>
+                                                onclick="deletePermission({{ $holiday->id }})">Delete</button>
                                         @endcan
                                     </td>
                                 @endcanany
@@ -68,7 +71,7 @@
             </table>
             <div class="d-flex justify-content-center">
                 {{-- {{ $permissions->links() }} --}}
-                {{ $permissions->appends(request()->input())->links('pagination::bootstrap-5') }}
+                {{ $holidays->appends(request()->input())->links('pagination::bootstrap-5') }}
             </div>
         </div>
     </section>
@@ -77,7 +80,7 @@
         function deletePermission(id) {
             if (confirm('Are You sure You want to Delete?')) {
                 $.ajax({
-                    url: '{{ route('permissions.delete') }}',
+                    url: '{{ route('holiday.delete') }}',
                     type: 'delete',
                     data: {
                         id: id
@@ -88,7 +91,7 @@
                     },
                     success: function(response) {
                         console.log(response);
-                        window.location.href = '{{ route('permissions.index') }}';
+                        window.location.href = '{{ route('holiday.index') }}';
                     }
                 })
             }

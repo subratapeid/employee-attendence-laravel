@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CompanyLeave;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
@@ -29,7 +30,7 @@ class HolidayController extends Controller implements HasMiddleware
     {
         // Retrieve paginated users along with their roles using eager loading
         // $users = User::with('roles')->latest()->paginate(5);
-        $users = User::latest()->paginate(5);
+        $holidays = CompanyLeave::latest()->paginate(5);
 
         // Add a 'roles' attribute to each user as a comma-separated list of roles
         // $users->getCollection()->transform(function ($user) {
@@ -38,7 +39,7 @@ class HolidayController extends Controller implements HasMiddleware
         // });
 
         // Pass the users data to the view
-        return view('holiday.list', ['permissions' => $users]);
+        return view('holiday.list', ['holidays' => $holidays]);
     }
 
     /**
@@ -47,7 +48,7 @@ class HolidayController extends Controller implements HasMiddleware
     public function create()
     {
         $roles = Role::orderBy('name', 'ASC')->get();
-        return view('users.create', [
+        return view('holiday.create', [
             'roles' => $roles
         ]);
     }

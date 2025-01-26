@@ -39,7 +39,7 @@
                         <th class="text-nowrap" scope="col">Roles</th>
                         <th style="min-width: 500px;" scope="col">Has Permissions</th>
                         <th class="text-nowrap" scope="col">Created At</th>
-                        @canany(['Delete Roles', 'Edit Roles'])
+                        @canany(['delete-role', 'edit-role'])
                             <th class="text-nowrap" scope="col">Actions</th>
                         @endcan
                     </tr>
@@ -53,13 +53,13 @@
                                 <td>{{ $role->permissions->pluck('name')->implode(', ') }}</td>
                                 <td class="text-nowrap">{{ \Carbon\Carbon::parse($role->created_at)->format('d-M-Y') }}
                                 </td>
-                                @canany(['Delete Roles', 'Edit Roles'])
+                                @canany(['delete-role', 'edit-role'])
                                     <td class="text-nowrap">
-                                        @can('Edit Roles')
+                                        @can('edit-role')
                                             <a href="{{ route('roles.edit', $role->id) }}"
                                                 class="btn btn-warning btn-sm">Edit</a>
                                         @endcan
-                                        @can('Delete Roles')
+                                        @can('delete-role')
                                             <button class="btn btn-danger btn-sm"
                                                 onclick="deleteRole({{ $role->id }})">Delete</button>
                                         @endcan

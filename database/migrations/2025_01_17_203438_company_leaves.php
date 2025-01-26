@@ -11,10 +11,12 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('company_leaves', function (Blueprint $table) {
-            $table->id(); // Primary key
-            $table->date('leave_date'); // Date of the leave
-            $table->text('reason'); // Reason for the leave
-            $table->timestamps(); // created_at and updated_at columns for tracking
+            $table->id();
+            $table->date('leave_date');
+            $table->string('state');
+            $table->text('reason');
+            $table->string('status')->default('Pending');
+            $table->timestamps();
         });
 
     }

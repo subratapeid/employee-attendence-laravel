@@ -18,11 +18,8 @@ class RolePermissionSeeder extends Seeder
             'create-attendance',
             'view-attendance',
             'edit-attendance',
-            'delete-attendance',
-            'create-report',
             'view-report',
-            'edit-report',
-            'delete-report',
+            'download-report',
             'create-user',
             'view-user',
             'edit-user',
@@ -31,6 +28,17 @@ class RolePermissionSeeder extends Seeder
             'view-leave',
             'edit-leave',
             'delete-leave',
+            'create-holiday',
+            'view-holiday',
+            'edit-holiday',
+            'delete-holiday',
+            'create-role',
+            'view-role',
+            'edit-role',
+            'delete-role',
+            'view-activity',
+            'edit-activity',
+            'delete-activity',
         ];
 
         // Insert permissions into the database
@@ -42,17 +50,16 @@ class RolePermissionSeeder extends Seeder
         $superAdminRole = Role::firstOrCreate(['name' => 'Super Admin', 'guard_name' => 'web']);
         $adminRole = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $userRole = Role::firstOrCreate(['name' => 'User', 'guard_name' => 'web']);
+        $employeeRole = Role::firstOrCreate(['name' => 'Employee', 'guard_name' => 'web']);
 
         // Assign all permissions to Super Admin
         $superAdminRole->syncPermissions(Permission::all());
 
         // Assign specific permissions to Admin
         $adminRole->syncPermissions([
-            'create-attendance',
             'view-attendance',
             'edit-attendance',
-            'delete-attendance',
-            'create-report',
+            'download-report',
             'view-report',
             'create-user',
             'view-user',
@@ -64,6 +71,14 @@ class RolePermissionSeeder extends Seeder
 
         // Assign limited permissions to User
         $userRole->syncPermissions([
+            'create-attendance',
+            'view-attendance',
+            'create-leave',
+            'view-leave',
+        ]);
+
+        // Assign limited permissions to Employee
+        $employeeRole->syncPermissions([
             'create-attendance',
             'view-attendance',
             'create-leave',

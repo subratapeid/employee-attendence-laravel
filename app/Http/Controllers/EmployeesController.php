@@ -19,36 +19,12 @@ class EmployeesController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('permission:view-employee', only: ['index']),
-            new Middleware('permission:edit-employee', only: ['update']),
-            new Middleware('permission:create-employee', only: ['store']),
-            new Middleware('permission:delete-employee', only: ['destroy']),
+            new Middleware('permission:view-attendance', only: ['index']),
+            new Middleware('permission:edit-user', only: ['update']),
+            new Middleware('permission:create-user', only: ['store']),
+            new Middleware('permission:delete-user', only: ['destroy']),
         ];
     }
-    // public function index(Request $request)
-    // {
-    //     $query = User::query();
-
-    //     // Search functionality
-    //     if ($request->filled('search')) {
-    //         $query->where('name', 'like', '%' . $request->search . '%')
-    //             ->orWhere('id', 'like', '%' . $request->search . '%')
-    //             ->orWhere('email', 'like', '%' . $request->search . '%');
-    //     }
-
-    //     // Filtering by department or designation
-    //     if ($request->filled('filter') && $request->filled('filter_value')) {
-    //         $query->where($request->filter, $request->filter_value);
-    //     }
-
-    //     // Paginate the results (15 per page)
-    //     $employees = $query->paginate(15);
-
-    //     // Calculate the serial number based on the current page
-    //     $sl_no = ($employees->currentPage() - 1) * $employees->perPage() + 1;
-
-    //     return view('pages.employees', compact('employees', 'sl_no'));
-    // }
 
     public function index(Request $request)
     {
@@ -105,7 +81,7 @@ class EmployeesController extends Controller implements HasMiddleware
             // Select only desired data for frontend
             $data = [
                 'id' => $employee->id,
-                'sl_no' => $sl_no++, // Increment sl_no for each employee
+                'sl_no' => $sl_no++,
                 'name' => $employee->name,
                 'email' => $employee->email,
                 'phone' => $employee->phone ?? "-",
@@ -219,7 +195,8 @@ class EmployeesController extends Controller implements HasMiddleware
         if (!$employee) {
             return response()->json(['error' => 'Employee not found'], 404);
         }
-
+        // Set default photo if null or empty
+        $employee->photo = $employee->photo ?? asset('assets/img/user.png');
         return response()->json($employee);
     }
 

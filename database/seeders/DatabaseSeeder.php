@@ -15,8 +15,9 @@ class DatabaseSeeder extends Seeder
     {
         // Call the RoleSeeder to insert fixed roles
         $this->call(RolePermissionSeeder::class);
-
         // Call the UserSeeder to insert fixed users
         $this->call(UserSeeder::class);
+        // Call the CompanyLeavesSeeder to insert
+        $this->call(CompanyLeavesSeeder::class);
     }
 }

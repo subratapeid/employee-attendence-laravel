@@ -12,11 +12,11 @@
         <div class="mb-3">
             <div class="row g-2">
                 <!-- Buttons Section (Mobile View) -->
-                <div class="col-12 d-flex d-md-none pt-2 pe-4 ps-4">
+                {{-- <div class="col-12 d-flex d-md-none pt-2 pe-4 ps-4">
                     <button class="btn btn-primary flex-fill me-2 add-btn">Add Employee</button>
                     <a href="{{ route('employees.export', request()->all()) }}"
                         class="btn btn-secondary export-btn">Export</a>
-                </div>
+                </div> --}}
 
                 <!-- Filter and Search Section (Mobile & Desktop) -->
                 <div class="col-12 col-md-6 pt-2 pe-4 ps-4 pb-2">
@@ -43,10 +43,10 @@
 
 
                 <!-- Buttons Section (Desktop View) -->
-                <div class="col-12 col-md-6 text-md-end d-none d-md-block pt-2 pe-4 pb-2">
-                    <button class="btn btn-primary me-2 add-btn">Add Employee</button>
+                <div class="col-12 col-md-6 text-md-end d-md-block pt-2 pe-4 pb-2">
+                    {{-- <button class="btn btn-primary me-2 add-btn">Add Employee</button> --}}
                     <a href="{{ route('employees.export', request()->all()) }}"
-                        class="btn btn-secondary export-btn">Export</a>
+                        class="btn btn-secondary export-btn">Export Data</a>
                 </div>
             </div>
         </div>
@@ -59,10 +59,10 @@
                         <th class="text-nowrap">SL No</th>
                         <th class="text-nowrap">Name</th>
                         <th class="text-nowrap">Emp ID</th>
-                        <th class="text-nowrap">Email</th>
+                        {{-- <th class="text-nowrap">Email</th>
                         <th class="text-nowrap">Phone</th>
                         <th class="text-nowrap">State</th>
-                        <th class="text-nowrap">Branch</th>
+                        <th class="text-nowrap">Branch</th> --}}
                         <th class="text-nowrap">Duty Status</th>
                         <th class="text-nowrap">Login Time</th>
                         <th class="text-nowrap">Login Location</th>
@@ -82,11 +82,11 @@
                             <td class="text-nowrap">{{ $employee['sl_no'] }}</td>
                             <td class="text-nowrap">{{ $employee['name'] }}</td>
                             <td class="text-nowrap">{{ $employee['id'] }}</td>
-                            <td class="text-nowrap">{{ $employee['email'] }}</td>
+                            {{-- <td class="text-nowrap">{{ $employee['email'] }}</td>
 
                             <td class="text-nowrap">{{ $employee['phone'] }}</td>
                             <td class="text-nowrap">{{ $employee['state'] }}</td>
-                            <td class="text-nowrap">{{ $employee['branch'] }}</td>
+                            <td class="text-nowrap">{{ $employee['branch'] }}</td> --}}
                             <td class="text-nowrap">
                                 @if ($employee['duty_status'] == 'On Duty')
                                     <span class="badge bg-success">{{ $employee['duty_status'] }}</span>
@@ -107,17 +107,11 @@
                             <td class="text-nowrap">{{ $employee['duty_hours'] }}</td>
                             <td class="text-nowrap">{{ $employee['account_status'] }}</td>
                             <td class="text-nowrap">
-                                <button class="btn btn-primary btn-sm activity-btn"
-                                    data-id="{{ $employee['id'] }}">Activity</button>
-                                <button class="btn btn-warning btn-sm edit-btn"
-                                    data-id="{{ $employee['id'] }}">Edit</button>
-                                <button class="btn btn-danger btn-sm delete-btn"
-                                    data-id="{{ $employee['id'] }}">Delete</button>
                                 <button class="btn btn-info btn-sm view-btn"
                                     data-id="{{ $employee['id'] }}">Details</button>
-                                <button class="btn btn-secondary btn-sm reset-btn"
-                                    data-id="{{ $employee['id'] }}">Reset
-                                    Password</button>
+
+                                <button class="btn btn-primary btn-sm activity-btn"
+                                    data-id="{{ $employee['id'] }}">Activity</button>
                             </td>
                         </tr>
                     @endforeach
