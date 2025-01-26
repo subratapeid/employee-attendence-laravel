@@ -1,10 +1,10 @@
 <x-app-layout>
     <div class="pagetitle">
-        <h1>Edit Permission</h1>
+        <h1>Edit Holiday</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('permissions.index') }}">Permission</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('holiday.index') }}">Holidays</a></li>
                 <li class="breadcrumb-item">Edit</li>
             </ol>
         </nav>
@@ -13,15 +13,15 @@
         <div class="container-fluied ">
             <div class="card shadow-sm p-lg-4 p-sm-2">
                 <div class="card-body p-4">
-                    <form action="{{ route('permissions.update', $permission->id) }}" method="post">
+                    <form action="{{ route('holiday.update', $holiday->id) }}" method="post">
                         @csrf
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    <input type="text" name="name" value="{{ old('name', $permission->name) }}"
-                                        id="permission_name" class="form-control" placeholder="Enter Permission Name" />
-                                    <label for="permission_name">Enter Permission Name</label>
-                                    @error('name')
+                                    <input type="text" name="name" value="{{ old('name', $holiday->reason) }}"
+                                        id="holiday_reason" class="form-control" placeholder="Enter Holiday Reason" />
+                                    <label for="holiday_reason">Enter Holiday Reason</label>
+                                    @error('reason')
                                         <div class="text-danger mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>

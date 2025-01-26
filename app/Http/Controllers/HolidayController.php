@@ -90,13 +90,9 @@ class HolidayController extends Controller implements HasMiddleware
      */
     public function edit(string $id)
     {
-        $user = User::findOrFail($id);
-        $roles = Role::orderBy('name', 'ASC')->get();
-        $hasRoles = $user->roles->pluck('id');
-        return view('users.edit', [
-            'user' => $user,
-            'roles' => $roles,
-            'hasRoles' => $hasRoles
+        $holiday = CompanyLeave::findOrFail($id);
+        return view('holiday.edit', [
+            'holiday' => $holiday
         ]);
     }
 
@@ -128,19 +124,19 @@ class HolidayController extends Controller implements HasMiddleware
     public function destroy(Request $request)
     {
         $id = $request->id;
-        $user = User::find($id);
-        if ($user == null) {
-            session()->flash('error', 'user not Found');
+        $holiday = CompanyLeave::find($id);
+        if ($holiday == null) {
+            session()->flash('error', 'Holiday not Found');
             return response()->json([
                 'status' => false,
-                'error' => 'user not Found'
+                'error' => 'Holiday not Found'
             ]);
         }
-        $user->delete();
-        session()->flash('success', 'Role Deleted Successfully.');
+        $holiday->delete();
+        session()->flash('success', 'Holiday Deleted Successfully.');
         return response()->json([
             'status' => true,
-            'message' => 'Role Deleted Successfully'
+            'message' => 'Holiday Deleted Successfully'
         ]);
     }
 }
