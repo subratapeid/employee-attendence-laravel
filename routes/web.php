@@ -14,6 +14,7 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\DutyStatusController;
 use App\Http\Controllers\DateTimeController;
 use App\Http\Controllers\UserImportController;
+use App\Http\Controllers\TestController;
 
 use App\Http\Controllers\PermissionController;
 
@@ -34,6 +35,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/calender', function () {
         return view('calender');
     })->name('calender');
+
+    // test pages
+    Route::get('/user-index', function () {
+        return view('users.index');
+    })->name('user-index');
+    Route::get('/test-user', [TestController::class, 'fetchEmployees'])->name('test-index');
+
 
     Route::get('/current-time', [DateTimeController::class, 'getCurrentTime']);
 

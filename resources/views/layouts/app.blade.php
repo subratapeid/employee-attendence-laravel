@@ -48,6 +48,7 @@
     <div class="min-h-screen bg-gray-100">
         @include('layouts.navigation')
 
+        <div id="loading-overlay">Loading...</div>
 
 
         <!-- Page Content -->
