@@ -24,7 +24,7 @@
 
                 <!-- Create Button (4 columns) -->
                 <div class="col-4 col-md-2 text-md-end">
-                    <a href="{{ route('permissions.create') }}" class="btn btn-primary w-100 w-md-auto">+ Create</a>
+                    <a href="{{ route('users.create') }}" class="btn btn-primary w-100 w-md-auto">+ Create</a>
                 </div>
             </div>
         </div>
@@ -52,18 +52,18 @@
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->roles->pluck('name')->implode(', ') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d-M-Y') }}</td>
-                                {{-- @canany(['Delete Users', 'Edit Users']) --}}
-                                <td>
-                                    {{-- @can('Edit Users') --}}
-                                    <a href="{{ route('users.edit', $user->id) }}"
-                                        class="btn btn-warning btn-sm">Edit</a>
-                                    {{-- @endcan
-                                    @can('Delete Users') --}}
-                                    <a href="javascript:void(0);" onclick="deleteUser({{ $user->id }})"
-                                        class="btn btn-danger btn-sm">Delete</a>
-                                    {{-- @endcan --}}
-                                </td>
-                                {{-- @endcanany --}}
+                                @canany(['Delete Users', 'Edit Users'])
+                                    <td>
+                                        @can('Edit Users')
+                                            <a href="{{ route('users.edit', $user->id) }}"
+                                                class="btn btn-warning btn-sm">Edit</a>
+                                        @endcan
+                                        @can('Delete Users')
+                                            <a href="javascript:void(0);" onclick="deleteUser({{ $user->id }})"
+                                                class="btn btn-danger btn-sm">Delete</a>
+                                        @endcan
+                                    </td>
+                                @endcanany
                             </tr>
                         @endforeach
                     @endif
@@ -77,25 +77,27 @@
         </div>
         </div>
 
-        {{-- <x-slot name="script">
+        {{-- <x-slot name="script"> --}}
         <script>
-            function deleteUser(id){
-                if(confirm('Are you sure you want to delete?')){
+            function deleteUser(id) {
+                if (confirm('Are you sure you want to delete?')) {
                     $.ajax({
-                        url: '{{route('users.delete')}}',
+                        url: '{{ route('users.delete') }}',
                         type: 'DELETE',
-                        data: {id: id},
-                        dataType: 'json',
-                        headers:{
-                            'X-CSRF-TOKEN': '{{csrf_token()}}'
+                        data: {
+                            id: id
                         },
-                        success: function(response){
+                        dataType: 'json',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
                             console.log(response);
-                            window.location.href = '{{route('users.index')}}';
+                            window.location.href = '{{ route('users.index') }}';
                         }
                     })
                 }
             }
         </script>
-    </x-slot> --}}
+        {{-- </x-slot> --}}
 </x-app-layout>

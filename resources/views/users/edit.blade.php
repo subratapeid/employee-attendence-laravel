@@ -1,24 +1,25 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
-            <h2 class="fw-semibold fs-4 text-dark">
-                {{ __('Roles/Edit') }}
-            </h2>
-            <a href="{{ route('users.index') }}" class="btn btn-primary">Back</a>
-        </div>
-    </x-slot>
-
-    <div class="py-4 d-flex justify-content-center">
-        <div class="container">
-            <div class="card shadow-sm">
+    <div class="pagetitle">
+        <h1>Edit User</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('users.index') }}">Users</a></li>
+                <li class="breadcrumb-item active">Edit</li>
+            </ol>
+        </nav>
+    </div>
+    <section class="section create-user">
+        <div class="container-fluied ">
+            <div class="card shadow-sm p-lg-4 p-sm-2">
                 <div class="card-body text-dark">
                     <form action="{{ route('users.update', $user->id) }}" method="post">
                         @csrf
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label for="permission_name" class="form-label">Edit Role Name</label>
+                                <label for="user_name" class="form-label">Edit User Name</label>
                                 <input type="text" name="name" value="{{ old('name', $user->name) }}"
-                                    id="permission_name" class="form-control" placeholder="Edit Role Name" />
+                                    id="user_name" class="form-control" placeholder="Edit User Name" />
                                 @error('name')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -39,8 +40,6 @@
                                         <input {{ $hasRoles->contains($role->id) ? 'checked' : '' }} type="checkbox"
                                             class="form-check-input" id="{{ $role->id }}" name="role[]"
                                             value="{{ $role->name }}">
-                                        {{-- <input type="checkbox" class="form-check-input" id="{{ $role->id }}"
-                                            name="role[]" value="{{ $role->name }}"> --}}
                                         <label class="form-check-label"
                                             for="{{ $role->id }}">{{ $role->name }}</label>
                                     </div>
@@ -54,5 +53,5 @@
                 </div>
             </div>
         </div>
-    </div>
+        </div>
 </x-app-layout>

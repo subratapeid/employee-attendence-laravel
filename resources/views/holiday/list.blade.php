@@ -1,10 +1,10 @@
 <x-app-layout>
     <div class="pagetitle">
-        <h1>All Roles</h1>
+        <h1>All Holidays</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active">Roles</li>
+                <li class="breadcrumb-item active">Holidays</li>
             </ol>
         </nav>
     </div>
@@ -24,44 +24,40 @@
 
                 <!-- Create Button (4 columns) -->
                 <div class="col-4 col-md-2 text-md-end">
-                    <a href="{{ route('roles.create') }}" class="btn btn-primary w-100 w-md-auto">+ Create</a>
+                    <a href="{{ route('permissions.create') }}" class="btn btn-primary w-100 w-md-auto">+ Create</a>
                 </div>
             </div>
         </div>
-
-
 
         <div class="table-responsive " style="min-height: 250px;">
             <table class="table table-striped table-bordered">
                 <thead class="table-secondary">
                     <tr>
-                        <th class="text-nowrap" style="min-width: 50px;" scope="col">Sl</th>
-                        <th class="text-nowrap" scope="col">Roles</th>
-                        <th style="min-width: 500px;" scope="col">Has Permissions</th>
-                        <th class="text-nowrap" scope="col">Created At</th>
-                        @canany(['Delete Roles', 'Edit Roles'])
-                            <th class="text-nowrap" scope="col">Actions</th>
-                        @endcan
+                        <th>Sl</th>
+                        <th>Permissions</th>
+                        <th>Created At</th>
+                        @canany(['Delete Permissions', 'Edit Permissions'])
+                            <th>Actions</th>
+                        @endcanany
                     </tr>
                 </thead>
                 <tbody>
-                    @if ($roles->isNotEmpty())
-                        @foreach ($roles as $role)
+                    @if ($permissions->isNotEmpty())
+                        @foreach ($permissions as $permission)
                             <tr>
-                                <td>{{ $role->id }}</td>
-                                <td class="text-nowrap">{{ $role->name }}</td>
-                                <td>{{ $role->permissions->pluck('name')->implode(', ') }}</td>
-                                <td class="text-nowrap">{{ \Carbon\Carbon::parse($role->created_at)->format('d-M-Y') }}
+                                <td>{{ $permission->id }}</td>
+                                <td>{{ $permission->name }}</td>
+                                <td>{{ \Carbon\Carbon::parse($permission->created_at)->format('d-M-Y') }}
                                 </td>
-                                @canany(['Delete Roles', 'Edit Roles'])
-                                    <td class="text-nowrap">
-                                        @can('Edit Roles')
-                                            <a href="{{ route('roles.edit', $role->id) }}"
-                                                class="btn btn-warning btn-sm">Edit</a>
+                                @canany(['Delete Permissions', 'Edit Permissions'])
+                                    <td>
+                                        @can('Edit Permissions')
+                                            <a href="{{ route('permissions.edit', $permission->id) }}"
+                                                class="btn btn-primary">Edit</a>
                                         @endcan
-                                        @can('Delete Roles')
-                                            <button class="btn btn-danger btn-sm"
-                                                onclick="deleteRole({{ $role->id }})">Delete</button>
+                                        @can('Delete Permissions')
+                                            <button type="button" class="btn btn-danger"
+                                                onclick="deletePermission({{ $permission->id }})">Delete</button>
                                         @endcan
                                     </td>
                                 @endcanany
@@ -70,18 +66,18 @@
                     @endif
                 </tbody>
             </table>
-            <div class="mt-4">
-                {{ $roles->links() }}
+            <div class="d-flex justify-content-center">
+                {{-- {{ $permissions->links() }} --}}
+                {{ $permissions->appends(request()->input())->links('pagination::bootstrap-5') }}
             </div>
         </div>
     </section>
 
-    {{-- <x-slot name="script"> --}}
     <script>
-        function deleteRole(id) {
+        function deletePermission(id) {
             if (confirm('Are You sure You want to Delete?')) {
                 $.ajax({
-                    url: '{{ route('roles.delete') }}',
+                    url: '{{ route('permissions.delete') }}',
                     type: 'delete',
                     data: {
                         id: id
@@ -92,11 +88,11 @@
                     },
                     success: function(response) {
                         console.log(response);
-                        window.location.href = '{{ route('roles.index') }}';
+                        window.location.href = '{{ route('permissions.index') }}';
                     }
                 })
             }
         }
     </script>
-    {{-- </x-slot> --}}
+
 </x-app-layout>

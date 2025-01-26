@@ -73,26 +73,26 @@
         </div>
     </section>
 
-    {{-- <script>
-            function deletePermission(id) {
-                if (confirm('Are You sure You want to Delete?')) {
-                    $.ajax({
-                        // url: '{{ route('permissions.delete') }}',
-                        type: 'delete',
-                        data: {
-                            id: id
-                        },
-                        dataType: 'json',
-                        headers: {
-                            'x-csrf-token': '{{ csrf_token() }}'
-                        },
-                        success: function(response) {
-                            console.log(response);
-                            // window.location.href = '{{ route('permissions.index') }}';
-                        }
-                    })
-                }
+    <script>
+        function deletePermission(id) {
+            if (confirm('Are You sure You want to Delete?')) {
+                $.ajax({
+                    url: '{{ route('permissions.delete') }}',
+                    type: 'delete',
+                    data: {
+                        id: id
+                    },
+                    dataType: 'json',
+                    headers: {
+                        'x-csrf-token': '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        window.location.href = '{{ route('permissions.index') }}';
+                    }
+                })
             }
-        </script> --}}
+        }
+    </script>
 
 </x-app-layout>

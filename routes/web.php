@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -102,19 +103,28 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('permissions', [PermissionController::class, 'index'])->name('permissions.index');
     Route::get('permission/edit/{id}', [PermissionController::class, 'edit'])->name('permissions.edit');
     Route::post('permission/update/{id}', [PermissionController::class, 'update'])->name('permissions.update');
+    Route::delete('permission/delete', [PermissionController::class, 'destroy'])->name('permissions.delete');
     // roles routes
     Route::get('role/create', [RoleController::class, 'create'])->name('roles.create');
     Route::post('role/store', [RoleController::class, 'store'])->name('roles.store');
     Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
-    Route::get('role-edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
-    Route::post('role-update/{id}', [RoleController::class, 'update'])->name('roles.update');
+    Route::get('role/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
+    Route::post('role/update/{id}', [RoleController::class, 'update'])->name('roles.update');
+    Route::delete('role/delete', [RoleController::class, 'destroy'])->name('roles.delete');
     // Users Routes
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/user/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/user/store', [UserController::class, 'store'])->name('users.store');
     Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('users.edit');
     Route::post('/user/update/{id}', [UserController::class, 'update'])->name('users.update');
-    Route::delete('/users', [UserController::class, 'destroy'])->name('users.delete');
+    Route::delete('/user/delete', [UserController::class, 'destroy'])->name('users.delete');
+    // Holiday Routes
+    Route::get('/holidays', [HolidayController::class, 'index'])->name('holiday.index');
+    Route::get('/holiday/create', [HolidayController::class, 'create'])->name('holiday.create');
+    Route::post('/holidays/store', [HolidayController::class, 'store'])->name('holiday.store');
+    Route::get('/holidays/edit/{id}', [HolidayController::class, 'edit'])->name('holiday.edit');
+    Route::post('/holidays/update/{id}', [HolidayController::class, 'update'])->name('holiday.update');
+    Route::delete('/holidays/delete', [HolidayController::class, 'destroy'])->name('holiday.delete');
 
 
 });

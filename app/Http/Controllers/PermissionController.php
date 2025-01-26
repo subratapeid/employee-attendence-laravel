@@ -50,21 +50,48 @@ class PermissionController extends Controller implements HasMiddleware
             return redirect()->route('permissions.create')->withInput()->withErrors($validator);
         }
     }
-    // This method will Show edit permission page
 
-    public function edit()
+    // this methode will show edit permission page
+    public function edit($id)
     {
+        $permission = Permission::findOrFail($id);
+        return view('permissions.edit', [
+            'permission' => $permission
+        ]);
 
     }
-    // This method will Updae permission 
-
-    public function update()
+    // this methode will update a permission
+    public function update($id, Request $request)
     {
-
+        $permission = Permission::findOrFail($id);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:3|unique:permissions,name,' . $id . ',id'
+        ]);
+        if ($validator->passes()) {
+            $permission->name = $request->name;
+            $permission->save();
+            return redirect()->route('permissions.index')->with('success', 'Permission Updated Successfully.');
+        } else {
+            return redirect()->route('permissions.edit,$id')->withInput()->withError($validator);
+        }
     }
-    // This method will Delete permission From db
-    public function destroy()
+    // this methode will Delete permission from DB
+    public function destroy(Request $request)
     {
-
+        $id = $request->id;
+        $permission = Permission::find($id);
+        if ($permission == null) {
+            session()->flash('error', 'Permission not Found');
+            return response()->json([
+                'status' => false,
+                'error' => 'Permission not Found'
+            ]);
+        }
+        $permission->delete();
+        session()->flash('success', 'Permission Deleted Successfully.');
+        return response()->json([
+            'status' => true,
+            'message' => 'Permission Deleted Successfully'
+        ]);
     }
 }

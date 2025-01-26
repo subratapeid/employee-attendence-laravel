@@ -1,55 +1,75 @@
 <?php
+
 namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
 class RolePermissionSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run()
     {
-        // Define permissions for each module
-        $modules = ['attendance', 'report', 'user', 'leave'];
-        $actions = ['create', 'view', 'edit', 'delete'];
+        // Define permissions
+        $permissions = [
+            'create-attendance',
+            'view-attendance',
+            'edit-attendance',
+            'delete-attendance',
+            'create-report',
+            'view-report',
+            'edit-report',
+            'delete-report',
+            'create-user',
+            'view-user',
+            'edit-user',
+            'delete-user',
+            'create-leave',
+            'view-leave',
+            'edit-leave',
+            'delete-leave',
+        ];
 
-        // Create permissions like create-attendance, view-attendance, etc.
-        foreach ($modules as $module) {
-            foreach ($actions as $action) {
-                Permission::create(['name' => "{$action}-{$module}"]);
-            }
+        // Insert permissions into the database
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
         }
 
-        // Create roles
-        $superAdminRole = Role::create(['name' => 'super-admin']);
-        $adminRole = Role::create(['name' => 'admin']);
-        $userRole = Role::create(['name' => 'user']);
+        // Insert fixed roles into the database
+        $superAdminRole = Role::firstOrCreate(['name' => 'Super Admin', 'guard_name' => 'web']);
+        $adminRole = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
+        $userRole = Role::firstOrCreate(['name' => 'User', 'guard_name' => 'web']);
 
-        // Assign permissions to the user role (as per your request)
-        $userPermissions = [
+        // Assign all permissions to Super Admin
+        $superAdminRole->syncPermissions(Permission::all());
+
+        // Assign specific permissions to Admin
+        $adminRole->syncPermissions([
+            'create-attendance',
+            'view-attendance',
+            'edit-attendance',
+            'delete-attendance',
+            'create-report',
+            'view-report',
+            'create-user',
+            'view-user',
+            'create-leave',
+            'view-leave',
+            'edit-leave',
+            'delete-leave',
+        ]);
+
+        // Assign limited permissions to User
+        $userRole->syncPermissions([
             'create-attendance',
             'view-attendance',
             'create-leave',
-            'view-leave'
-        ];
-        $userRole->givePermissionTo($userPermissions);
+            'view-leave',
+        ]);
 
-        // Assign all permissions to super-admin
-        $allPermissions = Permission::all();
-        $superAdminRole->givePermissionTo($allPermissions);
-
-        // Assign all except 'user' related permissions to admin
-        $adminPermissions = $allPermissions->filter(function ($permission) {
-            return !str_contains($permission->name, 'user');
-        });
-        $adminRole->givePermissionTo($adminPermissions);
-
-        echo "Roles and permissions created successfully.";
+        echo "Roles and permissions seeded successfully.\n";
     }
 }
-
-
-// $user = \App\Models\User::find(1);
-// $user->assignRole('super-admin'); // Assign super-admin role
-
-// $anotherUser = \App\Models\User::find(2);
-// $anotherUser->assignRole('user'); // Assign user role

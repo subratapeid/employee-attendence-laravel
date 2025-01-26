@@ -1,16 +1,17 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
-            <h2 class="fw-semibold fs-4 text-dark">
-                {{ __('Users/Create') }}
-            </h2>
-            <a href="{{ route('users.index') }}" class="btn btn-primary">Back</a>
-        </div>
-    </x-slot>
-
-    <div class="py-4 d-flex justify-content-center">
-        <div class="container">
-            <div class="card shadow-sm">
+    <div class="pagetitle">
+        <h1>Create User</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('users.index') }}">Users</a></li>
+                <li class="breadcrumb-item active">Create</li>
+            </ol>
+        </nav>
+    </div>
+    <section class="section create-user">
+        <div class="container-fluied ">
+            <div class="card shadow-sm p-lg-4 p-sm-2">
                 <div class="card-body text-dark">
                     <form action="{{ route('users.store') }}" method="post">
                         @csrf
@@ -52,6 +53,5 @@
                     </form>
                 </div>
             </div>
-        </div>
-    </div>
+    </section>
 </x-app-layout>

@@ -2,41 +2,33 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
-    public function run()
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
     {
-        // Create Super Admin User
-        $superAdmin = User::firstOrCreate([
-            'email' => 'superadmin@example.com'
-        ], [
-            'name' => 'Super Admin',
-            'password' => bcrypt('password123'),
-        ]);
-        // $superAdmin->assignRole('super-admin');
+        $adminRole = Role::where('name', 'Admin')->first();
+        $superAdminRole = Role::where('name', 'Super Admin')->first();
 
-        // Create Admin User
-        $admin = User::firstOrCreate([
-            'email' => 'admin@example.com'
-        ], [
+        User::create([
             'name' => 'Admin User',
-            'password' => bcrypt('password123'),
-        ]);
-        // $admin->assignRole('admin');
+            'email' => 'subratap.eid@gmail.com',
+            'password' => bcrypt('123456'),
+        ])->assignRole($adminRole);
 
-        // Create Normal User
-        $user = User::firstOrCreate([
-            'email' => 'user@example.com'
-        ], [
-            'name' => 'Normal User',
-            'password' => bcrypt('password123'),
-        ]);
-        // $user->assignRole('user');
+        // Create Editor user
+        User::create([
+            'name' => 'Super Admin',
+            'email' => 'subratap@integramicro.co.in',
+            'password' => bcrypt('123456'),
+        ])->assignRole($superAdminRole);
 
-        echo "Users created successfully.\n";
     }
 }
