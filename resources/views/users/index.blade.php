@@ -1,53 +1,4 @@
 <x-app-layout>
-    <style>
-        .filter-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: red;
-            color: white;
-            font-size: 12px;
-            border-radius: 50%;
-            padding: 3px 7px;
-        }
-
-        #search-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        #search-overlay.active {
-            display: flex;
-        }
-
-        @media (max-width: 768px) {
-            .mobile-hidden {
-                display: none;
-            }
-
-            .mobile-visible {
-                display: flex;
-            }
-        }
-
-        @media (min-width: 769px) {
-            .mobile-hidden {
-                display: flex;
-            }
-
-            .mobile-visible {
-                display: none;
-            }
-        }
-    </style>
 
     <div class="pagetitle">
         <h1>All Users</h1>
@@ -104,10 +55,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <select id="department" class="form-select mb-3">
-                        <option value="">All Departments</option>
-                        <option value="HR">HR</option>
-                        <option value="Finance">Finance</option>
+                    <select id="role" class="form-select mb-3">
+                        <option value="">All Roles</option>
+                        <option value="employee">Employee</option>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
                     </select>
                     <select id="status" class="form-select">
                         <option value="">All Status</option>
@@ -177,27 +129,77 @@
             </div>
         </div>
     </div>
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editUserForm">
+                        <input type="hidden" id="edit_emp_id">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" id="edit_name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="edit_email" name="email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update User</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- View User Modal -->
+    <div class="modal fade" id="viewUserModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">User Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <img id="view_photo" src="assets/img/user.png" alt="Employee Photo"
+                            class="img-fluid rounded-circle" width="120">
+                    </div>
+                    <p><strong>Name:</strong> <span id="view_name"></span></p>
+                    <p><strong>Email:</strong> <span id="view_email"></span></p>
+                    <p><strong>Phone:</strong> <span id="view_phone"></span></p>
+                    <p><strong>Department:</strong> <span id="view_department"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
     {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
     <script>
         fetchEmployees();
         $('#create-btn').click(function() {
             $('#addUserModal').modal('show');
-            // $('#addEmployeeForm')[0].reset();
+            // $('#addUserForm')[0].reset();
         });
         let appliedFilters = 0;
 
         function fetchEmployees(page = 1) {
             $('#loading-overlay').addClass('d-flex')
             let search = $('#search').val() || $('#overlaySearch').val();
+            let role = $('#role').val();
+            let status = $('#status').val();
             let perPage = $('#per_page').val();
 
             $.ajax({
-                url: "{{ route('test-index') }}",
+                url: "{{ route('users.fetch') }}",
                 method: 'GET',
                 data: {
                     search,
+                    role: role,
+                    status: status,
                     page,
                     per_page: perPage
                 },
@@ -211,10 +213,37 @@
                         '<th>SL No</th><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Action</th>' +
                         '</tr></thead><tbody>';
                     response.data.forEach(function(employee) {
-                        tableHtml += '<tr><td>' + employee.name + '</td>';
+                        tableHtml += '<tr><td>' + employee.sl_no + '</td>';
+                        tableHtml += '<td>' + employee.name + '</td>';
                         tableHtml += '<td>' + employee.email + '</td>';
-                        tableHtml += '<td>' + employee.department + '</td>';
-                        tableHtml += '<td>' + employee.status + '</td></tr>';
+                        tableHtml += '<td>' + employee.roles + '</td>';
+                        tableHtml += '<td>' + employee.status + '</td>';
+                        tableHtml += '<td class="text-nowrap">';
+
+                        // Conditionally render action buttons based on permissions
+                        @canany(['view-user', 'edit-user', 'delete-user', 'reset-password'])
+                            @can('edit-user')
+                                tableHtml +=
+                                    '<button class="btn btn-warning btn-sm edit-btn" data-id="' +
+                                    employee.id + '">Edit</button> ';
+                            @endcan
+                            @can('delete-user')
+                                tableHtml +=
+                                    '<button class="btn btn-danger btn-sm delete-btn" data-id="' +
+                                    employee.id + '">Delete</button> ';
+                            @endcan
+                            @can('view-user')
+                                tableHtml += '<button class="btn btn-info btn-sm view-btn" data-id="' +
+                                    employee.id + '">Details</button> ';
+                            @endcan
+                            @can('reset-password')
+                                tableHtml +=
+                                    '<button class="btn btn-secondary btn-sm reset-btn" data-id="' +
+                                    employee.id + '">Reset Password</button>';
+                            @endcan
+                        @endcanany
+
+                        tableHtml += '</td></tr>';
                     });
 
                     tableHtml += '</tbody></table></div>'; // Closing the scrollable div
@@ -233,6 +262,66 @@
                         '</div></div>';
 
                     $('#employee-table').html(tableHtml + paginationHtml);
+
+
+
+                    // Open Edit User Modal
+                    $('.edit-btn').click(function() {
+                        let empId = $(this).data('id');
+                        $('#editUserModal').modal('show');
+                        $.get(`/employee/${empId}`, function(data) {
+                            $('#edit_emp_id').val(data.id);
+                            $('#edit_name').val(data.name);
+                            $('#edit_email').val(data.email);
+                        });
+                    });
+
+                    // Open View User Modal
+                    $('.view-btn').click(function() {
+                        let empId = $(this).data('id');
+                        $('#viewUserModal').modal('show');
+                        $.get(`/employee/${empId}`, function(data) {
+                            $('#view_photo').attr('src', data.photo);
+                            $('#view_name').text(data.name);
+                            $('#view_email').text(data.email);
+                            $('#view_phone').text(data.phone);
+                            $('#view_department').text(data.department);
+                        });
+                    });
+
+                    // Delete Employee
+                    $('.delete-btn').click(function() {
+                        if (confirm("Are you sure you want to delete this user?")) {
+                            let empId = $(this).data('id');
+                            $.ajax({
+                                url: `/employees/${empId}`,
+                                type: 'DELETE',
+                                data: {
+                                    _token: '{{ csrf_token() }}'
+                                },
+                                success: function(response) {
+                                    alert('User Deleted Successfully');
+                                    fetchEmployees();
+
+                                }
+                            });
+                        }
+                    });
+
+                    // Reset Password
+                    $('.reset-btn').click(function() {
+                        let empId = $(this).data('id');
+                        if (confirm('Are you sure you want to reset the password?')) {
+                            $.post("{{ url('/employees/reset-password') }}/" + empId, {
+                                _token: '{{ csrf_token() }}'
+                            }, function(response) {
+                                alert(response.success + '\nNew Password: ' + response
+                                    .new_password);
+                            }).fail(function() {
+                                alert('Failed to reset password.');
+                            });
+                        }
+                    });
                 },
 
                 error: function() {
@@ -272,7 +361,7 @@
         });
 
         $('#applyFilters').on('click', function() {
-            appliedFilters = ($('#department').val() ? 1 : 0) + ($('#status').val() ? 1 : 0);
+            appliedFilters = ($('#role').val() ? 1 : 0) + ($('#status').val() ? 1 : 0);
             if (appliedFilters > 0) {
                 $('#filter-count').text(appliedFilters).show();
             } else {
@@ -293,6 +382,134 @@
             let status = $('#status').val();
             window.location.href =
                 `{{ route('employees.export') }}?search=${search}&department=${department}&status=${status}`;
+        });
+
+        function validateCoordinateInput(input) {
+            let value = input.value;
+
+            // Allow only numbers and a single decimal point
+            value = value.replace(/[^0-9.]/g, '');
+
+            // Prevent typing the decimal point if no digits are entered before
+            if (value.startsWith('.')) {
+                value = '0' + value; // Automatically add 0 before decimal
+            }
+
+            // Ensure only one decimal point is allowed
+            let dotCount = (value.match(/\./g) || []).length;
+            if (dotCount > 1) {
+                value = value.substring(0, value.lastIndexOf('.')); // Remove the extra decimal
+            }
+
+            // Prevent entering more than 3 digits before the decimal point
+            let parts = value.split('.');
+            if (parts[0].length > 3) {
+                parts[0] = parts[0].slice(0, 3); // Limit the number of digits before the decimal
+            }
+
+            // Ensure exactly 8 digits after the decimal point
+            if (parts.length > 1) {
+                parts[1] = parts[1].slice(0, 8); // Limit the number of digits after the decimal
+                value = parts.join('.');
+            } else {
+                value = parts[0];
+            }
+
+            input.value = value;
+        }
+
+        $('#latitude, #longitude').on('input', function() {
+            validateCoordinateInput(this);
+            $(this).removeClass('is-invalid');
+            $(this).next('.invalid-feedback').hide();
+        });
+
+        $('#addUserForm').on('submit', function(e) {
+            e.preventDefault();
+            var form = $(this);
+            var isValid = true;
+
+            // Validate Latitude
+            var latitude = $('#latitude').val();
+            var latitudeRegex = /^[0-9]{1,3}(\.\d{8})$/; // Exactly 8 digits after the decimal
+            if (!latitudeRegex.test(latitude)) {
+                $('#latitude').addClass('is-invalid');
+                $('#latitude').next('.invalid-feedback').text(
+                    'Please enter a valid latitude with exactly 8 digits after the decimal.'
+                ).show();
+                isValid = false;
+            }
+
+            // Validate Longitude
+            var longitude = $('#longitude').val();
+            var longitudeRegex = /^[0-9]{1,3}(\.\d{8})$/; // Exactly 8 digits after the decimal
+            if (!longitudeRegex.test(longitude)) {
+                $('#longitude').addClass('is-invalid');
+                $('#longitude').next('.invalid-feedback').text(
+                    'Please enter a valid longitude with exactly 8 digits after the decimal.'
+                ).show();
+                isValid = false;
+            }
+
+            if (!isValid) {
+                return; // Stop form submission if invalid
+            }
+
+            // If valid, proceed with AJAX submission
+            $.ajax({
+                url: '{{ route('employees.store') }}',
+                type: 'POST',
+                data: form.serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+
+                success: function(response) {
+                    alert('User added successfully!');
+                    form[0].reset();
+                    $('#addUserModal').modal('hide');
+                    fetchEmployees();
+                    form.removeClass('was-validated');
+                },
+                error: function(xhr) {
+                    form.find('.invalid-feedback').hide(); // Hide previous errors
+                    var errors = xhr.responseJSON.errors;
+                    if (errors) {
+                        $.each(errors, function(field, messages) {
+                            var input = $('[name="' + field + '"]');
+                            input.addClass('is-invalid');
+                            input.next('.invalid-feedback').text(messages[0])
+                                .show();
+                        });
+                    }
+                }
+            });
+        });
+        // Add User functionality end
+
+        // Edit User Form Submit
+        $('#editUserForm').submit(function(e) {
+            e.preventDefault();
+            let id = $('#edit_emp_id').val();
+            $.ajax({
+                url: `/employees/${id}`,
+                type: 'PUT',
+                data: $(this).serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    alert("User Updated Successfully");
+                    $('#editUserModal').modal('hide');
+                    fetchEmployees();
+                }
+            });
+        });
+
+        // Clear modal content on close
+        $('.modal').on('hidden.bs.modal', function() {
+            // $(this).find('form')[0].reset();
+            $('#viewContent').html('');
         });
     </script>
 </x-app-layout>

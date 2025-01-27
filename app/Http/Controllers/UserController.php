@@ -17,6 +17,7 @@ class UserController extends Controller implements HasMiddleware
         return [
             new Middleware('permission:view-user', only: ['index']),
             new Middleware('permission:edit-user', only: ['edit']),
+            new Middleware('permission:view-user', only: ['show']),
             new Middleware('permission:create-user', only: ['create']),
             new Middleware('permission:delete-user', only: ['destroy']),
         ];
@@ -25,21 +26,50 @@ class UserController extends Controller implements HasMiddleware
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Retrieve paginated users along with their roles using eager loading
-        // $users = User::with('roles')->latest()->paginate(5);
-        $users = User::latest()->paginate(5);
+        // Get query parameters from the frontend
+        $search = $request->input('search');
+        $roleFilter = $request->input('role');
+        $perPage = $request->input('per_page', 5); // Default to 5 per page
 
-        // Add a 'roles' attribute to each user as a comma-separated list of roles
-        // $users->getCollection()->transform(function ($user) {
-        //     $user->roles = $user->roles->pluck('name')->implode(', '); // Concatenate role names as a string
-        //     return $user;
-        // });
+        // Query users with filters
+        $query = User::select('id', 'name', 'email', 'status', 'created_at')
+            ->with([
+                'roles:id,name' // Select only required fields from roles
+            ]);
 
-        // Pass the users data to the view
-        return view('users.list', ['users' => $users]);
+        // Apply search filter on name or email
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%$search%")
+                    ->orWhere('email', 'like', "%$search%");
+            });
+        }
+
+        // Apply role filter if provided
+        if (!empty($roleFilter)) {
+            $query->whereHas('roles', function ($q) use ($roleFilter) {
+                $q->where('name', $roleFilter);
+            });
+        }
+
+        // Paginate with user-defined per page value
+        $users = $query->latest()->paginate($perPage);
+
+        // Calculate serial number and format the roles
+        $users->getCollection()->transform(function ($user, $index) use ($users) {
+            $user->roles = $user->roles->isEmpty() ? 'Guest' : $user->roles->pluck('name')->implode(', ') ?? 'Guest';
+
+            // Calculate SL No based on current page and per page count
+            $user->sl_no = ($users->currentPage() - 1) * $users->perPage() + ($index + 1);
+
+            return $user->only(['sl_no', 'id', 'name', 'email', 'status', 'created_at', 'roles']);
+        });
+
+        return response()->json($users);
     }
+
 
     /**
      * Show the form for creating a new resource.

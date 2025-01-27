@@ -37,9 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('calender');
 
     // test pages
-    Route::get('/user-index', function () {
-        return view('users.index');
-    })->name('user-index');
+
     Route::get('/test-user', [TestController::class, 'fetchEmployees'])->name('test-index');
 
 
@@ -120,7 +118,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('role/update/{id}', [RoleController::class, 'update'])->name('roles.update');
     Route::delete('role/delete', [RoleController::class, 'destroy'])->name('roles.delete');
     // Users Routes
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users-data', [UserController::class, 'index'])->name('users.fetch');
+    Route::get('/users', function () {
+        return view('users.index');
+    })->name('users.index');
     Route::get('/user/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/user/store', [UserController::class, 'store'])->name('users.store');
     Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('users.edit');
