@@ -30,7 +30,7 @@ class HolidayController extends Controller implements HasMiddleware
     {
         // Retrieve paginated users along with their roles using eager loading
         // $users = User::with('roles')->latest()->paginate(5);
-        $holidays = CompanyLeave::latest()->paginate(5);
+        $holidays = CompanyLeave::latest()->paginate(50);
 
         // Add a 'roles' attribute to each user as a comma-separated list of roles
         // $users->getCollection()->transform(function ($user) {
@@ -58,23 +58,24 @@ class HolidayController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|min:3',
-            'email' => 'required|email|unique:users,email'
-
+        $request->validate([
+            'holiday_date' => 'required|date',
+            'state' => 'required|string|max:255',
+            'reason' => 'required|string|max:500',
+        ], [
+            'holiday_date.required' => 'Please select a holiday date.',
+            'state.required' => 'Please select a state.',
+            'reason.required' => 'Please enter reason.'
         ]);
-        if ($validator->passes()) {
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make(123456)
-            ]);
 
-            $user->syncRoles($request->role);
-            return redirect()->route('users.index')->with('success', 'User added successfully.');
-        } else {
-            return redirect()->route('users.create')->withInput()->withErrors($validator);
-        }
+        CompanyLeave::create([
+            'leave_date' => $request->holiday_date,
+            'state' => $request->state,
+            'reason' => $request->reason,
+            'status' => 'active',
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Holiday added successfully!']);
     }
 
     /**
@@ -138,5 +139,20 @@ class HolidayController extends Controller implements HasMiddleware
             'status' => true,
             'message' => 'Holiday Deleted Successfully'
         ]);
+    }
+
+    public function getStates()
+    {
+        $states = [
+            'All States',
+            'Maharashtra',
+            'Delhi',
+            'Karnataka',
+            'Tamil Nadu',
+            'Uttar Pradesh',
+            'Gujarat'
+        ];
+
+        return response()->json($states);
     }
 }

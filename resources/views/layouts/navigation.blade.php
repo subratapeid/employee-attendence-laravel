@@ -102,7 +102,7 @@
                 <a class="nav-link {{ request()->routeIs('transactions.index') ? '' : 'collapsed' }}"
                     href="{{ route('transactions.index') }}">
                     <i class="fas fa-university"></i>
-                    <span>Daily Activity</span>
+                    <span>Transactions</span>
                 </a>
             </li><!-- End Dashboard Nav -->
         @endcan

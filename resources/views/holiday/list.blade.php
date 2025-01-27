@@ -10,9 +10,9 @@
     </div>
     <section class="section dashboard bg-white mt-4" style="min-height: 400px;">
         <div class="mb-3">
-            <div class="row g-2 align-items-between justify-content-between ps-md-4 pe-md-4 pt-2">
+            <div class="row g-2 align-items-center justify-content-end ps-md-4 pe-md-4 pt-2">
                 <!-- Search Box (8 columns) -->
-                <div class="col-8 col-md-6">
+                {{-- <div class="col-8 col-md-6">
                     <form method="GET" action="{{ route('employees.index') }}" class="d-flex">
                         <div class="input-group" style="max-width: 100%;">
                             <input type="text" name="search" class="form-control" placeholder="Search..."
@@ -20,12 +20,17 @@
                             <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                         </div>
                     </form>
-                </div>
+                </div> --}}
 
                 <!-- Create Button (4 columns) -->
-                <div class="col-4 col-md-2 text-md-end">
+                {{-- <div class="col-4 col-md-2 text-md-end">
                     <a href="{{ route('holiday.create') }}" class="btn btn-primary w-100 w-md-auto">+ Create</a>
-                </div>
+                </div> --}}
+                <!-- Button to trigger the modal -->
+                <button type="button" class="col-4 col-md-2 btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#holidayModal">
+                    Add Holiday
+                </button>
             </div>
         </div>
 
@@ -60,7 +65,7 @@
                                         @endcan
                                         @can('delete-holiday')
                                             <button type="button" class="btn btn-danger"
-                                                onclick="deletePermission({{ $holiday->id }})">Delete</button>
+                                                onclick="deleteHoliday({{ $holiday->id }})">Delete</button>
                                         @endcan
                                     </td>
                                 @endcanany
@@ -76,61 +81,45 @@
         </div>
     </section>
     {{-- Model Popup Part --}}
-    <!-- Add Employee Modal -->
-    <div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-hidden="true">
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="holidayModal" tabindex="-1" aria-labelledby="holidayModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add Employee</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title" id="holidayModalLabel">Add Holiday</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addEmployeeForm">
-                        <div class="row mb-3">
+                    <form id="holidayForm">
+                        <div class="mb-3 row">
                             <div class="col-md-6">
-                                <label class="form-label">Name</label>
-                                <input type="text" class="form-control" name="name" required>
-                                <div class="invalid-feedback">Please enter a name.</div>
+                                <label for="holiday_date" class="form-label">Holiday Date</label>
+                                <input type="date" class="form-control" id="holiday_date" name="holiday_date"
+                                    required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Emp Id</label>
-                                <input type="text" class="form-control" name="empId" required>
-                                <div class="invalid-feedback">Please enter employee id.</div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Email</label>
-                                <input type="email" class="form-control" name="email" required>
-                                <div class="invalid-feedback">Please enter a valid email.</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Phone</label>
-                                <input type="number" class="form-control" name="phone" required>
-                                <div class="invalid-feedback">Please enter a mobile no.</div>
+                                <label for="state" class="form-label">Select State</label>
+                                <select class="form-select" id="state" name="state" required>
+                                    <option value="" selected disabled>Loading states...</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Latitude</label>
-                                <input type="text" class="form-control" name="latitude" id="latitude" required>
-                                <div class="invalid-feedback">Please enter a valid latitude (e.g., 123.12345678).
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Longitude</label>
-                                <input type="text" class="form-control" name="longitude" id="longitude" required>
-                                <div class="invalid-feedback">Please enter a valid longitude (e.g., 123.12345678).
-                                </div>
-                            </div>
+                        <div class="mb-3">
+                            <label for="reason" class="form-label">Reason</label>
+                            <textarea class="form-control" id="reason" name="reason" rows="3" placeholder="Enter holiday reason"></textarea>
                         </div>
-
-                        <button type="submit" class="btn btn-primary">Add Employee</button>
                     </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="holidayForm">Create</button>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- Edit Employee Modal -->
     <div class="modal fade" id="editEmployeeModal" tabindex="-1" aria-hidden="true">
@@ -182,42 +171,74 @@
 
     {{-- <x-slot name="script"> --}}
     <script>
-        function deleteUser(id) {
-            if (confirm('Are you sure you want to delete?')) {
-                $.ajax({
-                    url: '{{ route('users.delete') }}',
-                    type: 'DELETE',
-                    data: {
-                        id: id
-                    },
-                    dataType: 'json',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        window.location.href = '{{ route('users.index') }}';
-                    }
-                })
-            }
-        }
-    </script>
-    <script>
         $(document).ready(function() {
-            // Open Add Employee Modal
-            $('.add-btn').click(function() {
-                $('#addEmployeeModal').modal('show');
-                // $('#addEmployeeForm')[0].reset();
+            // Fetch states from the server when modal is opened
+            $('#holidayModal').on('show.bs.modal', function() {
+                $.ajax({
+                    url: '{{ route('fetch-states') }}',
+                    method: 'GET',
+                    success: function(response) {
+                        let stateDropdown = $('#state');
+                        stateDropdown.empty();
+                        stateDropdown.append(
+                            '<option value="" selected disabled>Select State</option>');
+                        $.each(response, function(index, state) {
+                            stateDropdown.append(
+                                `<option value="${state}">${state}</option>`);
+                        });
+                    },
+                    error: function() {
+                        alert('Failed to load states');
+                    }
+                });
             });
 
-            // Open Edit Employee Modal
-            $('.edit-btn').click(function() {
-                let empId = $(this).data('id');
-                $('#editEmployeeModal').modal('show');
-                $.get(`/employee/${empId}`, function(data) {
-                    $('#edit_emp_id').val(data.id);
-                    $('#edit_name').val(data.name);
-                    $('#edit_email').val(data.email);
+
+
+            // Handle form submission using AJAX
+            $('#holidayForm').on('submit', function(e) {
+                e.preventDefault();
+
+                // Clear previous errors
+                $('.text-danger').remove();
+
+                let formData = {
+                    holiday_date: $('#holiday_date').val(),
+                    state: $('#state').val(),
+                    reason: $('#reason').val(),
+                    _token: '{{ csrf_token() }}' // Laravel CSRF token for security
+                };
+
+                $.ajax({
+                    url: '{{ route('holiday.store') }}',
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                            $('#holidayForm')[0].reset();
+                            $('#holidayModal').modal('hide');
+                            location.reload();
+                        }
+                    },
+                    error: function(xhr) {
+                        let errors = xhr.responseJSON.errors;
+                        console.log(errors);
+
+                        // Show errors in respective fields
+                        if (errors.holiday_date) {
+                            $('#holiday_date').after('<div class="text-danger">' + errors
+                                .holiday_date[0] + '</div>');
+                        }
+                        if (errors.state) {
+                            $('#state').after('<div class="text-danger">' + errors.state[0] +
+                                '</div>');
+                        }
+                        if (errors.reason) {
+                            $('#reason').after('<div class="text-danger">' + errors.reason[
+                                0] + '</div>');
+                        }
+                    }
                 });
             });
 
@@ -234,132 +255,6 @@
                 });
             });
 
-            // // Add Employee Form Submit
-            // $('#addEmployeeForm').submit(function(e) {
-            //     e.preventDefault();
-
-            //     $.ajax({
-            //         url: "{{ route('employees.store') }}",
-            //         type: "POST",
-            //         data: $(this).serialize(),
-            // headers: {
-            //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            // },
-            //         success: function(response) {
-            //             alert(response.success);
-            //             location.reload();
-            //         },
-            //         error: function(xhr) {
-            //             alert("Something went wrong. Please try again.");
-            //             console.log(xhr.responseText);
-            //         }
-            //     });
-            // });
-
-
-
-            function validateCoordinateInput(input) {
-                let value = input.value;
-
-                // Allow only numbers and a single decimal point
-                value = value.replace(/[^0-9.]/g, '');
-
-                // Prevent typing the decimal point if no digits are entered before
-                if (value.startsWith('.')) {
-                    value = '0' + value; // Automatically add 0 before decimal
-                }
-
-                // Ensure only one decimal point is allowed
-                let dotCount = (value.match(/\./g) || []).length;
-                if (dotCount > 1) {
-                    value = value.substring(0, value.lastIndexOf('.')); // Remove the extra decimal
-                }
-
-                // Prevent entering more than 3 digits before the decimal point
-                let parts = value.split('.');
-                if (parts[0].length > 3) {
-                    parts[0] = parts[0].slice(0, 3); // Limit the number of digits before the decimal
-                }
-
-                // Ensure exactly 8 digits after the decimal point
-                if (parts.length > 1) {
-                    parts[1] = parts[1].slice(0, 8); // Limit the number of digits after the decimal
-                    value = parts.join('.');
-                } else {
-                    value = parts[0];
-                }
-
-                input.value = value;
-            }
-
-            $('#latitude, #longitude').on('input', function() {
-                validateCoordinateInput(this);
-                $(this).removeClass('is-invalid');
-                $(this).next('.invalid-feedback').hide();
-            });
-
-            $('#addEmployeeForm').on('submit', function(e) {
-                e.preventDefault();
-                var form = $(this);
-                var isValid = true;
-
-                // Validate Latitude
-                var latitude = $('#latitude').val();
-                var latitudeRegex = /^[0-9]{1,3}(\.\d{8})$/; // Exactly 8 digits after the decimal
-                if (!latitudeRegex.test(latitude)) {
-                    $('#latitude').addClass('is-invalid');
-                    $('#latitude').next('.invalid-feedback').text(
-                        'Please enter a valid latitude with exactly 8 digits after the decimal.'
-                    ).show();
-                    isValid = false;
-                }
-
-                // Validate Longitude
-                var longitude = $('#longitude').val();
-                var longitudeRegex = /^[0-9]{1,3}(\.\d{8})$/; // Exactly 8 digits after the decimal
-                if (!longitudeRegex.test(longitude)) {
-                    $('#longitude').addClass('is-invalid');
-                    $('#longitude').next('.invalid-feedback').text(
-                        'Please enter a valid longitude with exactly 8 digits after the decimal.'
-                    ).show();
-                    isValid = false;
-                }
-
-                if (!isValid) {
-                    return; // Stop form submission if invalid
-                }
-
-                // If valid, proceed with AJAX submission
-                $.ajax({
-                    url: '{{ route('employees.store') }}',
-                    type: 'POST',
-                    data: form.serialize(),
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-
-                    success: function(response) {
-                        alert('Employee added successfully!');
-                        form[0].reset();
-                        $('#addEmployeeModal').modal('hide');
-                        location.reload();
-                        form.removeClass('was-validated');
-                    },
-                    error: function(xhr) {
-                        form.find('.invalid-feedback').hide(); // Hide previous errors
-                        var errors = xhr.responseJSON.errors;
-                        if (errors) {
-                            $.each(errors, function(field, messages) {
-                                var input = $('[name="' + field + '"]');
-                                input.addClass('is-invalid');
-                                input.next('.invalid-feedback').text(messages[0])
-                                    .show();
-                            });
-                        }
-                    }
-                });
-            });
-            // Add employee functionality end
 
             // Edit Employee Form Submit
             $('#editEmployeeForm').submit(function(e) {
@@ -417,10 +312,11 @@
                     });
                 }
             });
+
+
         });
-    </script>
-    <script>
-        function deletePermission(id) {
+
+        function deleteHoliday(id) {
             if (confirm('Are You sure You want to Delete?')) {
                 $.ajax({
                     url: '{{ route('holiday.delete') }}',

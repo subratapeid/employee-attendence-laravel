@@ -1,4 +1,5 @@
 <?php
+use App\Exports\DesignExport;
 use App\Http\Controllers\DailyActivityController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\RoleController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\UserImportController;
 use App\Http\Controllers\TestController;
 
 use App\Http\Controllers\PermissionController;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -43,11 +45,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('calender');
 
     // test pages
+    Route::get('/export-design', function () {
+        return Excel::download(new DesignExport('year', null, 2025), 'attendance_january.xlsx');
+    });
 
     Route::get('/test-user', [TestController::class, 'fetchEmployees'])->name('test-index');
-
-
-    Route::get('/current-time', [DateTimeController::class, 'getCurrentTime']);
+    // Helper Data Routes
+    Route::get('/fetch-states', [HolidayController::class, 'getStates'])->name('fetch-states');
+    Route::get('/current-time', [DateTimeController::class, 'getCurrentTime'])->name('get-time');
 
     Route::post('/duty-status', [DutyStatusController::class, 'store']);
     Route::post('/resolve-duty', [DutyStatusController::class, 'resolveUnresolvedDuty']);

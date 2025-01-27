@@ -11,6 +11,7 @@ class CompanyLeave extends Model
 
     protected $fillable = [
         'leave_date',
+        'state',
         'reason',
     ];
 }
