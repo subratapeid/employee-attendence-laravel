@@ -59,11 +59,11 @@ function openCaptureModal(type) {
     retakeBtn.classList.add('d-none');
     confirmBtn.classList.add('d-none');
     if (type == 'on') {
-        popupTitle.textContent = 'Go On Duty';
-        confirmBtn.textContent = 'On Duty';
+        popupTitle.textContent = 'Start Your Duty';
+        confirmBtn.textContent = 'Start Now';
     } else {
-        popupTitle.textContent = 'Go Off Duty';
-        confirmBtn.textContent = 'Off Duty';
+        popupTitle.textContent = 'End Your Duty';
+        confirmBtn.textContent = 'End Now';
     }
     captureBtn.classList.remove('d-none');
     if (!stream) startCamera();
@@ -209,7 +209,7 @@ confirmBtn.addEventListener('click', function () {
         type: 'POST',
         data: requestData,
         success: function (response) {
-            toastr.success('Duty Status Updated Successfully!', 'Status Updated');
+            toastr.success(response.message, response.title);
             console.log(response.message);
             // Close the camera popup after success
             cameraPopup.classList.remove('visible');

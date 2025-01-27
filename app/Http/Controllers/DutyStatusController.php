@@ -39,6 +39,8 @@ class DutyStatusController extends Controller
                 'start_photo' => $photoUrl,
                 'created_at' => now(),
             ]);
+            return response()->json(['title' => 'Duty Started', 'message' => 'You has been marked as Attended for today.']);
+
         } elseif ($type === 'off') {
             // End today's duty record
             $dutyStatus = DutyStatus::where('user_id', $userId)
@@ -58,12 +60,12 @@ class DutyStatusController extends Controller
                     'end_channel' => 'system',
                     'updated_at' => now(),
                 ]);
+                return response()->json(['title' => 'Duty Completed', 'message' => 'Your duty for today has been completed.']);
             } else {
                 return response()->json(['message' => 'No open duty record found to update.'], 404);
             }
         }
 
-        return response()->json(['message' => 'Duty status updated successfully.']);
     }
 
     // store unresolved duty send manualy by user

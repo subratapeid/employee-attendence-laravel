@@ -86,6 +86,27 @@
                         <canvas id="canvas" class="d-none"></canvas>
                         <img id="capturedPhoto" class="img-thumbnail d-none" src="default-image.png" alt="Captured photo">
                     </div>
+
+                    {{-- <div class="d-none mt-3" id="aditionalInput">
+                        <div class="row">
+                            <div class="col-md-6 mb-1">
+                                <input type="text" class="form-control small-input" id="transaction" name="transaction"
+                                    placeholder="Total Transaction" required>
+                                <div class="invalid-feedback">Please enter total transaction.</div>
+                            </div>
+                            <div class="col-md-6 mb-1">
+                                <input type="text" class="form-control small-input" id="onboarding" name="onboarding"
+                                    placeholder="Onboarding Count" required>
+                                <div class="invalid-feedback">Please enter onboarding count.</div>
+                            </div>
+                            <div class="col-md-12 mb-1">
+                                <input type="text" class="form-control small-input" id="remarks" name="remarks"
+                                    placeholder="Remarks" required>
+                                <div class="invalid-feedback">Please enter remarks.</div>
+                            </div>
+                        </div>
+                    </div> --}}
+
                     <div class="popup-footer mt-3 d-flex justify-content-center">
                         <button type="button" class="iconButtons btn btn-primary d-none" id="captureBtn"
                             title="Capture">Capture</button>

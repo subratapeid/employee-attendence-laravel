@@ -71,7 +71,6 @@
                         <th class="text-nowrap">Logout Location</th>
                         <th class="text-nowrap">Logout From</th>
                         <th class="text-nowrap">Duty Hours</th>
-                        <th class="text-nowrap">Account Status</th>
                         <th class="text-nowrap">Action</th>
 
                     </tr>
@@ -105,7 +104,6 @@
                             <td class="text-nowrap">{{ $employee['end_location'] }}</td>
                             <td class="text-nowrap">{{ $employee['logout_from'] }}</td>
                             <td class="text-nowrap">{{ $employee['duty_hours'] }}</td>
-                            <td class="text-nowrap">{{ $employee['account_status'] }}</td>
                             <td class="text-nowrap">
                                 <button class="btn btn-info btn-sm view-btn"
                                     data-id="{{ $employee['id'] }}">Details</button>
@@ -222,7 +220,6 @@
                     <p><strong>Name:</strong> <span id="view_name"></span></p>
                     <p><strong>Email:</strong> <span id="view_email"></span></p>
                     <p><strong>Phone:</strong> <span id="view_phone"></span></p>
-                    <p><strong>Department:</strong> <span id="view_department"></span></p>
                 </div>
             </div>
         </div>
@@ -258,7 +255,6 @@
                     $('#view_name').text(data.name);
                     $('#view_email').text(data.email);
                     $('#view_phone').text(data.phone);
-                    $('#view_department').text(data.department);
                 });
             });
 

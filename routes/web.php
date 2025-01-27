@@ -1,6 +1,8 @@
 <?php
+use App\Http\Controllers\DailyActivityController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +23,10 @@ use App\Http\Controllers\PermissionController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/', function () {
+        return view('pages.summary');
+    })->name('summary');
+
+    Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
@@ -135,6 +141,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/holidays/update/{id}', [HolidayController::class, 'update'])->name('holiday.update');
     Route::delete('/holidays/delete', [HolidayController::class, 'destroy'])->name('holiday.delete');
 
+    // Transaction Routes
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+    Route::get('/transactions/fetch', [TransactionController::class, 'fetch'])->name('transactions.fetch');
+    Route::get('/transactions/create', [TransactionController::class, 'create'])->name('transactions.create');
+    Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
+    Route::get('/transactions/{id}', [TransactionController::class, 'show'])->name('transactions.show');
+    Route::get('/transactions/{id}/edit', [TransactionController::class, 'edit'])->name('transactions.edit');
+    Route::put('/transactions/{id}', [TransactionController::class, 'update'])->name('transactions.update');
+    Route::delete('/transactions/{id}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
 
 });
 

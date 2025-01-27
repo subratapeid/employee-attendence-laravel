@@ -14,8 +14,8 @@
                 <input type="checkbox" id="toggle" class="toggle-input" />
                 <label for="toggle" class="toggle-label">
                     <span class="toggle-circle"></span>
-                    <span class="toggle-text off">Off Duty</span>
-                    <span class="toggle-text on">On Duty</span>
+                    <span class="toggle-text off">Start Duty</span>
+                    <span class="toggle-text on">End Duty</span>
                 </label>
             </div>
         </div>
@@ -91,10 +91,18 @@
     <ul class="sidebar-nav" id="sidebar-nav">
         @can('create-attendance')
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('dashboard') ? '' : 'collapsed' }}"
-                    href="{{ route('dashboard') }}">
+                <a class="nav-link {{ request()->routeIs('summary') ? '' : 'collapsed' }}" href="{{ route('summary') }}">
                     <i class="fa-solid fa-gauge"></i>
-                    <span>Dashboard</span>
+                    <span>Summary</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+        @endcan
+        @can('create-attendance')
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('transactions.index') ? '' : 'collapsed' }}"
+                    href="{{ route('transactions.index') }}">
+                    <i class="fas fa-university"></i>
+                    <span>Daily Activity</span>
                 </a>
             </li><!-- End Dashboard Nav -->
         @endcan
@@ -122,7 +130,7 @@
                 <a class="nav-link {{ request()->routeIs('activity-log') ? '' : 'collapsed' }}"
                     href="{{ route('activity-log') }}">
                     <i class="fa-solid fa-list-check"></i>
-                    <span>Activit Log</span>
+                    <span>Attendance Log</span>
                 </a>
             </li>
         @endcan
