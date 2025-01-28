@@ -236,12 +236,24 @@
                 success: function(response) {
                     $('#loading-overlay').removeClass('d-flex')
 
-                    let tableHtml =
-                        '<div class="table-responsive" overflow-y: auto;">' +
-                        '<table class="table table-striped table-bordered">' +
-                        '<thead class="table-dark"><tr>' +
-                        '<th>SL No</th><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Action</th>' +
-                        '</tr></thead><tbody>';
+                    let tableHtml = `
+                            <div class="table-responsive" style="overflow-y: auto;">
+                                <table class="table table-striped table-bordered">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th class="text-nowrap text-center">SL No</th>
+                                            <th class="text-nowrap text-center" style="min-width: 300px;">Name</th>
+                                            <th class="text-nowrap text-center">Email</th>
+                                            <th class="text-nowrap text-center">Role</th>
+                                            <th class="text-nowrap text-center">Status</th>
+                                            <th class="text-nowrap text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                        `;
+
+
+
                     response.data.forEach(function(employee) {
                         tableHtml += '<tr><td>' + employee.sl_no + '</td>';
                         tableHtml += '<td>' + employee.name + '</td>';

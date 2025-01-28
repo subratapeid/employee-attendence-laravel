@@ -457,14 +457,32 @@ h6 {
 @media (min-width: 1200px) {
   .logo {
     margin-right: 30px;
-    margin-left: 50px;
+    margin-left: 5px;
     /* width: 200px; */
   }
 }
 
 .logo img {
   max-height: 50px;
-  margin-right: 6px;
+  /* margin-right: 6px; */
+}
+
+.logo.mobile img {
+  display: none;
+}
+
+@media (max-width: 720px) {
+
+  .logo.desktop img {
+    display: none;
+  }
+
+  .logo.mobile img {
+    align-items: center;
+    display: flex;
+    max-height: 55px;
+    margin-right: 0;
+  }
 }
 
 .logo span {
@@ -480,7 +498,7 @@ h6 {
   height: 60px;
   box-shadow: 0px 2px 20px rgba(1, 41, 112, 0.1);
   background-color: #fff;
-  padding-left: 20px;
+  padding-left: 15px;
   /* Toggle Sidebar Button */
   /* Search Bar */
 }
@@ -717,7 +735,7 @@ h6 {
 --------------------------------------------------------------*/
 .sidebar {
   position: fixed;
-  top: 60px;
+  top: 45px;
   left: 0;
   bottom: 0;
   width: 250px;

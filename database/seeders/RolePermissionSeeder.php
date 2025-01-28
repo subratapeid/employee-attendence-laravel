@@ -39,6 +39,7 @@ class RolePermissionSeeder extends Seeder
             'view-activity',
             'edit-activity',
             'delete-activity',
+            'reset-password',
         ];
 
         // Insert permissions into the database

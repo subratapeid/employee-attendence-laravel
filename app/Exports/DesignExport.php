@@ -545,7 +545,7 @@ class DesignExport implements FromCollection, WithHeadings, WithTitle, WithStyle
         $attendanceData = collect();  // Initialize empty collection to store attendance data
 
         foreach ($employees as $index => $employee) {
-            $attendance = [$index + 1, $employee->name, $employee->id];
+            $attendance = [$index + 1, $employee->name, $employee->emp_id];
 
             $dateRange = $this->getDateRange(); // Get the date range for the month
 
@@ -628,22 +628,24 @@ class DesignExport implements FromCollection, WithHeadings, WithTitle, WithStyle
     {
         $dateRange = $this->getDateRange();
         // Calculate the last column based on the number of dates + other columns
-        $lastColumn = Coordinate::stringFromColumnIndex(4 + count($dateRange)); // Last date column
+        $lastColumn = Coordinate::stringFromColumnIndex(4 + count($dateRange) + 3); // Last date column
 
         // Get the last row with data
         $lastRow = $sheet->getHighestRow(); // Get the last row of data
+// Determine the actual last column with data
+        $lastColumnWithData = $sheet->getHighestColumn();
 
         // Merge header cells for date range
         $sheet->mergeCells('A1:A2');
         $sheet->mergeCells('B1:B2');
         $sheet->mergeCells('C1:C2');
         $sheet->mergeCells($lastColumn . '1:' . $lastColumn . '2');
-        $sheet->mergeCells(Coordinate::stringFromColumnIndex(4 + count($dateRange) + 1) . '1:' . Coordinate::stringFromColumnIndex(4 + count($dateRange) + 1) . '2');
-        $sheet->mergeCells(Coordinate::stringFromColumnIndex(4 + count($dateRange) + 2) . '1:' . Coordinate::stringFromColumnIndex(4 + count($dateRange) + 2) . '2');
-        $sheet->mergeCells(Coordinate::stringFromColumnIndex(4 + count($dateRange) + 3) . '1:' . Coordinate::stringFromColumnIndex(4 + count($dateRange) + 3) . '2');
+        $sheet->mergeCells(Coordinate::stringFromColumnIndex(3 + count($dateRange) + 1) . '1:' . Coordinate::stringFromColumnIndex(3 + count($dateRange) + 1) . '2');
+        $sheet->mergeCells(Coordinate::stringFromColumnIndex(3 + count($dateRange) + 2) . '1:' . Coordinate::stringFromColumnIndex(3 + count($dateRange) + 2) . '2');
+        $sheet->mergeCells(Coordinate::stringFromColumnIndex(3 + count($dateRange) + 3) . '1:' . Coordinate::stringFromColumnIndex(3 + count($dateRange) + 3) . '2');
 
         // Styling headers
-        $sheet->getStyle('A1:' . Coordinate::stringFromColumnIndex(4 + count($dateRange) + 3) . '2')->applyFromArray([
+        $sheet->getStyle('A1:' . Coordinate::stringFromColumnIndex(3 + count($dateRange) + 3) . '2')->applyFromArray([
             'font' => ['bold' => true, 'size' => 12],
             'alignment' => ['horizontal' => 'center', 'vertical' => 'middle'],
             'fill' => ['fillType' => 'solid', 'startColor' => ['rgb' => 'E6E6E6']],
@@ -656,8 +658,8 @@ class DesignExport implements FromCollection, WithHeadings, WithTitle, WithStyle
             'fill' => ['fillType' => 'solid', 'startColor' => ['rgb' => 'FFFFCC']],
         ]);
 
-        // Apply borders for the entire data range dynamically
-        $sheet->getStyle('A1:' . $lastColumn . $lastRow)->applyFromArray([
+        // Apply borders to the range with data
+        $sheet->getStyle('A1:' . $lastColumnWithData . $lastRow)->applyFromArray([
             'borders' => [
                 'allBorders' => ['borderStyle' => 'thin'],
             ],

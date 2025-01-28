@@ -44,9 +44,15 @@
             gap: 10px;
         }
 
+        #calendar #dates {
+            min-height: 270px;
+        }
+
         #calendar .days {
+            padding: 8px;
             font-weight: bold;
-            color: #333;
+            color: #ffff;
+            background: #1d00c5;
         }
 
         #calendar #dates div {
@@ -60,31 +66,36 @@
             position: relative;
         }
 
-        #calendar #dates div.today {
-            border: 2px solid green;
-            background-color: lightgreen;
-            font-weight: bold;
-        }
-
-
-        #calendar #dates div.week-off {
-            background-color: lightblue;
+        #calendar #dates div.employee-leave {
+            background-color: #ff00bf;
             color: white;
         }
 
-        #calendar #dates div.employee-leave {
-            background-color: orange;
+        #calendar #dates div.absent {
+            background-color: #ffab0f;
             color: white;
         }
 
         #calendar #dates div.attended {
-            background-color: lightgreen;
+            background-color: #006e00;
             color: white;
         }
 
         #calendar #dates div.company-leave {
-            background-color: lightcoral;
+            background-color: #ff2c2c;
             color: white;
+        }
+
+        #calendar #dates div.week-off {
+            background-color: #640101;
+            color: white;
+        }
+
+        #calendar #dates div.today {
+            color: #000000;
+            border: 2px solid #008000;
+            background-color: #76e976;
+            font-weight: bold;
         }
 
         #calendar #dates div:hover::after {
@@ -218,19 +229,22 @@
 
             <div class="color-indicator d-flex flex-wrap gap-3 justify-content-center">
                 <div>
-                    <span style="background-color: lightcoral;"></span> Holiday
+                    <span style="background-color: #ff2c2c;"></span> Holiday
                 </div>
                 <div>
-                    <span style="background-color: lightblue;"></span> Week Off
+                    <span style="background-color: #640101;"></span> Week Off
                 </div>
                 <div>
-                    <span style="background-color: orange;"></span> Absent
+                    <span style="background-color: #ffa500;"></span> Absent
                 </div>
                 <div>
-                    <span style="background-color: lightgreen;"></span> Attended
+                    <span style="background-color: #ff00bf;"></span> Leave
                 </div>
                 <div>
-                    <span style="background-color: lightgreen; border: 2px solid green;"></span> Today
+                    <span style="background-color: #006e00;"></span> Attended
+                </div>
+                <div>
+                    <span style="background-color: #76e976; border: 2px solid #008000;"></span> Today
                 </div>
             </div>
 
@@ -396,7 +410,7 @@
 
                     // Check for employee leaves
                     if (calendarData.employeeLeaves.includes(dateStr)) {
-                        cell.classList.add('employee-leave');
+                        cell.classList.add('absent');
                         cell.setAttribute('data-info', 'Absent');
                     }
 

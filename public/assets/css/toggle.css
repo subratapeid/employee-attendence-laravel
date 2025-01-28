@@ -1,5 +1,6 @@
-.toggle-container {
+.toggle-container.desktop {
     position: relative;
+
 }
 
 /* Toggle Button Styles */
@@ -248,5 +249,10 @@
 @media (max-width: 768px) {
     .popup-content {
         width: 350px;
+    }
+
+    .toggle-container.desktop {
+        display: none;
+
     }
 }

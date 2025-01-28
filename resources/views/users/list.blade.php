@@ -38,7 +38,7 @@
             <table class="table table-striped table-bordered">
                 <thead class="table-secondary">
                     <tr>
-                        <th scope="col">Sl</th>
+                        <th scope="col" class="text-nowrap">Sl</th>
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Role</th>

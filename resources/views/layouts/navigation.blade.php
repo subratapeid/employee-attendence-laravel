@@ -2,15 +2,19 @@
 <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-        <a href="{{ route('dashboard') }}" class="logo d-flex align-items-center">
-            <img src="/assets/img/logo.png" alt="">
+        <a href="{{ route('dashboard') }}" class="logo desktop d-flex align-items-center">
+            <img src="/assets/img/logo3.png" alt="">
         </a>
-        <i class="bi bi-list toggle-sidebar-btn"></i>
+        {{-- <i class="bi bi-list toggle-sidebar-btn"></i> --}}
+        <i class="fas fa-bars toggle-sidebar-btn"></i>
     </div>
     <!-- End Logo -->
-    @can('create-attendance')
-        <div class="d-flex allign-items-center justify-content-center" id="duty-btn">
-            <div class="toggle-container">
+    <div class="d-flex allign-items-center justify-content-center" id="duty-btn">
+        {{-- <a href="{{ route('dashboard') }}" class="logo mobile d-flex align-items-center">
+            <img src="/assets/img/logo3.png" alt="">
+        </a> --}}
+        @can('create-attendance')
+            <div class="toggle-container mobile">
                 <input type="checkbox" id="toggle" class="toggle-input" />
                 <label for="toggle" class="toggle-label">
                     <span class="toggle-circle"></span>
@@ -18,15 +22,16 @@
                     <span class="toggle-text on">End Duty</span>
                 </label>
             </div>
-        </div>
-    @endcan
-    <!-- <div class="search-bar">
+        @endcan
+
+    </div>
+    {{-- <!-- <div class="search-bar">
       <form class="search-form d-flex align-items-center" method="POST" action="#">
         <input type="text" name="query" placeholder="Search" title="Enter search keyword">
         <button type="submit" title="Search"><i class="bi bi-search"></i></button>
       </form>
       
-    </div> -->
+    </div> --> --}}
     <!-- End Search Bar -->
 
     <nav class="header-nav ms-auto">
@@ -87,7 +92,11 @@
 
 <!-- ======= Sidebar ======= -->
 <aside id="sidebar" class="sidebar">
-
+    <div class="d-flex allign-items-center justify-content-center mb-3">
+        <a href="{{ route('dashboard') }}" class="logo mobile">
+            <img src="/assets/img/logo3.png" alt="">
+        </a>
+    </div>
     <ul class="sidebar-nav" id="sidebar-nav">
         @can('create-attendance')
             <li class="nav-item">
