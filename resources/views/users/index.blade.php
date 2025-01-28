@@ -92,7 +92,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Emp Id</label>
-                                <input type="text" class="form-control" name="empId" required>
+                                <input type="text" class="form-control" name="emp_id" required>
                                 <div class="invalid-feedback">Please enter employee id.</div>
                             </div>
                         </div>
@@ -110,6 +110,20 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
+                                <label class="form-label">State</label>
+                                <select class="form-control" name="state" id="stateDropdown" required>
+                                    <option value="" disabled selected>Select a state</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a state.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">District</label>
+                                <input type="text" class="form-control" name="district" required>
+                                <div class="invalid-feedback">Please enter a district.</div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
                                 <label class="form-label">Latitude</label>
                                 <input type="text" class="form-control" name="latitude" id="latitude" required>
                                 <div class="invalid-feedback">Please enter a valid latitude (e.g., 123.12345678).
@@ -122,12 +136,27 @@
                                 </div>
                             </div>
                         </div>
-
-                        <button type="submit" class="btn btn-primary">Create User</button>
-                    </form>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">User Role</label>
+                                <Select class="form-control" name="role" id="role" required>
+                                    <option value="Employee" Selected>Employee</option>
+                                    <option value="User">User</option>
+                                    <option value="Guest">Guest</option>
+                                    <option value="Admin">Admin</option>
+                                </Select>
+                                <div class="invalid-feedback">Please enter a valid latitude (e.g., 123.12345678).
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary" id="createUser">Create User</button>
+                        </div>
                 </div>
+                </form>
             </div>
         </div>
+    </div>
     </div>
     <!-- Edit User Modal -->
     <div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
@@ -182,6 +211,7 @@
         fetchEmployees();
         $('#create-btn').click(function() {
             $('#addUserModal').modal('show');
+            fetchStates();
             // $('#addUserForm')[0].reset();
         });
         let appliedFilters = 0;
@@ -454,7 +484,7 @@
             if (!isValid) {
                 return; // Stop form submission if invalid
             }
-
+            $('#createUser').prop('disabled', true);
             // If valid, proceed with AJAX submission
             $.ajax({
                 url: '{{ route('employees.store') }}',
@@ -467,11 +497,17 @@
                 success: function(response) {
                     alert('User added successfully!');
                     form[0].reset();
-                    $('#addUserModal').modal('hide');
                     fetchEmployees();
                     form.removeClass('was-validated');
+                    $('#createUser').prop('disabled', false);
+                    // Remove is-invalid class from all input fields
+                    form.find('.is-invalid').removeClass('is-invalid');
+                    form.find('.invalid-feedback').hide(); // Hide error messages
+                    $('#addUserModal').modal('hide');
+
                 },
                 error: function(xhr) {
+                    $('#createUser').prop('disabled', false);
                     form.find('.invalid-feedback').hide(); // Hide previous errors
                     var errors = xhr.responseJSON.errors;
                     if (errors) {
@@ -487,6 +523,25 @@
         });
         // Add User functionality end
 
+        function fetchStates() {
+            $.ajax({
+                url: '{{ route('fetch-states') }}', // Replace with your API endpoint
+                method: 'GET',
+                success: function(response) {
+                    $('#stateDropdown').empty().append(
+                        '<option value="" disabled selected>Select a state</option>');
+
+                    // Populate the dropdown with states
+                    $.each(response, function(index, state) {
+                        $('#stateDropdown').append('<option value="' + state + '">' + state +
+                            '</option>');
+                    });
+                },
+                error: function(xhr) {
+                    alert('An error occurred while fetching states.');
+                }
+            });
+        }
         // Edit User Form Submit
         $('#editUserForm').submit(function(e) {
             e.preventDefault();

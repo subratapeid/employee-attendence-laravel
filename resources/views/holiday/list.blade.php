@@ -175,13 +175,17 @@
             // Fetch states from the server when modal is opened
             $('#holidayModal').on('show.bs.modal', function() {
                 $.ajax({
-                    url: '{{ route('fetch-states') }}',
+                    url: '{{ route('fetch-states') }}', // Adjust this route as necessary
                     method: 'GET',
                     success: function(response) {
                         let stateDropdown = $('#state');
                         stateDropdown.empty();
+
+                        // Add the "All States" option
                         stateDropdown.append(
-                            '<option value="" selected disabled>Select State</option>');
+                            '<option value="All States" selected>All States</option>');
+
+                        // Loop through API response and add states
                         $.each(response, function(index, state) {
                             stateDropdown.append(
                                 `<option value="${state}">${state}</option>`);
@@ -192,6 +196,7 @@
                     }
                 });
             });
+
 
 
 

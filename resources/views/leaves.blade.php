@@ -1,44 +1,31 @@
 <x-app-layout>
     <div class="pagetitle">
-        <h1>All Roles</h1>
+        <h1>All Leaves</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active">Roles</li>
+                <li class="breadcrumb-item active">Leaves</li>
             </ol>
         </nav>
     </div>
     <section class="section leave">
         <div class="mb-3">
             <div class="row g-2 align-items-center justify-content-end ps-md-4 pe-md-4 pt-2">
-                <!-- Search Box (8 columns) -->
-                {{-- <div class="col-8 col-md-6">
-                    <form method="GET" action="{{ route('employees.index') }}" class="d-flex">
-                        <div class="input-group" style="max-width: 100%;">
-                            <input type="text" name="search" class="form-control" placeholder="Search..."
-                                value="{{ request('search') }}">
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
-                        </div>
-                    </form>
-                </div> --}}
-
                 <!-- Create Button (4 columns) -->
                 <div class="col-4 col-md-2 text-md-end">
-                    <button id="appy-leave-btn" class="btn btn-primary w-100 w-md-auto">Apply Leave</button>
+                    <button id="apply-leave-btn" class="btn btn-primary w-100 w-md-auto">Apply Leave</button>
                 </div>
             </div>
         </div>
 
-
-
-        <div class="table-responsive " style="min-height: 250px;">
-            <table class="table table-striped table-bordered">
+        <!-- Leave Records Table -->
+        <div class="table-responsive" style="min-height: 250px;">
+            <table class="table table-striped table-bordered" id="leaveRecordsTable">
                 <thead class="table-secondary">
-
-
                     <tr>
                         <th>SL No</th>
-                        <th>Duration</th>
+                        <th>From Date</th>
+                        <th>To Date</th>
                         <th>Days</th>
                         <th>Remarks</th>
                         <th>Status</th>
@@ -46,26 +33,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>02-11-2024 - 02-11-2024</td>
-                        <td>1 Day</td>
-                        <td>Personal</td>
-                        <td><span class="status">Approved</span></td>
-                        <td>02-11-2024</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>31-10-2024 - 02-11-2024</td>
-                        <td>3 Days</td>
-                        <td>Personal</td>
-                        <td><span class="status">Approved</span></td>
-                        <td>02-11-2024</td>
-                    </tr>
+                    <!-- Table rows will be inserted here -->
                 </tbody>
             </table>
         </div>
     </section>
+
     <!-- Apply Leave Modal -->
     <div class="modal fade" id="applyLeaveModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -102,9 +75,87 @@
     </div>
 
     <script>
-        $('#appy-leave-btn').click(function() {
-            $('#applyLeaveModal').modal('show');
-            // $('#addUserForm')[0].reset();
+        $(document).ready(function() {
+            // Fetch leave data on page load
+            fetchLeaves();
+
+            function fetchLeaves() {
+                $.ajax({
+                    url: '{{ route('leaves.fetch') }}', // Route to fetch all leaves
+                    method: 'GET',
+                    success: function(response) {
+                        if (response.success) {
+                            // Clear previous table rows
+                            $('#leaveRecordsTable tbody').empty();
+
+                            // Loop through each leave and append it to the table
+                            $.each(response.data, function(index, leave) {
+                                var leaveRow = '<tr>' +
+                                    '<td>' + leave.sl_no + '</td>' +
+                                    '<td>' + leave.from_date + '</td>' +
+                                    '<td>' + leave.to_date + '</td>' +
+                                    '<td>' + leave.days + '</td>' +
+                                    '<td>' + leave.remarks + '</td>' +
+                                    '<td>' + leave.status + '</td>' +
+                                    '<td>' + leave.created_at + '</td>' +
+                                    // Formatted Created Date
+                                    '</tr>';
+                                $('#leaveRecordsTable tbody').append(leaveRow);
+                            });
+                        } else {
+                            alert('Failed to fetch leave data.');
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Something went wrong.');
+                    }
+                });
+            }
+
+            // Show the Apply Leave Modal
+            $('#apply-leave-btn').click(function() {
+                $('#applyLeaveModal').modal('show');
+            });
+
+            // On form submit
+            $('#applyLeaveForm').on('submit', function(e) {
+                e.preventDefault(); // Prevent form from reloading the page
+
+                // Clear previous error messages
+                $('.invalid-feedback').hide();
+
+                // Get form data
+                var formData = $(this).serialize();
+
+                // Send AJAX request to submit leave
+                $.ajax({
+                    url: '{{ route('apply.leave') }}', // Route to your controller method
+                    method: 'POST',
+                    data: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        // If success, close the modal and reset the form
+                        if (response.success) {
+                            $('#applyLeaveModal').modal('hide');
+                            $('#applyLeaveForm')[0].reset();
+                            alert('Leave application submitted successfully.');
+                            fetchLeaves(); // Refresh the leave data
+                        }
+                    },
+                    error: function(xhr) {
+                        // If there are validation errors
+                        var errors = xhr.responseJSON.errors;
+                        $.each(errors, function(key, value) {
+                            // Display validation error messages
+                            $('[name=' + key + ']').addClass('is-invalid');
+                            $('[name=' + key + ']').next('.invalid-feedback').text(
+                                value).show();
+                        });
+                    }
+                });
+            });
         });
     </script>
 </x-app-layout>

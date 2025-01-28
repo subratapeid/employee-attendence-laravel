@@ -64,7 +64,7 @@ class UserController extends Controller implements HasMiddleware
             // Calculate SL No based on current page and per page count
             $user->sl_no = ($users->currentPage() - 1) * $users->perPage() + ($index + 1);
 
-            return $user->only(['sl_no', 'id', 'name', 'email', 'status', 'created_at', 'roles']);
+            return $user->only(['sl_no', 'id', 'name', 'email', 'emp_id', 'status', 'created_at', 'roles']);
         });
 
         return response()->json($users);

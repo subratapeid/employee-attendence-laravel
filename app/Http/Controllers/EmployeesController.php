@@ -49,15 +49,16 @@ class EmployeesController extends Controller implements HasMiddleware
         }
 
         // Eager load duty status (latest for today) with select for specific columns
-        $employees = $query->with([
-            'dutyStatus' => function ($query) {
-                $query->whereDate('created_at', Carbon::today())
-                    ->latest()
-                    ->limit(1)
-                    ->select('id', 'user_id', 'start_location', 'end_location', 'end_time', 'created_at', 'start_latitude', 'start_longitude', 'end_latitude', 'end_longitude');
-            }
-        ])
-            ->paginate(15);
+        $employees = $query->role('Employee') // Filter users by 'Employee' role
+            ->with([
+                'dutyStatus' => function ($query) {
+                    $query->whereDate('created_at', Carbon::today()) // Filter for today's duty status
+                        ->latest() // Get the latest entry
+                        ->limit(1) // Limit to the most recent status
+                        ->select('id', 'user_id', 'start_location', 'end_location', 'end_time', 'created_at', 'start_latitude', 'start_longitude', 'end_latitude', 'end_longitude');
+                }
+            ])
+            ->paginate(15); // Paginate the result
 
         // Initialize starting sl_no (assuming pagination starts from 1)
         $sl_no = ($employees->currentPage() - 1) * $employees->perPage() + 1;
@@ -84,6 +85,7 @@ class EmployeesController extends Controller implements HasMiddleware
                 'sl_no' => $sl_no++,
                 'name' => $employee->name,
                 'email' => $employee->email,
+                'emp_id' => $employee->emp_id,
                 'phone' => $employee->phone ?? "-",
                 'state' => $employee->state ?? "-",
                 'branch' => $employee->branch ?? "-",
@@ -203,17 +205,27 @@ class EmployeesController extends Controller implements HasMiddleware
 
     public function store(Request $request)
     {
+        // Validate the incoming request
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
+            'emp_id' => 'required|string',
+            'phone' => 'required|string|max:15',
+            'state' => 'required|string',
+            'district' => 'required|string',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
+            'location' => 'nullable|string',
+            'role' => 'required|string|exists:roles,name',
         ]);
 
         // Add default password
-        $validatedData['password'] = bcrypt('abcd123'); // Set your default password
-
-        User::create($validatedData);
-
-        return response()->json(['success' => 'Employee added successfully.']);
+        $validatedData['password'] = bcrypt('abcd12345'); // Set your default password
+        $validatedData['status'] = 'Active';
+        $user = User::create($validatedData);
+        // Assign the role using Spatie
+        $user->assignRole($request->role);
+        return response()->json(['success' => 'User Created successfully.']);
     }
 
 

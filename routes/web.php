@@ -2,6 +2,7 @@
 use App\Exports\DesignExport;
 use App\Http\Controllers\DailyActivityController;
 use App\Http\Controllers\HolidayController;
+use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
@@ -45,9 +46,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('calender');
 
     // test pages
-    Route::get('/export-design', function () {
-        return Excel::download(new DesignExport('year', null, 2025), 'attendance_january.xlsx');
-    });
+    // Route::get('/export-design', function () {
+    //     return Excel::download(new DesignExport('year', null, 2025), 'attendance_january.xlsx');
+    // });
+
+    Route::get('/export-xls', [ReportsController::class, 'export'])->name('export.xls');
 
     Route::get('/test-user', [TestController::class, 'fetchEmployees'])->name('test-index');
     // Helper Data Routes
@@ -156,6 +159,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/transactions/{id}', [TransactionController::class, 'update'])->name('transactions.update');
     Route::delete('/transactions/{id}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
 
+    // Route to apply leave
+    Route::post('/apply-leave', [LeaveController::class, 'applyLeave'])->name('apply.leave');
+    Route::get('/leaves/fetch', [LeaveController::class, 'index'])->name('leaves.fetch');
+    Route::get('/leaves', function () {
+        return view('leaves');
+    })->name('leaves');
 });
 
 require __DIR__ . '/auth.php';

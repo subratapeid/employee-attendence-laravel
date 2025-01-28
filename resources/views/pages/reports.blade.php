@@ -22,14 +22,6 @@
                             <li class="dropdown-header text-start">
                                 <h6>Filter</h6>
                             </li>
-                            <li><a class="dropdown-item filter-option" data-filter="today" href="#"
-                                    data-report="attendance">Today</a></li>
-                            <li><a class="dropdown-item filter-option" data-filter="previous_day" href="#"
-                                    data-report="attendance">Previous Day</a></li>
-                            <li><a class="dropdown-item filter-option" data-filter="this_week" href="#"
-                                    data-report="attendance">This Week</a></li>
-                            <li><a class="dropdown-item filter-option" data-filter="previous_week" href="#"
-                                    data-report="attendance">Previous Week</a></li>
                             <li><a class="dropdown-item filter-option" data-filter="this_month" href="#"
                                     data-report="attendance">This Month</a></li>
                             <li><a class="dropdown-item filter-option" data-filter="previous_month" href="#"
@@ -86,14 +78,7 @@
                             <li class="dropdown-header text-start">
                                 <h6>Filter</h6>
                             </li>
-                            <li><a class="dropdown-item filter-option" data-filter="today" href="#"
-                                    data-report="activity">Today</a></li>
-                            <li><a class="dropdown-item filter-option" data-filter="previous_day" href="#"
-                                    data-report="activity">Previous Day</a></li>
-                            <li><a class="dropdown-item filter-option" data-filter="this_week" href="#"
-                                    data-report="activity">This Week</a></li>
-                            <li><a class="dropdown-item filter-option" data-filter="previous_week" href="#"
-                                    data-report="activity">Previous Week</a></li>
+
                             <li><a class="dropdown-item filter-option" data-filter="this_month" href="#"
                                     data-report="activity">This Month</a></li>
                             <li><a class="dropdown-item filter-option" data-filter="previous_month" href="#"
@@ -228,7 +213,7 @@
 
         $(document).ready(function() {
             // Load both reports' data on page load (This Month by default)
-            loadInitialReportData();
+            // loadInitialReportData();
 
             // When filter option is clicked for a specific card
             $('.filter-option').on('click', function(e) {
@@ -252,14 +237,16 @@
             // Export functionality for Attendance report
             $('#attendance-export-btn').click(function() {
                 var filter = $('#selected-filter-attendance').text().toLowerCase().replace(' ', '_');
-                window.location.href = "/export/csv?report=attendance&filter=" + filter;
+                // window.location.href = "/export/csv?report=attendance&filter=" + filter;
+                window.location.href = "/export-xls?report=attendance&filter=" + filter;
+
             });
 
             // Export functionality for Activity report
-            $('#activity-export-btn').click(function() {
-                var filter = $('#selected-filter-activity').text().toLowerCase().replace(' ', '_');
-                window.location.href = "/export/csv?report=activity&filter=" + filter;
-            });
+            // $('#activity-export-btn').click(function() {
+            //     var filter = $('#selected-filter-activity').text().toLowerCase().replace(' ', '_');
+            //     window.location.href = "/export/csv?report=activity&filter=" + filter;
+            // });
         });
 
         // Function to Load Both Report Data (attendance and activity) on Page Load

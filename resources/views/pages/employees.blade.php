@@ -80,7 +80,7 @@
                         <tr>
                             <td class="text-nowrap">{{ $employee['sl_no'] }}</td>
                             <td class="text-nowrap">{{ $employee['name'] }}</td>
-                            <td class="text-nowrap">{{ $employee['id'] }}</td>
+                            <td class="text-nowrap">{{ $employee['emp_id'] }}</td>
                             {{-- <td class="text-nowrap">{{ $employee['email'] }}</td>
 
                             <td class="text-nowrap">{{ $employee['phone'] }}</td>
