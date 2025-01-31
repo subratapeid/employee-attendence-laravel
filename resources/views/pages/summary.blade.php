@@ -113,7 +113,7 @@
                                 </ul>
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">Total Leaves <br /><span id="leaves-filter-title">This
+                                <h5 class="card-title">Total Absent <br /><span id="leaves-filter-title">This
                                         Week</span></h5>
                                 <div class="d-flex align-items-center">
                                     <div

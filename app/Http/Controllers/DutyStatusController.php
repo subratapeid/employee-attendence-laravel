@@ -30,6 +30,19 @@ class DutyStatusController extends Controller
         $photoUrl = $this->savePhoto($validatedData['photo'], $userId, $type);
 
         if ($type === 'on') {
+            // Check if there is an open duty record for today
+            $existingDuty = DutyStatus::where('user_id', $userId)
+                ->whereDate('created_at', $currentDate)
+                ->whereNull('end_latitude')
+                ->whereNull('end_longitude')
+                ->whereNull('end_photo')
+                ->first();
+
+            if ($existingDuty) {
+                // If there is already an open duty record, don't allow starting a new one
+                return response()->json(['message' => 'You are already on duty for today.'], 400);
+            }
+
             // Start a new duty record
             DutyStatus::create([
                 'user_id' => $userId,
@@ -39,7 +52,8 @@ class DutyStatusController extends Controller
                 'start_photo' => $photoUrl,
                 'created_at' => now(),
             ]);
-            return response()->json(['title' => 'Duty Started', 'message' => 'You has been marked as Attended for today.']);
+
+            return response()->json(['title' => 'Duty Started', 'message' => 'You have been marked as Attended for today.']);
 
         } elseif ($type === 'off') {
             // End today's duty record
@@ -65,8 +79,8 @@ class DutyStatusController extends Controller
                 return response()->json(['message' => 'No open duty record found to update.'], 404);
             }
         }
-
     }
+
 
     // store unresolved duty send manualy by user
     public function resolveUnresolvedDuty(Request $request)

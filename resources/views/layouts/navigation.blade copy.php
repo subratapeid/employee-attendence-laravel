@@ -15,8 +15,8 @@
             <input type="checkbox" id="toggle" class="toggle-input" />
             <label for="toggle" class="toggle-label">
                 <span class="toggle-circle"></span>
-                <span class="toggle-text off">Start Duty</span>
-                <span class="toggle-text on">End Duty</span>
+                <span class="toggle-text off">Day Begain</span>
+                <span class="toggle-text on">Day End</span>
             </label>
         </div>
     </div>

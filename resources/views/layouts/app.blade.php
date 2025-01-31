@@ -42,6 +42,8 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.css" />
 </head>
 
 <body class="font-sans antialiased">
@@ -68,7 +70,7 @@
     <!-- ======= Footer ======= -->
     <footer id="footer" class="footer">
         <div class="copyright">
-            &copy; Copyright <strong><span>Integra Micro Systems</span></strong>. All Rights Reserved
+            &copy; Copyright <strong><span>Integra Micro Systems Private Limited</span></strong>. All Rights Reserved
         </div>
     </footer><!-- End Footer -->
 
@@ -141,7 +143,7 @@
     <script src="/assets/js/main.js"></script>
     @can('create-attendance')
         <script src="/assets/js/toggle.js"></script>
-        <script src="/assets/js/photo.js"></script>
+        {{-- <script src="/assets/js/photo.js"></script> --}}
     @endcan
 </body>
 

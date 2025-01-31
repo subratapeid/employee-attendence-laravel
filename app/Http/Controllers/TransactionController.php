@@ -3,10 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
+
+    public function checkTransactionToday()
+    {
+        // Get the current date in Y-m-d format
+        $today = Carbon::now()->toDateString();
+
+        // Get the logged-in user's ID
+        $userId = Auth::id();
+
+        // Check if there's any transaction for the logged-in user today
+        $transactionExists = Transaction::where('user_id', $userId)
+            ->whereDate('created_at', $today)
+            ->exists();
+
+        // Return true or false
+        return response()->json(['exists' => $transactionExists]);
+    }
     public function index()
     {
         $transactions = Transaction::all();
@@ -26,23 +45,27 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'deposit_count' => 'required|integer',
-            'deposit_amount' => 'required|numeric',
-            'withdrawal_count' => 'required|integer',
-            'withdrawal_amount' => 'required|numeric',
-            'transfer_count' => 'required|integer',
-            'transfer_amount' => 'required|numeric',
-            'other_count' => 'required|integer',
-            'other_details' => 'nullable|string',
-            'enrollment_count' => 'required|integer',
-            'savings_count' => 'required|integer',
-            'deposit_accounts' => 'required|integer',
-            'aadhaar_seeding' => 'required|integer',
-            'ekyc_processed' => 'required|integer',
+            'deposit_count' => 'required|integer|min:1|max:1000000',
+            'deposit_amount' => 'required|numeric|min:0|max:99999999.99',
+            'withdrawal_count' => 'required|integer|min:1|max:1000000',
+            'withdrawal_amount' => 'required|numeric|min:0|max:99999999.99',
+            'transfer_count' => 'required|integer|min:1|max:1000000',
+            'transfer_amount' => 'required|numeric|min:0|max:99999999.99',
+            'other_count' => 'required|integer|min:1|max:1000000',
+            'other_details' => 'nullable|string|max:500',
+            'enrollment_count' => 'required|integer|min:1|max:1000000',
+            'savings_count' => 'required|integer|min:1|max:1000000',
+            'deposit_accounts' => 'required|integer|min:1|max:1000000',
+            'aadhaar_seeding' => 'required|integer|min:1|max:1000000',
+            'ekyc_processed' => 'required|integer|min:1|max:1000000',
             'device_issues' => 'required|in:Yes,No',
-            'issue_details' => 'nullable|required_if:device_issues,Yes|string',
+            'issue_details' => 'nullable|required_if:device_issues,Yes|string|max:1000',
         ]);
 
+        // Add the user_id to the request data
+        $request->merge([
+            'user_id' => Auth::id()
+        ]);
         Transaction::create($request->all());
 
         return response()->json(['message' => 'Transaction saved successfully']);

@@ -9,6 +9,7 @@ return new class extends Migration {
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->integer('deposit_count');
             $table->decimal('deposit_amount', 15, 2);
             $table->integer('withdrawal_count');
@@ -25,6 +26,8 @@ return new class extends Migration {
             $table->enum('device_issues', ['Yes', 'No']);
             $table->text('device_details')->nullable();
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
         });
     }
 

@@ -260,7 +260,7 @@ class EmployeesController extends Controller implements HasMiddleware
         }
 
         // Set a default new password (e.g., "password123") or generate a random one
-        $newPassword = 'abcd@12345';
+        $newPassword = '12345';
 
         // Update the employee's password
         $employee->password = Hash::make($newPassword);

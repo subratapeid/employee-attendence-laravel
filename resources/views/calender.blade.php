@@ -66,15 +66,16 @@
             position: relative;
         }
 
+        #calendar #dates div.absent {
+            background-color: #ffab0f;
+            color: white;
+        }
+
         #calendar #dates div.employee-leave {
             background-color: #ff00bf;
             color: white;
         }
 
-        #calendar #dates div.absent {
-            background-color: #ffab0f;
-            color: white;
-        }
 
         #calendar #dates div.attended {
             background-color: #006e00;
@@ -295,6 +296,7 @@
 
             let calendarData = {
                 companyLeaves: [],
+                employeeAbsent: [],
                 employeeLeaves: [],
                 attendedDates: []
             };
@@ -313,21 +315,24 @@
 
             // Fetch data for the selected month and year
             function fetchCalendarData(year, month) {
+                $('#loading-overlay').addClass('d-flex');
                 return new Promise((resolve, reject) => {
                     $.ajax({
-                        url: '/attendance/data',
+                        url: '{{ route('attendance.data') }}',
                         method: 'GET',
                         data: {
                             year: year,
                             month: month + 1 // Backend expects 1-based month
                         },
                         success: function(response) {
-                            calendarData.employeeLeaves = response.employee_leaves;
+                            calendarData.employeeLeaves = response.employee_leave;
+                            calendarData.employeeAbsent = response.employee_absent;
                             calendarData.attendedDates = response.attended_dates;
                             calendarData.companyLeaves = response.company_leaves;
                             console.log(response);
 
                             resolve();
+                            $('#loading-overlay').removeClass('d-flex');
                         },
                         error: function(error) {
                             console.error('Error fetching calendar data:', error);
@@ -408,8 +413,8 @@
                         cell.setAttribute('data-info', 'Today');
                     }
 
-                    // Check for employee leaves
-                    if (calendarData.employeeLeaves.includes(dateStr)) {
+                    // Check for employee Absent
+                    if (calendarData.employeeAbsent.includes(dateStr)) {
                         cell.classList.add('absent');
                         cell.setAttribute('data-info', 'Absent');
                     }
@@ -419,7 +424,12 @@
                         cell.classList.add('attended');
                         cell.setAttribute('data-info', 'Attended');
                     }
-
+                    // Check for Employee leaves
+                    let employeeLeave = calendarData.employeeLeaves.find(item => item.leave_date === dateStr);
+                    if (employeeLeave) {
+                        cell.classList.add('employee-leave');
+                        cell.setAttribute('data-info', `Leave: ${employeeLeave.remarks}`);
+                    }
 
                     // Check for company leaves
                     let leave = calendarData.companyLeaves.find(item => item.leave_date === dateStr);
@@ -427,6 +437,7 @@
                         cell.classList.add('company-leave');
                         cell.setAttribute('data-info', `Holiday: ${leave.reason}`);
                     }
+
                     // Mark weekly offs (Sundays)
                     if (weeklyOffs.includes(date.getDay())) {
                         cell.classList.add('week-off');

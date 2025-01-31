@@ -128,15 +128,15 @@
             <div class="text-center login-logo mb-4">
                 <img src="assets/img/logo.png" alt="Logo" />
             </div>
-            <h4 class="text-center mb-4">Login to Your Account</h4>
+            {{-- <h4 class="text-center mb-4">Login</h4> --}}
 
             <form method="POST" action="{{ route('login') }}" class="needs-validation" novalidate>
                 @csrf
                 <!-- Email -->
                 <div class="mb-3">
-                    <label for="email" class="form-label">Email Address</label>
+                    {{-- <label for="email" class="form-label">Email Address</label> --}}
                     <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
                         <input type="email" id="email" name="email" class="form-control"
                             placeholder="Enter your email" value="{{ old('email') }}" required autofocus
                             autocomplete="username" />
@@ -149,7 +149,7 @@
 
                 <!-- Password -->
                 <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
+                    {{-- <label for="password" class="form-label">Password</label> --}}
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                         <input type="password" id="password" name="password" class="form-control"
@@ -176,10 +176,10 @@
                 </div>
 
                 <!-- Register Link -->
-                <div class="text-center">
+                {{-- <div class="text-center">
                     <p class="small-text mb-0">Don't have an account? <a href="{{ route('register') }}">Register Now</a>
                     </p>
-                </div>
+                </div> --}}
             </form>
         </div>
     </div>

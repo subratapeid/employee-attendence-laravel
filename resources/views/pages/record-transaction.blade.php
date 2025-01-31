@@ -3,39 +3,52 @@
         <h1>Daily Transaction Entry</h1>
     </div>
     <section class="section daily-activity">
-        <div class="mb-5 pb-4">
+        <div class="container mx-0 px-2 px-sm-3 px-md-4 pb-5">
             <form id="transactionForm">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Transaction Details</h5>
-                        <div class="row mb-3">
+                <!-- Transaction Details -->
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Transaction Details</h5>
+                    </div>
+                    <div class="card-body p-3 p-sm-2 ps-md-4 pb-md-5 pe-md-4 pb-5">
+                        <div class="row g-3">
                             <div class="col-md-6">
-                                <label>Total Deposits:</label>
-                                <input type="number" class="form-control" name="deposit_count"
-                                    placeholder="Enter count">
-                                <input type="text" class="form-control mt-2" name="deposit_amount"
-                                    placeholder="Enter amount">
+                                <label class="form-label">Total Deposits</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control count" name="deposit_count"
+                                        placeholder="Count">
+                                    <input type="text" class="form-control amount" name="deposit_amount"
+                                        placeholder="Amount">
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <label>Total Withdrawals:</label>
-                                <input type="number" class="form-control" name="withdrawal_count"
-                                    placeholder="Enter count">
-                                <input type="text" class="form-control mt-2" name="withdrawal_amount"
-                                    placeholder="Enter amount">
+                                <label class="form-label">Total Withdrawals</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control count" name="withdrawal_count"
+                                        placeholder="Count">
+                                    <input type="text" class="form-control amount" name="withdrawal_amount"
+                                        placeholder="Amount">
+                                </div>
                             </div>
                         </div>
-                        <div class="row mb-3">
+                        <div class="row g-3 mt-3">
                             <div class="col-md-6">
-                                <label>Fund Transfers:</label>
-                                <input type="number" class="form-control" name="transfer_count"
-                                    placeholder="Enter count">
-                                <input type="text" class="form-control mt-2" name="transfer_amount"
-                                    placeholder="Enter amount">
+                                <label class="form-label">Fund Transfers</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control count" name="transfer_count"
+                                        placeholder="Count">
+                                    <input type="text" class="form-control amount" name="transfer_amount"
+                                        placeholder="Amount">
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <label>Other Transactions:</label>
-                                <input type="number" class="form-control mb-2" name="other_count"
-                                    placeholder="Enter count">
+                                <label class="form-label">Other Transactions</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control count" name="other_count"
+                                        placeholder="Count">
+                                    <input type="text" class="form-control amount" name="other_amount"
+                                        placeholder="Amount">
+                                </div>
                                 <input type="text" class="form-control mt-2" name="other_details"
                                     placeholder="Enter details">
                             </div>
@@ -43,69 +56,116 @@
                     </div>
                 </div>
 
-                <div class="card mb-3">
+                <!-- Enrollment Details -->
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Enrollment Details</h5>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">Enrollment Details</h5>
-                        <div class="row mb-3">
+                        <div class="row g-3">
                             <div class="col-md-6">
-                                <label>New Customer Enrollments:</label>
-                                <input type="number" class="form-control" name="enrollment_count"
+                                <label class="form-label">New Customer Enrollments</label>
+                                <input type="text" class="form-control count" name="enrollment_count"
                                     placeholder="Enter count">
                             </div>
                             <div class="col-md-6">
-                                <label>Savings Accounts:</label>
-                                <input type="number" class="form-control" name="savings_count"
-                                    placeholder="Enter count">
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label>Recurring/Fixed Deposit Accounts:</label>
-                                <input type="number" class="form-control" name="deposit_accounts"
-                                    placeholder="Enter count">
-                            </div>
-                            <div class="col-md-6">
-                                <label>Aadhaar Seeding:</label>
-                                <input type="number" class="form-control" name="aadhaar_seeding"
+                                <label class="form-label">Savings Accounts</label>
+                                <input type="text" class="form-control count" name="savings_count"
                                     placeholder="Enter count">
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label>e-KYC Processed:</label>
-                            <input type="number" class="form-control" name="ekyc_processed" placeholder="Enter count">
+                        <div class="row g-3 mt-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Recurring/Fixed Deposit Accounts</label>
+                                <input type="text" class="form-control count" name="deposit_accounts"
+                                    placeholder="Enter count">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Aadhaar Seeding</label>
+                                <input type="text" class="form-control count" name="aadhaar_seeding"
+                                    placeholder="Enter count">
+                            </div>
+                        </div>
+                        <div class="row g-3 mt-3">
+                            <div class="col-md-6">
+                                <label class="form-label">e-KYC Processed</label>
+                                <input type="text" class="form-control count" name="ekyc_processed"
+                                    placeholder="Enter count">
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="card mb-3">
+                <!-- Device Issues -->
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Device/Technical Issues</h5>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">Device/Technical Issues</h5>
-                        <div class="row align-items-center">
+                        <div class="row g-3 align-items-center">
                             <div class="col-md-6">
-                                <label for="device_issues">POS/Device Issues:</label>
+                                <label class="form-label" for="device_issues">POS/Device Issues</label>
                                 <select class="form-control" name="device_issues" id="device_issues">
                                     <option value="No">No</option>
                                     <option value="Yes">Yes</option>
                                 </select>
                             </div>
                             <div class="col-md-6" id="issue_details_wrapper" style="display: none;">
-                                <label for="issue_details">Issue Details:</label>
+                                <label class="form-label" for="issue_details">Issue Details</label>
                                 <textarea class="form-control" name="issue_details" id="issue_details" placeholder="Enter details" rows="3"></textarea>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="text-center pb-5">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                        <div id="loadingSpinner" style="display:none;">Processing...</div>
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success btn-lg px-5">Submit</button>
+                    <div id="loadingSpinner" class="mt-3" style="display:none;">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <span class="text-primary">Processing...</span>
                     </div>
                 </div>
             </form>
         </div>
     </section>
 
+    <style>
+        .card {
+            border-radius: 10px;
+            overflow: hidden;
+            width: 1400 px;
+        }
+
+        .card-header {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-group .form-control {
+            flex: 1;
+        }
+
+        .btn-success {
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
+
+
     <script>
         $(document).ready(function() {
+            // Show/Hide issue details based on dropdown selection
             $('#device_issues').on('change', function() {
                 if (this.value === 'Yes') {
                     $('#issue_details_wrapper').css('display', 'block');
@@ -114,11 +174,96 @@
                 }
             });
 
+            function validateFields(scrollToError = false) {
+                let isValid = true;
+                $('.is-invalid').removeClass('is-invalid');
+                $('.error-message').remove();
+                let firstInvalidField = null;
+
+                // Validate each Class Count field
+                $(".count").each(function() {
+                    let classCount = $(this).val();
+                    if (!/^\d+$/.test(classCount) || parseInt(classCount) <= 0) {
+                        $(this).addClass("is-invalid");
+                        $(this).after(
+                            '<div class="error-message text-danger">Please enter a valid class count (positive integer).</div>'
+                        );
+                        isValid = false;
+                        if (!firstInvalidField) firstInvalidField = $(this);
+                    }
+                });
+
+                // Validate each Amount field
+                $(".amount").each(function() {
+                    let amount = $(this).val();
+                    if (!/^\d+(\.\d{1,2})?$/.test(amount) || parseFloat(amount) <= 0) {
+                        $(this).addClass("is-invalid");
+                        $(this).after(
+                            '<div class="error-message text-danger">Please enter a valid amount (positive number with up to 2 decimal places).</div>'
+                        );
+                        isValid = false;
+                        if (!firstInvalidField) firstInvalidField = $(this);
+                    }
+                });
+
+                // Scroll to first invalid field ONLY on form submit
+                if (scrollToError && firstInvalidField) {
+                    $('html, body').animate({
+                        scrollTop: firstInvalidField.offset().top - 80
+                    }, 500);
+                }
+
+                return isValid;
+            }
+
+            // Prevent invalid input in Class Count (only numbers allowed)
+            $(document).on("keypress", ".count", function(e) {
+                let keyCode = e.which ? e.which : e.keyCode;
+                if (keyCode < 48 || keyCode > 57) {
+                    e.preventDefault(); // Block non-numeric input
+                }
+            });
+
+            // Prevent invalid input in Amount (only numbers and one decimal allowed)
+            $(document).on("keypress", ".amount", function(e) {
+                let keyCode = e.which ? e.which : e.keyCode;
+                let currentValue = $(this).val();
+
+                // Allow numbers (48-57), one dot (46) if not already present
+                if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+                    e.preventDefault();
+                }
+                if (keyCode === 46 && currentValue.includes(".")) {
+                    e.preventDefault(); // Prevent more than one decimal
+                }
+            });
+
+            // Prevent pasting invalid values
+            $(document).on("paste", ".count, .amount", function(e) {
+                let pastedData = e.originalEvent.clipboardData.getData("text");
+                if ($(this).hasClass("count") && !/^\d+$/.test(pastedData)) {
+                    e.preventDefault();
+                }
+                if ($(this).hasClass("amount") && !/^\d+(\.\d{1,2})?$/.test(pastedData)) {
+                    e.preventDefault();
+                }
+            });
+
+            // Validate fields on input change but DON'T scroll
+            $(document).on("input", ".count, .amount", function() {
+                validateFields(false);
+            });
+
             $('#transactionForm').on('submit', function(event) {
                 event.preventDefault();
                 $('#loadingSpinner').show();
                 $('.is-invalid').removeClass('is-invalid');
                 $('.error-message').remove();
+
+                if (!validateFields(true)) { // Scroll to first error field if validation fails
+                    $('#loadingSpinner').hide();
+                    return;
+                }
 
                 $.ajax({
                     url: '{{ route('transactions.store') }}',
@@ -135,6 +280,7 @@
                     error: function(xhr) {
                         $('#loadingSpinner').hide();
                         var errors = xhr.responseJSON.errors;
+
                         if (errors) {
                             for (const key in errors) {
                                 let inputField = $('[name="' + key + '"]');
@@ -142,15 +288,40 @@
                                 inputField.after('<div class="error-message text-danger">' +
                                     errors[key][0] + '</div>');
                             }
+
+                            // Scroll to first invalid field after backend error validation
                             $('html, body').animate({
                                 scrollTop: $('.is-invalid:first').offset().top - 80
                             }, 500);
+
+                        } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                            // Handle SQL error (like "Out of range value for column 'deposit_accounts'")
+                            let errorMessage = xhr.responseJSON.message;
+                            let matchedField = null;
+
+                            if (errorMessage.includes("Out of range value")) {
+                                matchedField = $(
+                                    ".amount"); // Adjust this if another field is the issue
+                            }
+
+                            if (matchedField) {
+                                matchedField.addClass('is-invalid');
+                                matchedField.after('<div class="error-message text-danger">' +
+                                    errorMessage + '</div>');
+                                $('html, body').animate({
+                                    scrollTop: matchedField.offset().top - 80
+                                }, 500);
+                            } else {
+                                alert(errorMessage); // Fallback for unknown errors
+                            }
+
                         } else {
                             alert('An unexpected error occurred. Please try again.');
                         }
                     }
                 });
             });
+
         });
     </script>
 </x-app-layout>

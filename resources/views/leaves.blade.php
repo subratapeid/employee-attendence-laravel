@@ -80,14 +80,18 @@
             fetchLeaves();
 
             function fetchLeaves() {
+                // Show loading message before sending the request
+                $('#leaveRecordsTable tbody').html(
+                    '<tr><td colspan="7" class="text-center">Loading data, please wait...</td></tr>');
+
                 $.ajax({
                     url: '{{ route('leaves.fetch') }}', // Route to fetch all leaves
                     method: 'GET',
                     success: function(response) {
-                        if (response.success) {
-                            // Clear previous table rows
-                            $('#leaveRecordsTable tbody').empty();
+                        // Clear previous table rows
+                        $('#leaveRecordsTable tbody').empty();
 
+                        if (response.success && response.data.length > 0) {
                             // Loop through each leave and append it to the table
                             $.each(response.data, function(index, leave) {
                                 var leaveRow = '<tr>' +
@@ -98,19 +102,24 @@
                                     '<td>' + leave.remarks + '</td>' +
                                     '<td>' + leave.status + '</td>' +
                                     '<td>' + leave.created_at + '</td>' +
-                                    // Formatted Created Date
                                     '</tr>';
                                 $('#leaveRecordsTable tbody').append(leaveRow);
                             });
                         } else {
-                            alert('Failed to fetch leave data.');
+                            // Show "No records found" message
+                            $('#leaveRecordsTable tbody').html(
+                                '<tr><td colspan="7" class="text-center">No records found</td></tr>'
+                                );
                         }
                     },
                     error: function(xhr) {
-                        alert('Something went wrong.');
+                        $('#leaveRecordsTable tbody').html(
+                            '<tr><td colspan="7" class="text-center text-danger">Failed to fetch data. Please try again.</td></tr>'
+                            );
                     }
                 });
             }
+
 
             // Show the Apply Leave Modal
             $('#apply-leave-btn').click(function() {

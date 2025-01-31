@@ -36,12 +36,12 @@ class EmployeesExport implements FromCollection, WithHeadings
             });
         }
 
-        return $query->select('id', 'name', 'email')->get();
+        return $query->select('id', 'name', 'email', 'emp_id', 'phone', 'state', 'district', 'location', 'status')->get();
     }
 
     public function headings(): array
     {
-        return ['ID', 'Name', 'Email'];
+        return ['ID', 'Name', 'Email', 'EmpId', 'Phone', 'State', 'District', 'Location', 'Status'];
     }
 }
 

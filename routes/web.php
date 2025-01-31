@@ -72,7 +72,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     // get leave Data for Calenders
-    Route::get('/attendance/data', [CalenderController::class, 'getCalendarData']);
+    Route::get('/attendance/data', [CalenderController::class, 'getCalendarData'])->name('attendance.data');
     Route::get('/activity', [ActivityController::class, 'getDuties'])->name('duties.get');
     Route::get('/activity/available-options', [ActivityController::class, 'getAvailableOptions']);
 
@@ -158,6 +158,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/transactions/{id}/edit', [TransactionController::class, 'edit'])->name('transactions.edit');
     Route::put('/transactions/{id}', [TransactionController::class, 'update'])->name('transactions.update');
     Route::delete('/transactions/{id}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
+    Route::get('/check-transaction-today', [TransactionController::class, 'checkTransactionToday'])->name('transaction.today');
+
 
     // Route to apply leave
     Route::post('/apply-leave', [LeaveController::class, 'applyLeave'])->name('apply.leave');

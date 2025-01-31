@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\CompanyLeave;
 use App\Models\DutyStatus;
+use App\Models\EmployeeLeave;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CalenderController extends Controller
@@ -26,10 +28,12 @@ class CalenderController extends Controller
             ->get();
 
         // Get employee leave dates
-        $employeeLeaves = $this->getEmployeeLeaves($year, $month, $appStartDate);
+        $absent = $this->getAbsent($year, $month, $appStartDate);
+        $employeeLeaves = $this->getEmployeeLeaves($month, $year, );
 
         // Fetch attended dates for the given month and year
-        $attendedDates = DutyStatus::whereYear('created_at', $year)
+        $attendedDates = DutyStatus::where('user_id', Auth::id()) // Filter for logged-in user
+            ->whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
             ->selectRaw('DATE(created_at) as date')
             ->groupBy('date')
@@ -39,7 +43,8 @@ class CalenderController extends Controller
             'year' => $year,
             'month' => $month,
             'company_leaves' => $companyLeaves,
-            'employee_leaves' => $employeeLeaves,
+            'employee_absent' => $absent,
+            'employee_leave' => $employeeLeaves,
             'attended_dates' => $attendedDates
         ]);
     }
@@ -86,7 +91,7 @@ class CalenderController extends Controller
     // }
 
 
-    private function getEmployeeLeaves($year, $month, $appStartDate)
+    private function getAbsent($year, $month, $appStartDate)
     {
         // Step 1: Get all days of the given month starting from app start date
         $startDate = Carbon::create($year, $month, 1);
@@ -114,6 +119,7 @@ class CalenderController extends Controller
 
         // Step 3: Exclude dates from duty_statuses table (considering the app start date)
         $dutyDates = DB::table('duty_statuses')
+            ->where('user_id', Auth::id()) // Filter for the logged-in user
             ->whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
             ->whereDate('created_at', '>=', $appStartDate)
@@ -143,4 +149,36 @@ class CalenderController extends Controller
         return array_values($filteredDates); // Return available leave dates
     }
 
+
+    public function getEmployeeLeaves($month, $year)
+    {
+        $employeeLeaves = EmployeeLeave::where('user_id', Auth::id()) // Filter by logged-in user
+            ->where(function ($query) use ($year, $month) {
+                $query->whereYear('from_date', $year)
+                    ->whereMonth('from_date', $month)
+                    ->orWhereYear('to_date', $year)
+                    ->whereMonth('to_date', $month);
+            })
+            ->get();
+        $leaveDates = [];
+
+        foreach ($employeeLeaves as $leave) {
+            $startDate = Carbon::parse($leave->from_date);
+            $endDate = Carbon::parse($leave->to_date);
+
+            while ($startDate <= $endDate) {
+                $leaveDates[] = [
+                    'leave_date' => $startDate->toDateString(),
+                    'remarks' => $leave->remarks,
+                ];
+                $startDate->addDay();
+            }
+        }
+
+        // Convert to a collection if needed
+        $leaveDatesCollection = collect($leaveDates);
+
+        // Return or use the leaveDatesCollection
+        return $leaveDatesCollection;
+    }
 }

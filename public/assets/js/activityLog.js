@@ -28,6 +28,7 @@ function populateDropdown(selector, options) {
 
 // Function to fetch and render duties
 function fetchDuties(url) {
+    $('#loading-overlay').addClass('d-flex')
     showLoader(true);
 
     fetch(url)
@@ -40,6 +41,7 @@ function fetchDuties(url) {
         })
         .finally(() => {
             showLoader(false);
+            $('#loading-overlay').removeClass('d-flex')
         });
 }
 
