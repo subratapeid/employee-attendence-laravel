@@ -34,7 +34,7 @@ $(document).ready(function () {
                     // If no transaction exists, show a popup and guide the user to submit today's transaction
                     Swal.fire({
                         title: 'Pending Activity!',
-                        text: 'Please submit today\'s transaction details before you end the day.',
+                        text: 'Please submit today\'s transaction details before you do the day end.',
                         icon: 'warning',
                         confirmButtonText: 'Submit Now',
                         showCancelButton: true,

@@ -1,5 +1,6 @@
 <?php
 use App\Exports\DesignExport;
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\DailyActivityController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\LeaveController;
@@ -61,7 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/resolve-duty', [DutyStatusController::class, 'resolveUnresolvedDuty']);
     Route::get('/duty-status', [DutyStatusController::class, 'getStatus']);
 
-    // get statics data
+    // get user Summary data
     Route::get('/dashboard/data', [DashboardController::class, 'getDashboardData']);
     Route::get('/attendance/hours', [DashboardController::class, 'getTotalWorkingHours']);
     Route::get('/attendance/count', [DashboardController::class, 'getAttendanceCount']);
@@ -69,6 +70,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance/late-arrival', [DashboardController::class, 'getLateArrivals']);
     Route::get('/attendance/early-left', [DashboardController::class, 'getEarlyDepartures']);
     Route::get('/attendance/overtime', [DashboardController::class, 'getOvertime']);
+
+    // get Admin Dashboard data
+    Route::get('/admin/dashboard/data', [AdminDashboardController::class, 'getAdminDashboardData']);
+    Route::get('/admin/attendance', [AdminDashboardController::class, 'getAttendanceCount']);
+    Route::get('/admin/leave', [AdminDashboardController::class, 'getTotalLeaves']);
+    Route::get('/admin/absent', [AdminDashboardController::class, 'getTotalAbsent']);
+    Route::get('/admin/late-arrival', [AdminDashboardController::class, 'getLateArrivals']);
+    Route::get('/admin/early-left', [AdminDashboardController::class, 'getEarlyDepartures']);
+    Route::get('/admin/on-time', [AdminDashboardController::class, 'getOntime']);
 
 
     // get leave Data for Calenders
