@@ -3,7 +3,7 @@
 
     <div class="d-flex align-items-center justify-content-between">
         <a href="{{ route('dashboard') }}" class="logo desktop d-flex align-items-center">
-            <img src="/assets/img/logo3.png" alt="">
+            <img src="/assets/img/logo4.png" alt="">
         </a>
         {{-- <i class="bi bi-list toggle-sidebar-btn"></i> --}}
         <i class="fas fa-bars toggle-sidebar-btn"></i>
@@ -18,8 +18,8 @@
                 <input type="checkbox" id="toggle" class="toggle-input" />
                 <label for="toggle" class="toggle-label">
                     <span class="toggle-circle"></span>
-                    <span class="toggle-text off">Start Duty</span>
-                    <span class="toggle-text on">End Duty</span>
+                    <span class="toggle-text off">Day Begain</span>
+                    <span class="toggle-text on">Day End</span>
                 </label>
             </div>
         @endcan
@@ -94,7 +94,7 @@
 <aside id="sidebar" class="sidebar">
     <div class="d-flex allign-items-center justify-content-center mb-3">
         <a href="{{ route('dashboard') }}" class="logo mobile">
-            <img src="/assets/img/logo3.png" alt="">
+            <img src="/assets/img/logo4.png" alt="">
         </a>
     </div>
     <ul class="sidebar-nav" id="sidebar-nav">

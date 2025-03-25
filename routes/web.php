@@ -179,4 +179,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('leaves');
 });
 
+
+
+use Illuminate\Support\Facades\Storage;
+
+Route::get('/download/{filename}', function ($filename) {
+    $filePath = "public/" . $filename;
+
+    if (!Storage::exists($filePath)) {
+        abort(404, 'File not found');
+    }
+
+    return redirect(asset("storage/{$filename}")); // Redirect to browser-accessible URL
+});
+
+
+
 require __DIR__ . '/auth.php';

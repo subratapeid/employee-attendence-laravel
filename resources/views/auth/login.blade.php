@@ -127,6 +127,7 @@
         <div class="login-card">
             <div class="text-center login-logo mb-4">
                 <img src="assets/img/logo.png" alt="Logo" />
+                <p>BCE Attendance Login</p>
             </div>
             {{-- <h4 class="text-center mb-4">Login</h4> --}}
 
@@ -138,7 +139,7 @@
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                         <input type="email" id="email" name="email" class="form-control"
-                            placeholder="Enter your email" value="{{ old('email') }}" required autofocus
+                            placeholder="Enter BCE Email ID" value="{{ old('email') }}" required autofocus
                             autocomplete="username" />
                     </div>
                     <div class="invalid-feedback">Please enter a valid email address.</div>

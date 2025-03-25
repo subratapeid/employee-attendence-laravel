@@ -34,7 +34,7 @@ $(document).ready(function () {
                     // If no transaction exists, show a popup and guide the user to submit today's transaction
                     Swal.fire({
                         title: 'Pending Activity!',
-                        text: 'Please submit today\'s transaction details before you do the day end.',
+                        text: 'Please submit today\'s BC transaction details before you do the day end.',
                         icon: 'warning',
                         confirmButtonText: 'Submit Now',
                         showCancelButton: true,
@@ -158,10 +158,10 @@ $(document).ready(function () {
         retakeBtn.classList.add('d-none');
         confirmBtn.classList.add('d-none');
         if (type == 'on') {
-            popupTitle.textContent = 'Start Your Duty';
+            popupTitle.textContent = 'Start BC Activity';
             confirmBtn.textContent = 'Start Now';
         } else {
-            popupTitle.textContent = 'End Your Duty';
+            popupTitle.textContent = 'End BC Activity';
             confirmBtn.textContent = 'End Now';
         }
         captureBtn.classList.remove('d-none');

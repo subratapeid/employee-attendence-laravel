@@ -104,7 +104,7 @@
                                 <i class="bi bi-check-circle" style="font-size: 2rem;"></i>
                             </div>
                             <div>
-                                <h6 class="mb-0">Total Activity</h6>
+                                <h6 class="mb-0">Total Transactions</h6>
                                 <h4 class="fw-bold" id="activity-stat-1">200</h4>
                             </div>
                         </div>
@@ -115,7 +115,7 @@
                                 <i class="bi bi-exclamation-circle" style="font-size: 2rem;"></i>
                             </div>
                             <div>
-                                <h6 class="mb-0">Inactive</h6>
+                                <h6 class="mb-0">Total Enrolments</h6>
                                 <h4 class="fw-bold" id="activity-stat-2">5</h4>
                             </div>
                         </div>
@@ -243,10 +243,10 @@
             });
 
             // Export functionality for Activity report
-            // $('#activity-export-btn').click(function() {
-            //     var filter = $('#selected-filter-activity').text().toLowerCase().replace(' ', '_');
-            //     window.location.href = "/export/csv?report=activity&filter=" + filter;
-            // });
+            $('#activity-export-btn').click(function() {
+                var filter = $('#selected-filter-activity').text().toLowerCase().replace(' ', '_');
+                window.location.href = "/export/csv?report=activity&filter=" + filter;
+            });
         });
 
         // Function to Load Both Report Data (attendance and activity) on Page Load

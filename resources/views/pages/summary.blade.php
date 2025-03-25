@@ -40,7 +40,7 @@
                             </div>
 
                             <div class="card-body">
-                                <h5 class="card-title">Total Working Hours <br /><span id="filter-label">Today</span>
+                                <h5 class="card-title">BC Working Hours <br /><span id="filter-label">Today</span>
                                 </h5>
                                 <div class="d-flex align-items-center">
                                     <div
@@ -77,7 +77,7 @@
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title">
-                                    Total Attendance <br />
+                                    BC Attendance <br />
                                     <span id="attendance-filter-title">This Week</span>
                                 </h5>
                                 <div class="d-flex align-items-center">
@@ -113,7 +113,7 @@
                                 </ul>
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">Total Absent <br /><span id="leaves-filter-title">This
+                                <h5 class="card-title">BC Absent <br /><span id="leaves-filter-title">This
                                         Week</span></h5>
                                 <div class="d-flex align-items-center">
                                     <div
@@ -152,7 +152,7 @@
                             </div>
 
                             <div class="card-body">
-                                <h5 class="card-title">Late Arrivals <br /><span id="late-filter-title">This
+                                <h5 class="card-title">BC Late Arrivals <br /><span id="late-filter-title">This
                                         Week</span></h5>
 
                                 <div class="d-flex align-items-center">
@@ -193,7 +193,7 @@
                             </div>
 
                             <div class="card-body">
-                                <h5 class="card-title">Early Left <br /><span id="early-left-filter-title">This
+                                <h5 class="card-title">BC Early Left <br /><span id="early-left-filter-title">This
                                         Week</span></h5>
 
                                 <div class="d-flex align-items-center">
@@ -235,7 +235,7 @@
                             </div>
 
                             <div class="card-body">
-                                <h5 class="card-title">Overtime Hours <br /><span id="overtime-filter-title">This
+                                <h5 class="card-title">BC Overtime Hours <br /><span id="overtime-filter-title">This
                                         Week</span></h5>
 
                                 <div class="d-flex align-items-center">

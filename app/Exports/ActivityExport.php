@@ -22,17 +22,17 @@ class ActivityExport implements FromCollection, WithHeadings, WithTitle
 
         // Adjust query based on filter
         if ($this->filter == 'today') {
-            $query->whereDate('date', now()->toDateString());
+            $query->whereDate('created_at', now()->toDateString());
         } elseif ($this->filter == 'this_week') {
-            $query->whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()]);
+            $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
         } elseif ($this->filter == 'this_month') {
-            $query->whereMonth('date', now()->month);
+            $query->whereMonth('created_at', now()->month);
         } elseif ($this->filter == 'this_year') {
-            $query->whereYear('date', now()->year);
+            $query->whereYear('created_at', now()->year);
         }
 
         // Get the activity data
-        return $query->get(['employee_id', 'employee_name', 'activity', 'date']);
+        return $query->get(['id', 'name', 'created_at']);
     }
 
     public function headings(): array
