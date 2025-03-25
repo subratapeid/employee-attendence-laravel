@@ -3,7 +3,7 @@
 
     <div class="d-flex align-items-center justify-content-between">
         <a href="{{ route('dashboard') }}" class="logo desktop d-flex align-items-center">
-            <img src="/assets/img/logo4.png" alt="">
+            <img src="{{ asset('assets/img/logo4.png') }}" alt="">
         </a>
         {{-- <i class="bi bi-list toggle-sidebar-btn"></i> --}}
         <i class="fas fa-bars toggle-sidebar-btn"></i>
@@ -94,7 +94,7 @@
 <aside id="sidebar" class="sidebar">
     <div class="d-flex allign-items-center justify-content-center mb-3">
         <a href="{{ route('dashboard') }}" class="logo mobile">
-            <img src="/assets/img/logo4.png" alt="">
+            <img src="{{ asset('assets/img/logo4.png')}}" alt="">
         </a>
     </div>
     <ul class="sidebar-nav" id="sidebar-nav">

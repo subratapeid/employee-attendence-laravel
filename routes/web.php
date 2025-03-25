@@ -26,7 +26,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 
 
-Route::prefix('app/myapp')->group(function () {
+// Route::prefix('app/myapp')->group(function () {
 // For changing app path
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -60,11 +60,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/test-user', [TestController::class, 'fetchEmployees'])->name('test-index');
     // Helper Data Routes
     Route::get('/fetch-states', [HolidayController::class, 'getStates'])->name('fetch-states');
-    Route::get('/current-time', [DateTimeController::class, 'getCurrentTime'])->name('get-time');
+    Route::get('current-time', [DateTimeController::class, 'getCurrentTime'])->name('get-time');
 
-    Route::post('/duty-status', [DutyStatusController::class, 'store']);
+    Route::post('/duty-status', [DutyStatusController::class, 'store'])->name('post-duty-status');
     Route::post('/resolve-duty', [DutyStatusController::class, 'resolveUnresolvedDuty']);
-    Route::get('/duty-status', [DutyStatusController::class, 'getStatus']);
+    Route::get('/duty-status', [DutyStatusController::class, 'getStatus'])->name('duty-status');
 
     // get user Summary data
     Route::get('/dashboard/data', [DashboardController::class, 'getDashboardData']);
@@ -198,7 +198,7 @@ Route::get('/download/{filename}', function ($filename) {
 
 
 // For changing app path
-});
+// });
 
 
 require __DIR__ . '/auth.php';

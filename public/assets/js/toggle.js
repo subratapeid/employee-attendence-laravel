@@ -208,7 +208,7 @@ $(document).ready(function () {
         context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
 
         // Fetch current time from the backend
-        fetch('/current-time')
+        fetch(getTime)
             .then((response) => response.json())
             .then((data) => {
                 const serverTime = new Date(data.current_time); // Parse server time
@@ -304,7 +304,7 @@ $(document).ready(function () {
 
         // Send data to the backend
         $.ajax({
-            url: '/duty-status',
+            url: postDutyStatus,
             type: 'POST',
             data: requestData,
             success: function (response) {
@@ -359,7 +359,7 @@ $(document).ready(function () {
 
     // Fetch the latest state from the server
     $.ajax({
-        url: '/duty-status',
+        url: getDutyStatus,
         type: 'GET',
         success: function (response) {
             console.log(response);

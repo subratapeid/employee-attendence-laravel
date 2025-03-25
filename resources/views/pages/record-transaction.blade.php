@@ -149,10 +149,46 @@
                 <!-- Device Issues -->
                 <div class="card shadow mb-4">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Device/Technical Issues</h5>
+                        <h5 class="mb-0">Other Details</h5>
                     </div>
-                    <div class="card-body">
-                        <div class="row g-3 align-items-center">
+                    <div class="card-body p-3 ps-md-4 pb-md-5 pe-md-4 pb-4">
+                        <div class="row g-3">
+                            <div class="col-lg-3 col-md-6 col-6">
+                                <label class="form-label">FD</label>
+                                <input type="text" class="form-control count" name="savings_count" placeholder="Enter count">
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-6">
+                                <label class="form-label">APY</label>
+                                <input type="text" class="form-control count" name="savings_count" placeholder="Enter count">
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-6">
+                                <label class="form-label">SB Account</label>
+                                <input type="text" class="form-control count" name="sb_count" placeholder="Enter count">
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-6">
+                                <label class="form-label">e-KYC Processed</label>
+                                <input type="text" class="form-control count" name="ekyc_processed" placeholder="Enter count">
+                            </div>
+                        </div>
+                        <div class="row g-3 mt-1">
+                            <div class="col-lg-3 col-md-6 col-6">
+                                <label class="form-label">FD</label>
+                                <input type="text" class="form-control count" name="savings_count" placeholder="Enter count">
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-6">
+                                <label class="form-label">APY</label>
+                                <input type="text" class="form-control count" name="savings_count" placeholder="Enter count">
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-6">
+                                <label class="form-label">SB Account</label>
+                                <input type="text" class="form-control count" name="sb_count" placeholder="Enter count">
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-6">
+                                <label class="form-label">e-KYC Processed</label>
+                                <input type="text" class="form-control count" name="ekyc_processed" placeholder="Enter count">
+                            </div>
+                        </div>
+                        <div class="row g-3 align-items-center mt-1">
                             <div class="col-md-6">
                                 <label class="form-label" for="device_issues">POS/Device Issues</label>
                                 <select class="form-control" name="device_issues" id="device_issues">
