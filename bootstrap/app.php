@@ -16,7 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         ]);
+        // ✅ Register the custom middleware
+        $middleware->append(\App\Http\Middleware\ForceSubdirectory::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
+    

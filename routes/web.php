@@ -23,7 +23,11 @@ use App\Http\Controllers\TestController;
 
 use App\Http\Controllers\PermissionController;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
+
+Route::prefix('app/myapp')->group(function () {
+// For changing app path
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/', function () {
@@ -181,7 +185,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 
-use Illuminate\Support\Facades\Storage;
 
 Route::get('/download/{filename}', function ($filename) {
     $filePath = "public/" . $filename;
@@ -193,6 +196,9 @@ Route::get('/download/{filename}', function ($filename) {
     return redirect(asset("storage/{$filename}")); // Redirect to browser-accessible URL
 });
 
+
+// For changing app path
+});
 
 
 require __DIR__ . '/auth.php';
