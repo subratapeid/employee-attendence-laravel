@@ -63,32 +63,32 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('current-time', [DateTimeController::class, 'getCurrentTime'])->name('get-time');
 
     Route::post('/duty-status', [DutyStatusController::class, 'store'])->name('post-duty-status');
-    Route::post('/resolve-duty', [DutyStatusController::class, 'resolveUnresolvedDuty']);
+    Route::post('/resolve-duty', [DutyStatusController::class, 'resolveUnresolvedDuty'])->name('resolve-duty');
     Route::get('/duty-status', [DutyStatusController::class, 'getStatus'])->name('duty-status');
 
     // get user Summary data
-    Route::get('/dashboard/data', [DashboardController::class, 'getDashboardData']);
-    Route::get('/attendance/hours', [DashboardController::class, 'getTotalWorkingHours']);
-    Route::get('/attendance/count', [DashboardController::class, 'getAttendanceCount']);
-    Route::get('/attendance/leave', [DashboardController::class, 'getTotalLeaves']);
-    Route::get('/attendance/late-arrival', [DashboardController::class, 'getLateArrivals']);
-    Route::get('/attendance/early-left', [DashboardController::class, 'getEarlyDepartures']);
-    Route::get('/attendance/overtime', [DashboardController::class, 'getOvertime']);
+    Route::get('/dashboard/data', [DashboardController::class, 'getDashboardData'])->name('dashboard-data');
+    Route::get('/attendance/hours', [DashboardController::class, 'getTotalWorkingHours'])->name('getTotalWorkingHours');
+    Route::get('/attendance/count', [DashboardController::class, 'getAttendanceCount'])->name('getAttendanceCount');
+    Route::get('/attendance/leave', [DashboardController::class, 'getTotalLeaves'])->name('getTotalLeaves');
+    Route::get('/attendance/late-arrival', [DashboardController::class, 'getLateArrivals'])->name('getLateArrivals');
+    Route::get('/attendance/early-left', [DashboardController::class, 'getEarlyDepartures'])->name('getEarlyDepartures');
+    Route::get('/attendance/overtime', [DashboardController::class, 'getOvertime'])->name('getOvertime');
 
     // get Admin Dashboard data
-    Route::get('/admin/dashboard/data', [AdminDashboardController::class, 'getAdminDashboardData']);
-    Route::get('/admin/attendance', [AdminDashboardController::class, 'getAttendanceCount']);
-    Route::get('/admin/leave', [AdminDashboardController::class, 'getTotalLeaves']);
-    Route::get('/admin/absent', [AdminDashboardController::class, 'getTotalAbsent']);
-    Route::get('/admin/late-arrival', [AdminDashboardController::class, 'getLateArrivals']);
-    Route::get('/admin/early-left', [AdminDashboardController::class, 'getEarlyDepartures']);
-    Route::get('/admin/on-time', [AdminDashboardController::class, 'getOntime']);
+    Route::get('/admin/dashboard/data', [AdminDashboardController::class, 'getAdminDashboardData'])->name('getAdminDashboardData');
+    Route::get('/admin/attendance', [AdminDashboardController::class, 'getAttendanceCount'])->name('getAdminAttendanceCount');
+    Route::get('/admin/leave', [AdminDashboardController::class, 'getTotalLeaves'])->name('getAdminTotalLeaves');
+    Route::get('/admin/absent', [AdminDashboardController::class, 'getTotalAbsent'])->name('getAdminTotalAbsent');
+    Route::get('/admin/late-arrival', [AdminDashboardController::class, 'getLateArrivals'])->name('getAdminLateArrivals');
+    Route::get('/admin/early-left', [AdminDashboardController::class, 'getEarlyDepartures'])->name('getAdminEarlyDepartures');
+    Route::get('/admin/on-time', [AdminDashboardController::class, 'getOntime'])->name('getAdminOntime');
 
 
     // get leave Data for Calenders
-    Route::get('/attendance/data', [CalenderController::class, 'getCalendarData'])->name('attendance.data');
-    Route::get('/activity', [ActivityController::class, 'getDuties'])->name('duties.get');
-    Route::get('/activity/available-options', [ActivityController::class, 'getAvailableOptions']);
+    Route::get('/attendance/data', [CalenderController::class, 'getCalendarData'])->name('getCalendarData');
+    Route::get('/activity', [ActivityController::class, 'getDuties'])->name('getDuties');
+    Route::get('/activity/available-options', [ActivityController::class, 'getAvailableOptions'])->name('getAvailableOptions');
 
     // Employees Page Data
     Route::get('/employees', [EmployeesController::class, 'index'])->name('employees.index');

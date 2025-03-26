@@ -318,7 +318,7 @@
                 $('#loading-overlay').addClass('d-flex');
                 return new Promise((resolve, reject) => {
                     $.ajax({
-                        url: '{{ route('attendance.data') }}',
+                        url: '{{ route('getCalendarData') }}',
                         method: 'GET',
                         data: {
                             year: year,

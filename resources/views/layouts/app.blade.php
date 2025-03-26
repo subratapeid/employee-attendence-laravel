@@ -87,7 +87,7 @@
                         </div>
                         <video id="video" width="100%" height="auto" autoplay></video>
                         <canvas id="canvas" class="d-none"></canvas>
-                        <img id="capturedPhoto" class="img-thumbnail d-none" src="{{ asset('assets/img/default-image.png') }}" alt="Captured photo">
+                        <img id="capturedPhoto" class="img-thumbnail d-none" src="{{ asset('assets/img/placeholder.jpg') }}" alt="Captured photo">
                     </div>
 
                     {{-- <div class="d-none mt-3" id="aditionalInput">
@@ -126,10 +126,34 @@
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
+
+{{-- Define routes for js files --}}
 <script>
     var getTime = "{{ route('get-time') }}";
     var getDutyStatus = "{{ route('duty-status') }}";
     var postDutyStatus = "{{ route('post-duty-status') }}";
+    var resolveDuty = "{{ route('resolve-duty') }}";
+    var dashboardData = "{{ route('dashboard-data') }}";
+    var getTotalWorkingHours = "{{ route('getTotalWorkingHours') }}";
+    var getAttendanceCount = "{{ route('getAttendanceCount') }}";
+    var getTotalLeaves = "{{ route('getTotalLeaves') }}";
+    var getLateArrivals = "{{ route('getLateArrivals') }}";
+    var getEarlyDepartures = "{{ route('getEarlyDepartures') }}";
+    var getOvertime = "{{ route('getOvertime') }}";
+
+    var getAdminDashboardData = "{{ route('getAdminDashboardData') }}";
+    var getAdminAttendanceCount = "{{ route('getAdminAttendanceCount') }}";
+    var getAdminTotalLeaves = "{{ route('getAdminTotalLeaves') }}";
+    var getAdminTotalAbsent = "{{ route('getAdminTotalAbsent') }}";
+    var getAdminLateArrivals = "{{ route('getAdminLateArrivals') }}";
+    var getAdminEarlyDepartures = "{{ route('getAdminEarlyDepartures') }}";
+    var getAdminOntime = "{{ route('getAdminOntime') }}";
+
+    var getCalendarData = "{{ route('getCalendarData') }}";
+    var getDuties = "{{ route('getDuties') }}";
+    var getAvailableOptions = "{{ route('getAvailableOptions') }}";
+
+    var baseUrl = "{{ asset('/') }}";
     
 </script>
 
