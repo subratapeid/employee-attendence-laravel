@@ -153,6 +153,10 @@
     var getDuties = "{{ route('getDuties') }}";
     var getAvailableOptions = "{{ route('getAvailableOptions') }}";
 
+    var transactionToday = "{{ route('transaction.today') }}";
+    var transactions = "{{ route('transactions.index') }}";
+
+
     var baseUrl = "{{ asset('/') }}";
     
 </script>

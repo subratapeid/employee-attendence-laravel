@@ -46,8 +46,8 @@ class ActivityController extends Controller implements HasMiddleware
             $userLongitude = $user->longitude ?? null;
 
             return [
-                'start_photo' => asset("{$duty->start_photo}"),
-                'end_photo' => $duty->end_photo ? asset("{$duty->end_photo}") : null,
+                'start_photo' => asset("public{$duty->start_photo}"),
+                'end_photo' => $duty->end_photo ? asset("public{$duty->end_photo}") : null,
                 'start_timestamp' => $startTime->format('d-m-Y h:i A'),
                 'end_timestamp' => $endTime ? $endTime->format('d-m-Y h:i A') : 'Currently On Duty',
                 'start_location' => $duty->start_location ? $duty->start_location : 'Unknown',

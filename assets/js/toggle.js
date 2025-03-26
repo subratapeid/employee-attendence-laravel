@@ -42,7 +42,7 @@ $(document).ready(function () {
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Redirect to the transaction page if the user clicks 'Go to Transaction Page'
-                            window.location.href = '/transactions'; // Replace with your actual page URL
+                            window.location.href = transactions; // Replace with your actual page URL
                         }
                     });
                 }
@@ -57,7 +57,7 @@ $(document).ready(function () {
     function checkTransactionToday() {
         return new Promise((resolve, reject) => {
             $.ajax({
-                url: '/check-transaction-today', // Route to check transaction for today
+                url: transactionToday, // Route to check transaction for today
                 method: 'GET', // Using GET request to fetch data
                 success: function (response) {
                     if (response.exists) {

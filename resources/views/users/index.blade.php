@@ -311,7 +311,8 @@
                     $('.edit-btn').click(function() {
                         let empId = $(this).data('id');
                         $('#editUserModal').modal('show');
-                        $.get(`/employee/${empId}`, function(data) {
+                        let url = "{{ route('employees.single', ['id' => '__ID__']) }}".replace('__ID__', empId);
+                        $.get(url, function(data) {
                             $('#edit_emp_id').val(data.id);
                             $('#edit_name').val(data.name);
                             $('#edit_email').val(data.email);
@@ -322,7 +323,8 @@
                     $('.view-btn').click(function() {
                         let empId = $(this).data('id');
                         $('#viewUserModal').modal('show');
-                        $.get(`/employee/${empId}`, function(data) {
+                        let url = "{{ route('employees.single', ['id' => '__ID__']) }}".replace('__ID__', empId);
+                        $.get(url, function(data) {
                             $('#view_photo').attr('src', data.photo);
                             $('#view_name').text(data.name);
                             $('#view_email').text(data.email);
@@ -335,8 +337,9 @@
                     $('.delete-btn').click(function() {
                         if (confirm("Are you sure you want to delete this user?")) {
                             let empId = $(this).data('id');
+                            let url = "{{ route('employees.destroy', ['id' => '__ID__']) }}".replace('__ID__', empId);
                             $.ajax({
-                                url: `/employees/${empId}`,
+                                url: url,
                                 type: 'DELETE',
                                 data: {
                                     _token: '{{ csrf_token() }}'
