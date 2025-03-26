@@ -15,18 +15,18 @@
                             <div class="col-md-6">
                                 <label class="form-label">AEPS Deposits</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control count" name="deposit_count"
+                                    <input type="text" class="form-control count" name="aeps_deposit_count"
                                         placeholder="Count">
-                                    <input type="text" class="form-control amount" name="deposit_amount"
+                                    <input type="text" class="form-control amount" name="aeps_deposit_amount"
                                         placeholder="Amount">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">AEPS Withdrawals</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control count" name="withdrawal_count"
+                                    <input type="text" class="form-control count" name="aeps_withdrawal_count"
                                         placeholder="Count">
-                                    <input type="text" class="form-control amount" name="withdrawal_amount"
+                                    <input type="text" class="form-control amount" name="aeps_withdrawal_amount"
                                         placeholder="Amount">
                                 </div>
                             </div>
@@ -36,18 +36,18 @@
                             <div class="col-md-6">
                                 <label class="form-label">Rupay(Card) Deposits</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control count" name="deposit_count"
+                                    <input type="text" class="form-control count" name="rupay_deposit_count"
                                         placeholder="Count">
-                                    <input type="text" class="form-control amount" name="deposit_amount"
+                                    <input type="text" class="form-control amount" name="rupay_deposit_amount"
                                         placeholder="Amount">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Rupay(Card) Withdrawals</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control count" name="withdrawal_count"
+                                    <input type="text" class="form-control count" name="rupay_withdrawal_count"
                                         placeholder="Count">
-                                    <input type="text" class="form-control amount" name="withdrawal_amount"
+                                    <input type="text" class="form-control amount" name="rupay_withdrawal_amount"
                                         placeholder="Amount">
                                 </div>
                             </div>
@@ -58,18 +58,18 @@
                             <div class="col-md-6">
                                 <label class="form-label">Fund Transfers</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control count" name="transfer_count"
+                                    <input type="text" class="form-control count" name="fund_transfer_count"
                                         placeholder="Count">
-                                    <input type="text" class="form-control amount" name="transfer_amount"
+                                    <input type="text" class="form-control amount" name="fund_transfer_amount"
                                         placeholder="Amount">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">TPD Transaction</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control count" name="other_count"
+                                    <input type="text" class="form-control count" name="tpd_count"
                                         placeholder="Count">
-                                    <input type="text" class="form-control amount" name="other_amount"
+                                    <input type="text" class="form-control amount" name="tpd_amount"
                                         placeholder="Amount">
                                 </div>
                                 {{-- <input type="text" class="form-control mt-2" name="other_details"
@@ -88,30 +88,30 @@
                         <div class="row g-3">
                             <div class="col-lg-3 col-md-6 col-6">
                                 <label class="form-label">PMJDY</label>
-                                <input type="text" class="form-control count" name="enrollment_count" placeholder="Enter count">
+                                <input type="text" class="form-control count" name="pmjdy_count" placeholder="Enter count">
                             </div>
                             <div class="col-lg-3 col-md-6 col-6">
                                 <label class="form-label">PMJJBY</label>
-                                <input type="text" class="form-control count" name="savings_count" placeholder="Enter count">
+                                <input type="text" class="form-control count" name="pmjjby_count" placeholder="Enter count">
                             </div>
                             <div class="col-lg-3 col-md-6 col-6">
                                 <label class="form-label">PMSBY</label>
-                                <input type="text" class="form-control count" name="savings_count" placeholder="Enter count">
+                                <input type="text" class="form-control count" name="pmsby_count" placeholder="Enter count">
                             </div>
                             <div class="col-lg-3 col-md-6 col-6">
                                 <label class="form-label">RD</label>
-                                <input type="text" class="form-control count" name="enrollment_count" placeholder="Enter count">
+                                <input type="text" class="form-control count" name="rd_count" placeholder="Enter count">
                             </div>
                         </div>
                     
                         <div class="row g-3 mt-1">
                             <div class="col-lg-3 col-md-6 col-6">
                                 <label class="form-label">FD</label>
-                                <input type="text" class="form-control count" name="savings_count" placeholder="Enter count">
+                                <input type="text" class="form-control count" name="fd_count" placeholder="Enter count">
                             </div>
                             <div class="col-lg-3 col-md-6 col-6">
                                 <label class="form-label">APY</label>
-                                <input type="text" class="form-control count" name="savings_count" placeholder="Enter count">
+                                <input type="text" class="form-control count" name="apy_count" placeholder="Enter count">
                             </div>
                             <div class="col-lg-3 col-md-6 col-6">
                                 <label class="form-label">SB Account</label>
@@ -153,50 +153,42 @@
                     </div>
                     <div class="card-body p-3 ps-md-4 pb-md-5 pe-md-4 pb-4">
                         <div class="row g-3">
-                            <div class="col-lg-3 col-md-6 col-6">
-                                <label class="form-label">FD</label>
+                            <div class="col-lg-4 col-md-6">
+                                <label class="form-label">Total Amount Deposited in bank</label>
                                 <input type="text" class="form-control count" name="savings_count" placeholder="Enter count">
                             </div>
-                            <div class="col-lg-3 col-md-6 col-6">
-                                <label class="form-label">APY</label>
+                            <div class="col-lg-4 col-md-6">
+                                <label class="form-label">Closing Cash Balance</label>
                                 <input type="text" class="form-control count" name="savings_count" placeholder="Enter count">
                             </div>
-                            <div class="col-lg-3 col-md-6 col-6">
-                                <label class="form-label">SB Account</label>
+                            <div class="col-lg-4 col-md-6">
+                                <label class="form-label">Pending Transactions(if Any)</label>
                                 <input type="text" class="form-control count" name="sb_count" placeholder="Enter count">
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-6">
-                                <label class="form-label">e-KYC Processed</label>
-                                <input type="text" class="form-control count" name="ekyc_processed" placeholder="Enter count">
                             </div>
                         </div>
                         <div class="row g-3 mt-1">
-                            <div class="col-lg-3 col-md-6 col-6">
-                                <label class="form-label">FD</label>
-                                <input type="text" class="form-control count" name="savings_count" placeholder="Enter count">
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-6">
-                                <label class="form-label">APY</label>
-                                <input type="text" class="form-control count" name="savings_count" placeholder="Enter count">
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-6">
-                                <label class="form-label">SB Account</label>
-                                <input type="text" class="form-control count" name="sb_count" placeholder="Enter count">
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-6">
-                                <label class="form-label">e-KYC Processed</label>
+                            <div class="col-lg-4 col-md-6">
+                                <label class="form-label">Chalages faced during the day</label>
                                 <input type="text" class="form-control count" name="ekyc_processed" placeholder="Enter count">
                             </div>
-                        </div>
-                        <div class="row g-3 align-items-center mt-1">
-                            <div class="col-md-6">
+                            <div class="col-lg-4 col-md-6">
+                                <label class="form-label">Logout status</label>
+                                <select class="form-control" name="logout_status" id="logout_status">
+                                    <option value="success">Success</option>
+                                    <option value="failed">Failed</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-4 col-md-6">
                                 <label class="form-label" for="device_issues">POS/Device Issues</label>
                                 <select class="form-control" name="device_issues" id="device_issues">
                                     <option value="No">No</option>
                                     <option value="Yes">Yes</option>
                                 </select>
                             </div>
-                            <div class="col-md-6" id="issue_details_wrapper" style="display: none;">
+                            
+                        </div>
+                        <div class="row g-3 align-items-center mt-1">
+                            <div class="col-12" id="issue_details_wrapper" style="display: none;">
                                 <label class="form-label" for="issue_details">Issue Details</label>
                                 <textarea class="form-control" name="issue_details" id="issue_details" placeholder="Enter details" rows="3"></textarea>
                             </div>
