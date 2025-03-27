@@ -238,14 +238,14 @@
             $('#attendance-export-btn').click(function() {
                 var filter = $('#selected-filter-attendance').text().toLowerCase().replace(' ', '_');
                 // window.location.href = "/export/csv?report=attendance&filter=" + filter;
-                window.location.href = "/export-xls?report=attendance&filter=" + filter;
+                window.location.href = "export-xls?report=attendance&filter=" + filter;
 
             });
 
             // Export functionality for Activity report
             $('#activity-export-btn').click(function() {
                 var filter = $('#selected-filter-activity').text().toLowerCase().replace(' ', '_');
-                window.location.href = "/export/csv?report=activity&filter=" + filter;
+                window.location.href = "export/csv?report=activity&filter=" + filter;
             });
         });
 

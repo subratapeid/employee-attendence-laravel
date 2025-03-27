@@ -381,6 +381,7 @@ $(document).ready(function () {
     // Function to show the unresolved duty popup
     function showUnresolvedDutyPopup(unresolvedDuty) {
         var startPhotoUrl = baseUrl + '/' + unresolvedDuty.start_photo;
+        
         // Create the popup HTML
         const popup = document.createElement('div');
         popup.id = 'unresolvedDutyPopup';
@@ -518,5 +519,147 @@ $(document).ready(function () {
             }
         });
     }
+
+
+     // Function to show the Day Begain popup
+     function showDayBegainPopupForm() {
+        
+        // Create the popup HTML
+        const popup = document.createElement('div');
+        popup.id = 'unresolvedDutyPopup';
+        popup.classList.add('popup-overlay'); // Optional CSS class for styling
+        popup.innerHTML = `
+        <div class="unresolved-popup-content">
+            <h2>Day Begain Details</h2>
+
+            <form id="resolveDutyForm">
+                <label for="manualLogoutTime">Enter Logout Time</label>
+                <div class="custom-time-input mt-2 mb-1" id="manualLogoutTime">
+                    <!-- Hour Dropdown -->
+                    <select id="hours" class="time-dropdown" name="hours">
+                        <option value="" disabled selected>Hour</option>
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                        <option value="03">03</option>
+                        <option value="04">04</option>
+                        <option value="05">05</option>
+                        <option value="06">06</option>
+                        <option value="07">07</option>
+                        <option value="08">08</option>
+                        <option value="09">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                    </select>
+
+                    <!-- Minutes Dropdown -->
+                    <select id="minutes" class="time-dropdown" name="minutes">
+                        <option value="" disabled selected>Minutes</option>
+                        <option value="00">00</option>
+                        <option value="15">15</option>
+                        <option value="30">30</option>
+                        <option value="45">45</option>
+                    </select>
+
+                    <!-- AM/PM Dropdown -->
+                    <select id="ampm" class="time-dropdown" name="ampm">
+                        <option value="" disabled selected>AM/PM</option>
+                        <option value="AM">AM</option>
+                        <option value="PM">PM</option>
+                    </select>
+                </div>
+                <div class"mt-1">
+                <label for="remarks">Enter your remarks</label>
+                <textarea id="remarks" name="remarks" rows="2" style="width: 100%;" class="mt-1"></textarea> 
+                </div>
+                <button type="submit" id="submit-btn" class="submit-btn">Submit</button>
+                <div id="spinner" class="spinner" style="display:none;"></div>
+            </form>
+        </div>
+    `;
+
+        // Append the popup to the body
+        document.body.appendChild(popup);
+
+        const timeform = document.getElementById('resolveDutyForm');
+        const submitBtn = document.getElementById('submit-btn');
+        const spinner = document.getElementById('spinner');
+
+        timeform.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Get values from dropdowns
+            const hour = document.getElementById('hours').value;
+            const minutes = document.getElementById('minutes').value;
+            const ampm = document.getElementById('ampm').value;
+
+            // Validate if all dropdowns are selected
+            if (!hour || !minutes || !ampm) {
+                alert('Please select all fields: Hour, Minutes, and AM/PM.');
+                return;
+            }
+
+            // Format the time to HH:mm AM/PM format
+            const manualLogoutTime = `${hour}:${minutes} ${ampm}`;
+
+            // Disable the submit button and show the spinner
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Submitting...';
+            spinner.style.display = 'block';
+
+            // Get latitude and longitude using Geolocation API
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+
+                        // Send AJAX request with time and location data
+                        $.ajax({
+                            url: resolveDuty,
+                            type: 'POST',
+                            data: {
+                                manual_logout_time: manualLogoutTime,
+                                latitude: latitude,
+                                longitude: longitude,
+                                type: 'off',
+                                _token: document.querySelector('meta[name="csrf-token"]').content, // CSRF token for security
+                            },
+                            success: function (response) {
+                                alert(response.message);
+                                // Remove the popup
+                                document.body.removeChild(popup);
+                                // Reload the page or update the status
+                                location.reload();
+                            },
+                            error: function (xhr, status, error) {
+                                alert('Error: ' + xhr.responseJSON.message);
+                            },
+                            complete: function () {
+                                // Enable the button and hide the spinner
+                                submitBtn.disabled = false;
+                                submitBtn.innerText = 'Submit';
+                                spinner.style.display = 'none';
+                            }
+                        });
+                    },
+                    function (error) {
+                        console.log(error.message);
+                        alert('Geolocation error: Unable To Get Your Location');
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = 'Submit';
+                        spinner.style.display = 'none';
+                    }
+                );
+            } else {
+                alert('Geolocation is not supported by your browser.');
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Submit';
+                spinner.style.display = 'none';
+            }
+        });
+    }
+
+    // showDayBegainPopupForm();
 
 });

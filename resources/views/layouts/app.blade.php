@@ -157,7 +157,7 @@
     var transactions = "{{ route('transactions.index') }}";
 
 
-    var baseUrl = "{{ asset('/') }}";
+    var baseUrl = "{{ asset('public') }}";
     
 </script>
 
