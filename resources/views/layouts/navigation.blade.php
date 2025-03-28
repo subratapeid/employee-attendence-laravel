@@ -110,8 +110,8 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('transactions.index') ? '' : 'collapsed' }}"
                     href="{{ route('transactions.index') }}">
-                    <i class="fas fa-university"></i>
-                    <span>Transactions</span>
+                    <i class="fa-solid fa-file"></i>
+                    <span>Day End Report</span>
                 </a>
             </li><!-- End Dashboard Nav -->
         @endcan

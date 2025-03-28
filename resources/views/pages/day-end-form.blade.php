@@ -33,15 +33,7 @@
                         </div>
 
                         <div class="row g-3 mt-1">
-                            <div class="col-md-6">
-                                <label class="form-label">Rupay(Card) Deposits</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control count" name="rupay_deposit_count"
-                                        placeholder="Count">
-                                    <input type="text" class="form-control amount" name="rupay_deposit_amount"
-                                        placeholder="Amount">
-                                </div>
-                            </div>
+    
                             <div class="col-md-6">
                                 <label class="form-label">Rupay(Card) Withdrawals</label>
                                 <div class="input-group">
@@ -51,6 +43,17 @@
                                         placeholder="Amount">
                                 </div>
                             </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">SHG Transaction</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control count" name="shg_count"
+                                        placeholder="Count">
+                                    <input type="text" class="form-control amount" name="shg_amount"
+                                        placeholder="Amount">
+                                </div>
+                            </div>
+
                         </div>
 
 
@@ -70,6 +73,18 @@
                                     <input type="text" class="form-control count" name="tpd_count"
                                         placeholder="Count">
                                     <input type="text" class="form-control amount" name="tpd_amount"
+                                        placeholder="Amount">
+                                </div>
+                                {{-- <input type="text" class="form-control mt-2" name="other_details"
+                                    placeholder="Enter details"> --}}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Other Transaction</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control count" name="other_count"
+                                        placeholder="Count">
+                                    <input type="text" class="form-control amount" name="other_amount"
                                         placeholder="Amount">
                                 </div>
                                 {{-- <input type="text" class="form-control mt-2" name="other_details"
@@ -155,22 +170,33 @@
                         <div class="row g-3">
                             <div class="col-lg-4 col-md-6">
                                 <label class="form-label">Total Amount Deposited in bank</label>
-                                <input type="text" class="form-control count" name="savings_count" placeholder="Enter count">
+                                <input type="text" class="form-control count" name="deposited_amount_bank" placeholder="End of the day bank deposit">
                             </div>
                             <div class="col-lg-4 col-md-6">
                                 <label class="form-label">Closing Cash Balance</label>
-                                <input type="text" class="form-control count" name="savings_count" placeholder="Enter count">
+                                <input type="text" class="form-control count" name="closing_cash" placeholder="CIH after completing the day's operations">
                             </div>
                             <div class="col-lg-4 col-md-6">
                                 <label class="form-label">Pending Transactions(if Any)</label>
-                                <input type="text" class="form-control count" name="sb_count" placeholder="Enter count">
+                                <input type="text" class="form-control count" name="pending_transaction_count" placeholder="Count of unresolved or failed transaction">
                             </div>
                         </div>
                         <div class="row g-3 mt-1">
                             <div class="col-lg-4 col-md-6">
-                                <label class="form-label">Chalages faced during the day</label>
-                                <input type="text" class="form-control count" name="ekyc_processed" placeholder="Enter count">
+                                <label class="form-label">Challenges faced during the day</label>
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Select Challenges
+                                    </button>
+                                    <ul class="dropdown-menu p-3" aria-labelledby="dropdownMenuButton">
+                                        <li><input type="checkbox" name="challenges[]" value="Network Issue"> Network Issue</li>
+                                        <li><input type="checkbox" name="challenges[]" value="System Crash"> System Crash</li>
+                                        <li><input type="checkbox" name="challenges[]" value="Power Failure"> Power Failure</li>
+                                        <li><input type="checkbox" name="challenges[]" value="Customer Complaint"> Customer Complaint</li>
+                                    </ul>
+                                </div>
                             </div>
+                            
                             <div class="col-lg-4 col-md-6">
                                 <label class="form-label">Logout status</label>
                                 <select class="form-control" name="logout_status" id="logout_status">
@@ -188,9 +214,13 @@
                             
                         </div>
                         <div class="row g-3 align-items-center mt-1">
-                            <div class="col-12" id="issue_details_wrapper" style="display: none;">
+                            <div class="col-lg-6" id="issue_details_wrapper" style="display: none;">
                                 <label class="form-label" for="issue_details">Issue Details</label>
-                                <textarea class="form-control" name="issue_details" id="issue_details" placeholder="Enter details" rows="3"></textarea>
+                                <textarea class="form-control" name="issue_details" id="device_issue_details" placeholder="Enter details" rows="3"></textarea>
+                            </div>
+                            <div class="col-lg-6" id="remarks_wrapper">
+                                <label class="form-label" for="remarks">Remarks:</label>
+                                <textarea class="form-control" name="remarks" id="remarks" placeholder="Final comments" rows="3"></textarea>
                             </div>
                         </div>
                     </div>
@@ -264,7 +294,7 @@
                     if (!/^\d+$/.test(classCount) || parseInt(classCount) <= 0) {
                         $(this).addClass("is-invalid");
                         $(this).after(
-                            '<div class="error-message text-danger">Please enter a valid class count (positive integer).</div>'
+                            '<div class="error-message text-danger">Please enter a valid count (positive integer).</div>'
                         );
                         isValid = false;
                         if (!firstInvalidField) firstInvalidField = $(this);
@@ -343,10 +373,13 @@
                     return;
                 }
 
+                var formData = $(this).serialize();
+                console.log(formData);
+                
                 $.ajax({
                     url: '{{ route('transactions.store') }}',
                     method: 'POST',
-                    data: $(this).serialize(),
+                    data: formData,
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },

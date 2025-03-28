@@ -5,7 +5,7 @@ use App\Http\Controllers\DailyActivityController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\DayStartEndDataController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -163,16 +163,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/holidays/update/{id}', [HolidayController::class, 'update'])->name('holiday.update');
     Route::delete('/holidays/delete', [HolidayController::class, 'destroy'])->name('holiday.delete');
 
-    // Transaction Routes
-    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
-    Route::get('/transactions/fetch', [TransactionController::class, 'fetch'])->name('transactions.fetch');
-    Route::get('/transactions/create', [TransactionController::class, 'create'])->name('transactions.create');
-    Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
-    Route::get('/transactions/{id}', [TransactionController::class, 'show'])->name('transactions.show');
-    Route::get('/transactions/{id}/edit', [TransactionController::class, 'edit'])->name('transactions.edit');
-    Route::put('/transactions/{id}', [TransactionController::class, 'update'])->name('transactions.update');
-    Route::delete('/transactions/{id}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
-    Route::get('/check-transaction-today', [TransactionController::class, 'checkTransactionToday'])->name('transaction.today');
+    // Day Start end Routes
+    Route::get('/day-end', [DayStartEndDataController::class, 'index'])->name('transactions.index');
+    Route::get('/day-end/fetch', [DayStartEndDataController::class, 'fetch'])->name('transactions.fetch');
+    Route::get('/day-end/create', [DayStartEndDataController::class, 'create'])->name('transactions.create');
+    Route::post('/day-end', [DayStartEndDataController::class, 'store'])->name('transactions.store');
+    Route::get('/day-end/{id}', [DayStartEndDataController::class, 'show'])->name('transactions.show');
+    Route::get('/day-end/{id}/edit', [DayStartEndDataController::class, 'edit'])->name('transactions.edit');
+    Route::put('/day-end/{id}', [DayStartEndDataController::class, 'update'])->name('transactions.update');
+    Route::delete('/day-end/{id}', [DayStartEndDataController::class, 'destroy'])->name('transactions.destroy');
+    Route::get('/check-day-end-today', [DayStartEndDataController::class, 'checkTransactionToday'])->name('transaction.today');
 
 
     // Route to apply leave

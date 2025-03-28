@@ -529,42 +529,46 @@ $(document).ready(function () {
         popup.innerHTML = `
             <div class="popup-content p-3 rounded bg-white shadow-lg">
                 <h2 class="text-center mb-3">Day Begin Details</h2>
-                <form id="bcaPortalForm">
-                    <div class="row mb-3">
-                        <div class="col-5">
-                            <label for="loginStatus" class="form-label">BCA Portal Login Status</label>
-                            <select id="loginStatus" name="loginStatus" class="form-control" required>
-                                <option value="" disabled selected>Select Status</option>
-                                <option value="Successfull">Successful</option>
-                                <option value="Failure">Failure</option>
-                            </select>
+                <form id="dayBeginForm">
+                    <div class="mb-1">
+                        <label for="loginStatus" class="form-label">BCA Portal Login Status</label>
+                        <select id="loginStatus" name="loginStatus" class="form-control" required>
+                            <option value="" disabled selected>Select Status</option>
+                            <option value="Successfull">Successful</option>
+                            <option value="Failure">Failure</option>
+                        </select>
+                    </div>
+                    <div class="mb-1">
+                        <label for="openingBalance" class="form-label">Opening Cash Balance (₹)</label>
+                        <input type="text" id="openingBalance" name="openingBalance" class="form-control" placeholder="Cash in hand at the day begin" required>
+                    </div>
+    
+                    <div class="mb-1">
+                        <label class="form-label">Technical/Operational issues at start:</label>
+                        <div class="border p-3 rounded">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="issues_at_start[]" value="Network Issue" id="issues_at_start1">
+                                <label class="form-check-label" for="issues_at_start1">Network Issue</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="issues_at_start[]" value="System Crash" id="issues_at_start2">
+                                <label class="form-check-label" for="issues_at_start2">System Crash</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="issues_at_start[]" value="Power Failure" id="issues_at_start3">
+                                <label class="form-check-label" for="issues_at_start3">Power Failure</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="issues_at_start[]" value="Customer Complaint" id="issues_at_start4">
+                                <label class="form-check-label" for="issues_at_start4">Customer Complaint</label>
+                            </div>
                         </div>
-                        <div class="col-7">
-                            <label for="openingBalance" class="form-label">Opening Cash Balance (₹)</label>
-                            <input type="text" id="openingBalance" name="openingBalance" class="form-control" required>
-                        </div>
                     </div>
     
-                    <div class="mb-1">
-                        <label for="bankingActivities" class="form-label">Banking Activities</label>
-                        <input type="text" id="bankingActivities" name="bankingActivities" class="form-control" required>
-                    </div>
-    
-                    <div class="mb-1">
-                        <label for="pendingTransactions" class="form-label">Pending Transactions from Previous Day</label>
-                        <input type="text" id="pendingTransactions" name="pendingTransactions" class="form-control">
-                    </div>
-    
-                    <div class="mb-1">
-                        <label for="issues" class="form-label">Technical/Operational Issues</label>
-                        <input type="text" id="issues" name="issues" class="form-control">
-                    </div>
-    
-                    <div class="mb-1">
+                    <div class="mb-3">
                         <label for="remarks" class="form-label">Remarks</label>
-                        <textarea id="remarks" name="remarks" class="form-control" rows="2"></textarea>
+                        <textarea id="remarks" name="day_start_remarks" class="form-control" rows="2" placeholder="Additional commands"></textarea>
                     </div>
-    
                     <button type="submit" id="submit-btn" class="btn btn-primary w-100">
                         <span id="submit-text">Submit</span>
                         <span id="spinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
@@ -576,7 +580,7 @@ $(document).ready(function () {
         // Append the popup to the body
         document.body.appendChild(popup);
     
-        const form = document.getElementById('bcaPortalForm');
+        const form = document.getElementById('dayBeginForm');
         const submitBtn = document.getElementById('submit-btn');
         const spinner = document.getElementById('spinner');
         const submitText = document.getElementById('submit-text');
@@ -593,12 +597,16 @@ $(document).ready(function () {
             const formData = {
                 login_status: document.getElementById('loginStatus').value,
                 opening_balance: document.getElementById('openingBalance').value,
-                banking_activities: document.getElementById('bankingActivities').value,
-                pending_transactions: document.getElementById('pendingTransactions').value,
-                issues: document.getElementById('issues').value,
                 remarks: document.getElementById('remarks').value,
                 _token: document.querySelector('meta[name="csrf-token"]').content
             };
+    
+            // Collect selected challenges
+            const selectedChallenges = [];
+            document.querySelectorAll('input[name="challenges[]"]:checked').forEach((checkbox) => {
+                selectedChallenges.push(checkbox.value);
+            });
+            formData.challenges = selectedChallenges; // Add to form data
     
             // Send AJAX request
             $.ajax({
@@ -623,6 +631,9 @@ $(document).ready(function () {
         });
     }
     
+    showDayBegainPopupForm();
+    // showUnresolvedDutyPopup('unresolvedDuty');
+    
         // Fetch the latest state from the server to show day begain popup
         $.ajax({
             url: getDutyStatus,
@@ -632,7 +643,7 @@ $(document).ready(function () {
     
                 if (response.type === 'unresolved') {
                     // Show the popup for unresolved duty
-                    showDayBegainPopupForm(response.unresolved_duty);
+                    showDayBegainPopupForm();
                 } else {
                     // Update the toggle based on the current status
                     toggleInput.checked = response.type === 'on';
