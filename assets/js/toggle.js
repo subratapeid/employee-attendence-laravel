@@ -521,145 +521,127 @@ $(document).ready(function () {
     }
 
 
-     // Function to show the Day Begain popup
-     function showDayBegainPopupForm() {
-        
+    function showDayBegainPopupForm() {
         // Create the popup HTML
         const popup = document.createElement('div');
-        popup.id = 'unresolvedDutyPopup';
-        popup.classList.add('popup-overlay'); // Optional CSS class for styling
+        popup.id = 'bcaPortalPopup';
+        popup.classList.add('popup-overlay');
         popup.innerHTML = `
-        <div class="unresolved-popup-content">
-            <h2>Day Begain Details</h2>
-
-            <form id="resolveDutyForm">
-                <label for="manualLogoutTime">Enter Logout Time</label>
-                <div class="custom-time-input mt-2 mb-1" id="manualLogoutTime">
-                    <!-- Hour Dropdown -->
-                    <select id="hours" class="time-dropdown" name="hours">
-                        <option value="" disabled selected>Hour</option>
-                        <option value="01">01</option>
-                        <option value="02">02</option>
-                        <option value="03">03</option>
-                        <option value="04">04</option>
-                        <option value="05">05</option>
-                        <option value="06">06</option>
-                        <option value="07">07</option>
-                        <option value="08">08</option>
-                        <option value="09">09</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                    </select>
-
-                    <!-- Minutes Dropdown -->
-                    <select id="minutes" class="time-dropdown" name="minutes">
-                        <option value="" disabled selected>Minutes</option>
-                        <option value="00">00</option>
-                        <option value="15">15</option>
-                        <option value="30">30</option>
-                        <option value="45">45</option>
-                    </select>
-
-                    <!-- AM/PM Dropdown -->
-                    <select id="ampm" class="time-dropdown" name="ampm">
-                        <option value="" disabled selected>AM/PM</option>
-                        <option value="AM">AM</option>
-                        <option value="PM">PM</option>
-                    </select>
-                </div>
-                <div class"mt-1">
-                <label for="remarks">Enter your remarks</label>
-                <textarea id="remarks" name="remarks" rows="2" style="width: 100%;" class="mt-1"></textarea> 
-                </div>
-                <button type="submit" id="submit-btn" class="submit-btn">Submit</button>
-                <div id="spinner" class="spinner" style="display:none;"></div>
-            </form>
-        </div>
-    `;
-
+            <div class="popup-content p-3 rounded bg-white shadow-lg">
+                <h2 class="text-center mb-3">Day Begin Details</h2>
+                <form id="bcaPortalForm">
+                    <div class="row mb-3">
+                        <div class="col-5">
+                            <label for="loginStatus" class="form-label">BCA Portal Login Status</label>
+                            <select id="loginStatus" name="loginStatus" class="form-control" required>
+                                <option value="" disabled selected>Select Status</option>
+                                <option value="Successfull">Successful</option>
+                                <option value="Failure">Failure</option>
+                            </select>
+                        </div>
+                        <div class="col-7">
+                            <label for="openingBalance" class="form-label">Opening Cash Balance (₹)</label>
+                            <input type="text" id="openingBalance" name="openingBalance" class="form-control" required>
+                        </div>
+                    </div>
+    
+                    <div class="mb-1">
+                        <label for="bankingActivities" class="form-label">Banking Activities</label>
+                        <input type="text" id="bankingActivities" name="bankingActivities" class="form-control" required>
+                    </div>
+    
+                    <div class="mb-1">
+                        <label for="pendingTransactions" class="form-label">Pending Transactions from Previous Day</label>
+                        <input type="text" id="pendingTransactions" name="pendingTransactions" class="form-control">
+                    </div>
+    
+                    <div class="mb-1">
+                        <label for="issues" class="form-label">Technical/Operational Issues</label>
+                        <input type="text" id="issues" name="issues" class="form-control">
+                    </div>
+    
+                    <div class="mb-1">
+                        <label for="remarks" class="form-label">Remarks</label>
+                        <textarea id="remarks" name="remarks" class="form-control" rows="2"></textarea>
+                    </div>
+    
+                    <button type="submit" id="submit-btn" class="btn btn-primary w-100">
+                        <span id="submit-text">Submit</span>
+                        <span id="spinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                    </button>
+                </form>
+            </div>
+        `;
+    
         // Append the popup to the body
         document.body.appendChild(popup);
-
-        const timeform = document.getElementById('resolveDutyForm');
+    
+        const form = document.getElementById('bcaPortalForm');
         const submitBtn = document.getElementById('submit-btn');
         const spinner = document.getElementById('spinner');
-
-        timeform.addEventListener('submit', function (event) {
+        const submitText = document.getElementById('submit-text');
+    
+        form.addEventListener('submit', function (event) {
             event.preventDefault();
-
-            // Get values from dropdowns
-            const hour = document.getElementById('hours').value;
-            const minutes = document.getElementById('minutes').value;
-            const ampm = document.getElementById('ampm').value;
-
-            // Validate if all dropdowns are selected
-            if (!hour || !minutes || !ampm) {
-                alert('Please select all fields: Hour, Minutes, and AM/PM.');
-                return;
-            }
-
-            // Format the time to HH:mm AM/PM format
-            const manualLogoutTime = `${hour}:${minutes} ${ampm}`;
-
-            // Disable the submit button and show the spinner
+    
+            // Disable button, show spinner, and hide text
             submitBtn.disabled = true;
-            submitBtn.innerText = 'Submitting...';
-            spinner.style.display = 'block';
-
-            // Get latitude and longitude using Geolocation API
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    function (position) {
-                        const latitude = position.coords.latitude;
-                        const longitude = position.coords.longitude;
-
-                        // Send AJAX request with time and location data
-                        $.ajax({
-                            url: resolveDuty,
-                            type: 'POST',
-                            data: {
-                                manual_logout_time: manualLogoutTime,
-                                latitude: latitude,
-                                longitude: longitude,
-                                type: 'off',
-                                _token: document.querySelector('meta[name="csrf-token"]').content, // CSRF token for security
-                            },
-                            success: function (response) {
-                                alert(response.message);
-                                // Remove the popup
-                                document.body.removeChild(popup);
-                                // Reload the page or update the status
-                                location.reload();
-                            },
-                            error: function (xhr, status, error) {
-                                alert('Error: ' + xhr.responseJSON.message);
-                            },
-                            complete: function () {
-                                // Enable the button and hide the spinner
-                                submitBtn.disabled = false;
-                                submitBtn.innerText = 'Submit';
-                                spinner.style.display = 'none';
-                            }
-                        });
-                    },
-                    function (error) {
-                        console.log(error.message);
-                        alert('Geolocation error: Unable To Get Your Location');
-                        submitBtn.disabled = false;
-                        submitBtn.innerText = 'Submit';
-                        spinner.style.display = 'none';
-                    }
-                );
-            } else {
-                alert('Geolocation is not supported by your browser.');
-                submitBtn.disabled = false;
-                submitBtn.innerText = 'Submit';
-                spinner.style.display = 'none';
-            }
+            submitText.classList.add('d-none');
+            spinner.classList.remove('d-none');
+    
+            // Collect form data
+            const formData = {
+                login_status: document.getElementById('loginStatus').value,
+                opening_balance: document.getElementById('openingBalance').value,
+                banking_activities: document.getElementById('bankingActivities').value,
+                pending_transactions: document.getElementById('pendingTransactions').value,
+                issues: document.getElementById('issues').value,
+                remarks: document.getElementById('remarks').value,
+                _token: document.querySelector('meta[name="csrf-token"]').content
+            };
+    
+            // Send AJAX request
+            $.ajax({
+                url: resolveDuty,
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    alert(response.message);
+                    document.body.removeChild(popup);
+                    location.reload();
+                },
+                error: function (xhr) {
+                    alert('Error: ' + xhr.responseJSON.message);
+                },
+                complete: function () {
+                    // Enable button, hide spinner, and show text
+                    submitBtn.disabled = false;
+                    submitText.classList.remove('d-none');
+                    spinner.classList.add('d-none');
+                }
+            });
         });
     }
-
-    // showDayBegainPopupForm();
+    
+        // Fetch the latest state from the server to show day begain popup
+        $.ajax({
+            url: getDutyStatus,
+            type: 'GET',
+            success: function (response) {
+                console.log(response);
+    
+                if (response.type === 'unresolved') {
+                    // Show the popup for unresolved duty
+                    showDayBegainPopupForm(response.unresolved_duty);
+                } else {
+                    // Update the toggle based on the current status
+                    toggleInput.checked = response.type === 'on';
+    
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
 
 });
