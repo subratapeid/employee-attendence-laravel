@@ -10,7 +10,7 @@ class DayStartEnd extends Model
     use HasFactory;
     protected $table = 'day_start_ends';
     protected $fillable = [
-        'user_id', 'login_status', 'opening_balance', 'issues_at_start', 'day_start_remarks',
+        'user_id', 'login_status', 'opening_balance', 'issues_at_start', 'day_start_remarks', 'entry_type',
         'aeps_deposit_count', 'aeps_deposit_amount', 
         'aeps_withdrawal_count', 'aeps_withdrawal_amount', 
         'rupay_withdrawal_count', 'rupay_withdrawal_amount', 

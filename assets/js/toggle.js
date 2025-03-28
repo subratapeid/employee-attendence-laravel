@@ -57,10 +57,12 @@ $(document).ready(function () {
     function checkTransactionToday() {
         return new Promise((resolve, reject) => {
             $.ajax({
-                url: transactionToday, // Route to check transaction for today
+                url: checkDataEntryStatus, // Route to check transaction for today
                 method: 'GET', // Using GET request to fetch data
                 success: function (response) {
-                    if (response.exists) {
+                    // console.log(response);
+                    
+                    if (response.entry_type === "end") {
                         resolve(true);  // If transaction exists, resolve with true
                     } else {
                         resolve(false); // If no transaction exists, resolve with false
@@ -534,7 +536,7 @@ $(document).ready(function () {
                         <label for="loginStatus" class="form-label">BCA Portal Login Status</label>
                         <select id="loginStatus" name="loginStatus" class="form-control" required>
                             <option value="" disabled selected>Select Status</option>
-                            <option value="Successfull">Successful</option>
+                            <option value="Successful">Successful</option>
                             <option value="Failure">Failure</option>
                         </select>
                     </div>
@@ -566,8 +568,8 @@ $(document).ready(function () {
                     </div>
     
                     <div class="mb-3">
-                        <label for="remarks" class="form-label">Remarks</label>
-                        <textarea id="remarks" name="day_start_remarks" class="form-control" rows="2" placeholder="Additional commands"></textarea>
+                        <label for="day_start_remarks" class="form-label">Remarks</label>
+                        <textarea id="day_start_remarks" name="day_start_remarks" class="form-control" rows="2" placeholder="Additional commands"></textarea>
                     </div>
                     <button type="submit" id="submit-btn" class="btn btn-primary w-100">
                         <span id="submit-text">Submit</span>
@@ -597,26 +599,27 @@ $(document).ready(function () {
             const formData = {
                 login_status: document.getElementById('loginStatus').value,
                 opening_balance: document.getElementById('openingBalance').value,
-                remarks: document.getElementById('remarks').value,
+                day_start_remarks: document.getElementById('day_start_remarks').value,
                 _token: document.querySelector('meta[name="csrf-token"]').content
             };
     
-            // Collect selected challenges
-            const selectedChallenges = [];
-            document.querySelectorAll('input[name="challenges[]"]:checked').forEach((checkbox) => {
-                selectedChallenges.push(checkbox.value);
+            // Collect selected Issues
+            const selectedIssues = [];
+            document.querySelectorAll('input[name="issues_at_start[]"]:checked').forEach((checkbox) => {
+                selectedIssues.push(checkbox.value);
             });
-            formData.challenges = selectedChallenges; // Add to form data
-    
+            formData.issues_at_start = selectedIssues; // Add to form data
+            console.log(formData);
+            
             // Send AJAX request
             $.ajax({
-                url: resolveDuty,
+                url: startDutyDataSave,
                 type: 'POST',
                 data: formData,
                 success: function (response) {
                     alert(response.message);
                     document.body.removeChild(popup);
-                    location.reload();
+                    // location.reload();
                 },
                 error: function (xhr) {
                     alert('Error: ' + xhr.responseJSON.message);
@@ -631,23 +634,19 @@ $(document).ready(function () {
         });
     }
     
-    showDayBegainPopupForm();
+    // showDayBegainPopupForm();
     // showUnresolvedDutyPopup('unresolvedDuty');
     
         // Fetch the latest state from the server to show day begain popup
         $.ajax({
-            url: getDutyStatus,
+            url: checkDataEntryStatus,
             type: 'GET',
             success: function (response) {
                 console.log(response);
     
-                if (response.type === 'unresolved') {
+                if (response.duty_status === 'exist' && response.entry_type === 'na') {
                     // Show the popup for unresolved duty
                     showDayBegainPopupForm();
-                } else {
-                    // Update the toggle based on the current status
-                    toggleInput.checked = response.type === 'on';
-    
                 }
             },
             error: function (xhr, status, error) {

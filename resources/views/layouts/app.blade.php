@@ -133,6 +133,9 @@
     var getDutyStatus = "{{ route('duty-status') }}";
     var postDutyStatus = "{{ route('post-duty-status') }}";
     var resolveDuty = "{{ route('resolve-duty') }}";
+    var startDutyDataSave = "{{ route('startDutyDataSave') }}";
+    var checkDataEntryStatus = "{{ route('checkDataEntryStatus') }}";
+
     var dashboardData = "{{ route('dashboard-data') }}";
     var getTotalWorkingHours = "{{ route('getTotalWorkingHours') }}";
     var getAttendanceCount = "{{ route('getAttendanceCount') }}";
@@ -153,7 +156,7 @@
     var getDuties = "{{ route('getDuties') }}";
     var getAvailableOptions = "{{ route('getAvailableOptions') }}";
 
-    var transactionToday = "{{ route('transaction.today') }}";
+    var transactionToday = "";
     var transactions = "{{ route('transactions.index') }}";
 
 

@@ -228,11 +228,12 @@
 
                 <!-- Submit Button -->
                 <div class="text-center">
-                    <button type="submit" class="btn btn-success btn-lg px-5">Submit</button>
-                    <div id="loadingSpinner" class="mt-3" style="display:none;">
-                        <div class="spinner-border text-primary" role="status"></div>
-                        <span class="text-primary">Processing...</span>
-                    </div>
+                    <button type="submit" class="btn btn-success btn-lg px-5" id="submitButton">
+                        <span id="buttonText">Submit</span>
+                        <div id="loadingSpinner" class="spinner-border spinner-border-sm text-light ms-2" 
+                            role="status" style="display:none;">
+                        </div>
+                    </button>
                 </div>
             </form>
         </div>
@@ -271,7 +272,7 @@
     </style>
 
 
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             // Show/Hide issue details based on dropdown selection
             $('#device_issues').on('change', function() {
@@ -434,5 +435,140 @@
             });
 
         });
+    </script> --}}
+
+    <script>
+        $(document).ready(function () {
+            // Show/Hide issue details field based on dropdown selection
+            $('#device_issues').on('change', function () {
+                $('#issue_details_wrapper').toggle(this.value === 'Yes');
+            });
+    
+            function validateFields(scrollToError = false) {
+                let isValid = true;
+                $('.is-invalid').removeClass('is-invalid');
+                $('.error-message').remove();
+                let firstInvalidField = null;
+    
+                // Validate Count Fields
+                $(".count").each(function () {
+                    let value = $(this).val();
+                    if (!/^\d+$/.test(value) || parseInt(value) <= 0) {
+                        showError($(this), "Please enter a valid count (positive integer).");
+                        isValid = false;
+                        if (!firstInvalidField) firstInvalidField = $(this);
+                    }
+                });
+    
+                // Validate Amount Fields
+                $(".amount").each(function () {
+                    let value = $(this).val();
+                    if (!/^\d+(\.\d{1,2})?$/.test(value) || parseFloat(value) <= 0) {
+                        showError($(this), "Please enter a valid amount (positive number with up to 2 decimal places).");
+                        isValid = false;
+                        if (!firstInvalidField) firstInvalidField = $(this);
+                    }
+                });
+    
+                // Scroll to first invalid field if needed
+                if (scrollToError && firstInvalidField) {
+                    $('html, body').animate({
+                        scrollTop: firstInvalidField.offset().top - 80
+                    }, 500);
+                }
+    
+                return isValid;
+            }
+    
+            function showError(element, message) {
+                if (!element.next(".error-message").length) {
+                    element.addClass("is-invalid").after('<div class="error-message text-danger">' + message + '</div>');
+                }
+            }
+    
+            // Restrict input for count fields (only numbers)
+            $(document).on("keypress", ".count", function (e) {
+                if (e.which < 48 || e.which > 57) e.preventDefault();
+            });
+    
+            // Restrict input for amount fields (only numbers & one decimal)
+            $(document).on("keypress", ".amount", function (e) {
+                let keyCode = e.which;
+                let currentValue = $(this).val();
+                if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) e.preventDefault();
+                if (keyCode === 46 && currentValue.includes(".")) e.preventDefault();
+            });
+    
+            // Prevent invalid pasting
+            $(document).on("paste", ".count, .amount", function (e) {
+                let pastedData = e.originalEvent.clipboardData.getData("text");
+                if ($(this).hasClass("count") && !/^\d+$/.test(pastedData)) e.preventDefault();
+                if ($(this).hasClass("amount") && !/^\d+(\.\d{1,2})?$/.test(pastedData)) e.preventDefault();
+            });
+    
+            // Validate on input change
+            $(document).on("input", ".count, .amount", function () {
+                validateFields(false);
+            });
+    
+            // Form Submission with Spinner Inside Button
+            $('#transactionForm').on('submit', function (event) {
+                event.preventDefault();
+                let submitButton = $('#submitButton');
+                let buttonText = $('#buttonText');
+                let spinner = $('#loadingSpinner');
+    
+                // Show spinner and disable button
+                buttonText.hide();
+                spinner.show();
+                submitButton.prop("disabled", true);
+    
+                if (!validateFields(true)) {
+                    // Hide spinner and enable button if validation fails
+                    buttonText.show();
+                    spinner.hide();
+                    submitButton.prop("disabled", false);
+                    return;
+                }
+    
+                var formData = $(this).serialize();
+    
+                $.ajax({
+                    url: '{{ route('transactions.store') }}',
+                    method: 'POST',
+                    data: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        alert('Data submitted successfully!');
+                        $('#transactionForm')[0].reset();
+                    },
+                    error: function (xhr) {
+                        var errors = xhr.responseJSON.errors;
+                        if (errors) {
+                            for (const key in errors) {
+                                showError($('[name="' + key + '"]'), errors[key][0]);
+                            }
+                            $('html, body').animate({
+                                scrollTop: $('.is-invalid:first').offset().top - 80
+                            }, 500);
+                        } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                            alert(xhr.responseJSON.message);
+                        } else {
+                            alert('An unexpected error occurred. Please try again.');
+                        }
+                    },
+                    complete: function () {
+                        // Hide spinner and enable button after request completes
+                        buttonText.show();
+                        spinner.hide();
+                        submitButton.prop("disabled", false);
+                    }
+                });
+            });
+    
+        });
     </script>
+    
 </x-app-layout>

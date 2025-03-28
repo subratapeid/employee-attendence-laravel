@@ -164,6 +164,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/holidays/delete', [HolidayController::class, 'destroy'])->name('holiday.delete');
 
     // Day Start end Routes
+    Route::post('/save-duty-start-data', [DayStartEndDataController::class, 'storeDayBeginData'])->name('startDutyDataSave');
     Route::get('/day-end', [DayStartEndDataController::class, 'index'])->name('transactions.index');
     Route::get('/day-end/fetch', [DayStartEndDataController::class, 'fetch'])->name('transactions.fetch');
     Route::get('/day-end/create', [DayStartEndDataController::class, 'create'])->name('transactions.create');
@@ -172,7 +173,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/day-end/{id}/edit', [DayStartEndDataController::class, 'edit'])->name('transactions.edit');
     Route::put('/day-end/{id}', [DayStartEndDataController::class, 'update'])->name('transactions.update');
     Route::delete('/day-end/{id}', [DayStartEndDataController::class, 'destroy'])->name('transactions.destroy');
-    Route::get('/check-day-end-today', [DayStartEndDataController::class, 'checkTransactionToday'])->name('transaction.today');
+    Route::get('/check-data-entry-status', [DayStartEndDataController::class, 'checkDataEntryStatus'])->name('checkDataEntryStatus');
 
 
     // Route to apply leave
