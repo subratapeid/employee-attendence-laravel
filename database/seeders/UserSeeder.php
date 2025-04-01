@@ -17,6 +17,21 @@ class UserSeeder extends Seeder
         $adminRole = Role::where('name', 'Admin')->first();
         $superAdminRole = Role::where('name', 'Super Admin')->first();
         $employeeRole = Role::where('name', 'Employee')->first();
+        $fieldGroupRole = Role::where('name', 'Field Group')->first();
+        
+        User::create([
+            'name' => 'Field Group',
+            'email' => 'fieldgroup@gmail.com',
+            'emp_id' => 'JT0301',
+            'password' => bcrypt('12345'),
+            'phone' => '9547415324',
+            'state' => 'Karnataka',
+            'district' => 'Bangalore',
+            'location' => 'Yelahanka',
+            'latitude' => '13.08379650',
+            'longitude' => '77.58638670',
+            'status' => 'Active',
+        ])->assignRole($fieldGroupRole);
 
         User::create([
             'name' => 'Subrata Porel',

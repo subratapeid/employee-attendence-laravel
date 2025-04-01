@@ -141,7 +141,7 @@
                                 <label class="form-label">User Role</label>
                                 <Select class="form-control" name="role" id="role" required>
                                     <option value="Employee" Selected>Employee</option>
-                                    <option value="User">User</option>
+                                    <option value="Field Group">Field Group</option>
                                     <option value="Guest">Guest</option>
                                     <option value="Admin">Admin</option>
                                 </Select>

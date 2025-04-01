@@ -312,6 +312,7 @@ $(document).ready(function () {
             success: function (response) {
                 toastr.success(response.message, response.title);
                 console.log(response.message);
+                checkDayBeginEntry();
                 // Close the camera popup after success
                 cameraPopup.classList.remove('visible');
                 // Update the toggle state and local storage
@@ -564,6 +565,7 @@ $(document).ready(function () {
                                 <input class="form-check-input" type="checkbox" name="issues_at_start[]" value="Customer Complaint" id="issues_at_start4">
                                 <label class="form-check-label" for="issues_at_start4">Customer Complaint</label>
                             </div>
+
                         </div>
                     </div>
     
@@ -637,6 +639,8 @@ $(document).ready(function () {
     // showDayBegainPopupForm();
     // showUnresolvedDutyPopup('unresolvedDuty');
     
+
+    function checkDayBeginEntry(){
         // Fetch the latest state from the server to show day begain popup
         $.ajax({
             url: checkDataEntryStatus,
@@ -653,5 +657,7 @@ $(document).ready(function () {
                 console.error(xhr.responseText);
             }
         });
+        }
+        checkDayBeginEntry();
 
 });

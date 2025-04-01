@@ -129,11 +129,19 @@
                                 <input type="text" class="form-control count" name="apy_count" placeholder="Enter count">
                             </div>
                             <div class="col-lg-3 col-md-6 col-6">
-                                <label class="form-label">SB Account</label>
+                                <label class="form-label">Total SB Account Opened</label>
                                 <input type="text" class="form-control count" name="sb_count" placeholder="Enter count">
                             </div>
                             <div class="col-lg-3 col-md-6 col-6">
-                                <label class="form-label">e-KYC Processed</label>
+                                <label class="form-label">Zero Balance SB Accounts</label>
+                                <input type="text" class="form-control count" name="sb_count" placeholder="Enter count">
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-6">
+                                <label class="form-label">Pending e-sign SB Account</label>
+                                <input type="text" class="form-control count" name="sb_count" placeholder="Enter count">
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-6">
+                                <label class="form-label">Pending signature capture SB Account</label>
                                 <input type="text" class="form-control count" name="ekyc_processed" placeholder="Enter count">
                             </div>
                         </div>
@@ -445,40 +453,41 @@
             });
     
             function validateFields(scrollToError = false) {
-                let isValid = true;
-                $('.is-invalid').removeClass('is-invalid');
-                $('.error-message').remove();
-                let firstInvalidField = null;
-    
-                // Validate Count Fields
-                $(".count").each(function () {
-                    let value = $(this).val();
-                    if (!/^\d+$/.test(value) || parseInt(value) <= 0) {
-                        showError($(this), "Please enter a valid count (positive integer).");
-                        isValid = false;
-                        if (!firstInvalidField) firstInvalidField = $(this);
-                    }
-                });
-    
-                // Validate Amount Fields
-                $(".amount").each(function () {
-                    let value = $(this).val();
-                    if (!/^\d+(\.\d{1,2})?$/.test(value) || parseFloat(value) <= 0) {
-                        showError($(this), "Please enter a valid amount (positive number with up to 2 decimal places).");
-                        isValid = false;
-                        if (!firstInvalidField) firstInvalidField = $(this);
-                    }
-                });
-    
-                // Scroll to first invalid field if needed
-                if (scrollToError && firstInvalidField) {
-                    $('html, body').animate({
-                        scrollTop: firstInvalidField.offset().top - 80
-                    }, 500);
-                }
-    
-                return isValid;
-            }
+    let isValid = true;
+    $('.is-invalid').removeClass('is-invalid');
+    $('.error-message').remove();
+    let firstInvalidField = null;
+
+    // Validate Count Fields (Allowing 0 and positive integers)
+    $(".count").each(function () {
+        let value = $(this).val();
+        if (!/^\d+$/.test(value) || parseInt(value) < 0) { // Allow 0 and positive integers
+            showError($(this), "Please enter a valid count (0 or a positive integer).");
+            isValid = false;
+            if (!firstInvalidField) firstInvalidField = $(this);
+        }
+    });
+
+    // Validate Amount Fields (Allowing 0 and positive numbers with up to 2 decimal places)
+    $(".amount").each(function () {
+        let value = $(this).val();
+        if (!/^\d+(\.\d{1,2})?$/.test(value) || parseFloat(value) < 0) { // Allow 0 and positive values
+            showError($(this), "Please enter a valid amount (0 or a positive number with up to 2 decimal places).");
+            isValid = false;
+            if (!firstInvalidField) firstInvalidField = $(this);
+        }
+    });
+
+    // Scroll to first invalid field if needed
+    if (scrollToError && firstInvalidField) {
+        $('html, body').animate({
+            scrollTop: firstInvalidField.offset().top - 80
+        }, 500);
+    }
+
+    return isValid;
+}
+
     
             function showError(element, message) {
                 if (!element.next(".error-message").length) {

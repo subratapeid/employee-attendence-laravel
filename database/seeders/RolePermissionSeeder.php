@@ -50,7 +50,7 @@ class RolePermissionSeeder extends Seeder
         // Insert fixed roles into the database
         $superAdminRole = Role::firstOrCreate(['name' => 'Super Admin', 'guard_name' => 'web']);
         $adminRole = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
-        $userRole = Role::firstOrCreate(['name' => 'User', 'guard_name' => 'web']);
+        $fieldGroupRole = Role::firstOrCreate(['name' => 'Field Group', 'guard_name' => 'web']);
         $employeeRole = Role::firstOrCreate(['name' => 'Employee', 'guard_name' => 'web']);
 
         // Assign all permissions to Super Admin
@@ -71,11 +71,13 @@ class RolePermissionSeeder extends Seeder
         ]);
 
         // Assign limited permissions to User
-        $userRole->syncPermissions([
-            'create-attendance',
-            'view-attendance',
-            'create-leave',
-            'view-leave',
+        $fieldGroupRole->syncPermissions([
+            'view-attendance', 
+            'view-report', 
+            'download-report', 
+            'edit-user', 
+            'create-leave', 
+            'view-activity'
         ]);
 
         // Assign limited permissions to Employee

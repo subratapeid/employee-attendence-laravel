@@ -38,6 +38,9 @@ return new class extends Migration {
             $table->integer('fd_count')->default(0);
             $table->integer('apy_count')->default(0);
             $table->integer('sb_count')->default(0);
+            $table->integer('zero_balance_sb_count')->default(0);
+            $table->integer('pending_esign_sb_count')->default(0);
+            $table->integer('pending_signature_sb_count')->default(0);
             $table->integer('ekyc_processed')->default(0);
             $table->decimal('deposited_amount_bank', 10, 2)->default(0.00);
             $table->decimal('closing_cash', 10, 2)->default(0.00);

@@ -220,7 +220,7 @@ class EmployeesController extends Controller implements HasMiddleware
         ]);
 
         // Add default password
-        $validatedData['password'] = bcrypt('abcd12345'); // Set your default password
+        $validatedData['password'] = bcrypt('12345'); // Set your default password
         $validatedData['status'] = 'Active';
         $user = User::create($validatedData);
         // Assign the role using Spatie
