@@ -14,9 +14,25 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
+    # Prevent direct access to sensitive files
+    <FilesMatch "(\.env|\.xml|\.json|\.lock|\.htaccess|\.htpasswd|composer\.(json|lock)|package\.(json|lock))$">
+        Order Allow,Deny
+        Deny from all
+    </FilesMatch>
+
+    # Allow access to assets inside the public folder (CSS, JS, images, etc.)
+    RewriteCond %{REQUEST_URI} ^/public/.*$ [OR]
+    RewriteCond %{REQUEST_URI} ^/storage/.*$ [OR]
+    RewriteCond %{REQUEST_URI} ^/assets/.*$
+    RewriteRule ^ - [L]
+
+    # Block direct access to all PHP files except index.php
+    RewriteCond %{REQUEST_FILENAME} !index.php$ [NC]
+    RewriteCond %{REQUEST_FILENAME} \.php$ [NC]
+    RewriteRule ^ - [F,L]
+
+    # Send all other requests to index.php
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
-
 </IfModule>
