@@ -530,59 +530,66 @@ $(document).ready(function () {
         popup.id = 'bcaPortalPopup';
         popup.classList.add('popup-overlay');
         popup.innerHTML = `
-            <div class="popup-content p-3 rounded bg-white shadow-lg">
-                <h2 class="text-center mb-3">Day Begin Details</h2>
-                <form id="dayBeginForm">
-                    <div class="mb-1">
-                        <label for="loginStatus" class="form-label">BCA Portal Login Status</label>
-                        <select id="loginStatus" name="loginStatus" class="form-control" required>
-                            <option value="" disabled selected>Select Status</option>
-                            <option value="Successful">Successful</option>
-                            <option value="Failure">Failure</option>
-                        </select>
-                    </div>
-                    <div class="mb-1">
-                        <label for="openingBalance" class="form-label">Opening Cash Balance (₹)</label>
-                        <input type="text" id="openingBalance" name="openingBalance" class="form-control" placeholder="Cash in hand at the day begin" required>
-                    </div>
-    
-                    <div class="mb-1">
-                        <label class="form-label">Technical/Operational issues at start:</label>
-                        <div class="border p-3 rounded">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="issues_at_start[]" value="Network Issue" id="issues_at_start1">
-                                <label class="form-check-label" for="issues_at_start1">Network Issue</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="issues_at_start[]" value="System Crash" id="issues_at_start2">
-                                <label class="form-check-label" for="issues_at_start2">System Crash</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="issues_at_start[]" value="Power Failure" id="issues_at_start3">
-                                <label class="form-check-label" for="issues_at_start3">Power Failure</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="issues_at_start[]" value="Customer Complaint" id="issues_at_start4">
-                                <label class="form-check-label" for="issues_at_start4">Customer Complaint</label>
-                            </div>
+        <div class="popup-content p-3 rounded bg-white shadow-lg">
+            <h2 class="text-center mb-3">Day Begin Details</h2>
+            <form id="dayBeginForm">
+                <div class="mb-1">
+                    <label for="loginStatus" class="form-label">BCA Portal Login Status</label>
+                    <select id="loginStatus" name="loginStatus" class="form-control" required>
+                        <option value="" disabled selected>Select Status</option>
+                        <option value="Successful">Successful</option>
+                        <option value="Failure">Failure</option>
+                    </select>
+                </div>
+                <div class="mb-1">
+                    <label for="openingBalance" class="form-label">Opening Cash Balance (₹)</label>
+                    <input type="text" id="openingBalance" name="openingBalance" class="form-control" placeholder="Cash in hand at the day begin" required>
+                </div>
 
+                <div class="mb-1">
+                    <label class="form-label">Technical/Operational Issues at Start:</label>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="issuesDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            Select Issues
+                        </button>
+                        <div class="dropdown-menu p-3" id="issuesDropdownMenu">
+                            <div class="form-check">
+                                <label class="form-check-label dropdown-option" for="issues_at_start1">Network Issue</label>
+                                <input class="form-check-input mt-2" type="checkbox" name="issues_at_start[]" value="Network Issue" id="issues_at_start1">
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label dropdown-option" for="issues_at_start2">System Crash</label>
+                                <input class="form-check-input mt-2" type="checkbox" name="issues_at_start[]" value="System Crash" id="issues_at_start2">
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label dropdown-option" for="issues_at_start3">Power Failure</label>
+                                <input class="form-check-input mt-2" type="checkbox" name="issues_at_start[]" value="Power Failure" id="issues_at_start3">
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label dropdown-option" for="issues_at_start4">Customer Complaint</label>
+                                <input class="form-check-input mt-2" type="checkbox" name="issues_at_start[]" value="Customer Complaint" id="issues_at_start4">
+                            </div>
                         </div>
                     </div>
-    
-                    <div class="mb-3">
-                        <label for="day_start_remarks" class="form-label">Remarks</label>
-                        <textarea id="day_start_remarks" name="day_start_remarks" class="form-control" rows="2" placeholder="Additional commands"></textarea>
-                    </div>
-                    <button type="submit" id="submit-btn" class="btn btn-primary w-100">
-                        <span id="submit-text">Submit</span>
-                        <span id="spinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
-                    </button>
-                </form>
-            </div>
-        `;
-    
+                </div>
+
+                <div class="mb-3">
+                    <label for="day_start_remarks" class="form-label">Remarks</label>
+                    <textarea id="day_start_remarks" name="day_start_remarks" class="form-control" rows="2" placeholder="Additional comments"></textarea>
+                </div>
+                <button type="submit" id="submit-btn" class="btn btn-primary w-100">
+                    <span id="submit-text">Submit</span>
+                    <span id="spinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                </button>
+            </form>
+        </div>
+    `;
         // Append the popup to the body
         document.body.appendChild(popup);
+        // Now attach the event listener after appending
+    document.querySelector("#issuesDropdownMenu").addEventListener("click", function (event) {
+        event.stopPropagation(); // Prevent dropdown from closing when clicking inside
+    });
     
         const form = document.getElementById('dayBeginForm');
         const submitBtn = document.getElementById('submit-btn');

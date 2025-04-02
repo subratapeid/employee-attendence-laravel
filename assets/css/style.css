@@ -1382,3 +1382,13 @@ h6 {
   font-size: 13px;
   color: #012970;
 }
+
+
+
+.dropdown-option {
+  cursor: pointer; /* Hand pointer on hover */
+  padding: 5px; /* Some padding for better click area */
+}
+.dropdown-option input {
+  cursor: pointer; /* Ensure checkbox also shows hand cursor */
+}

@@ -18,7 +18,7 @@ class DayStartEnd extends Model
         'fund_transfer_amount', 'tpd_count', 'tpd_amount', 
         'other_count', 'other_amount', 'pmjdy_count', 
         'pmjjby_count', 'pmsby_count', 'rd_count', 'fd_count', 
-        'apy_count', 'sb_count', 'ekyc_processed', 
+        'apy_count', 'sb_count', 'zero_balance_sb_count', 'pending_esign_sb_count', 'pending_signature_sb_count',
         'deposited_amount_bank', 'closing_cash', 
         'pending_transaction_count', 'device_issues', 
         'issue_details', 'logout_status', 'remarks', 'challenges'

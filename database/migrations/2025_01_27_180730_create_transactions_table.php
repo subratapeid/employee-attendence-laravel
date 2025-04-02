@@ -53,7 +53,7 @@ return new class extends Migration {
             $table->string('logout_status')->default('Success');
             $table->text('remarks')->nullable();
             $table->json('challenges')->nullable(); // Store challenges as JSON
-            $table->text('entry_type')->default('start');
+            $table->text('entry_type');
         
             // Foreign key
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

@@ -134,15 +134,15 @@
                             </div>
                             <div class="col-lg-3 col-md-6 col-6">
                                 <label class="form-label">Zero Balance SB Accounts</label>
-                                <input type="text" class="form-control count" name="sb_count" placeholder="Enter count">
+                                <input type="text" class="form-control count" name="zero_balance_sb_count" placeholder="Enter count">
                             </div>
                             <div class="col-lg-6 col-md-6 col-6">
                                 <label class="form-label">Pending e-sign SB Account</label>
-                                <input type="text" class="form-control count" name="sb_count" placeholder="Enter count">
+                                <input type="text" class="form-control count" name="pending_esign_sb_count" placeholder="Enter count">
                             </div>
                             <div class="col-lg-6 col-md-6 col-6">
                                 <label class="form-label">Pending signature capture SB Account</label>
-                                <input type="text" class="form-control count" name="ekyc_processed" placeholder="Enter count">
+                                <input type="text" class="form-control count" name="pending_signature_sb_count" placeholder="Enter count">
                             </div>
                         </div>
                     
@@ -196,14 +196,39 @@
                                     <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                         Select Challenges
                                     </button>
-                                    <ul class="dropdown-menu p-3" aria-labelledby="dropdownMenuButton">
-                                        <li><input type="checkbox" name="challenges[]" value="Network Issue"> Network Issue</li>
-                                        <li><input type="checkbox" name="challenges[]" value="System Crash"> System Crash</li>
-                                        <li><input type="checkbox" name="challenges[]" value="Power Failure"> Power Failure</li>
-                                        <li><input type="checkbox" name="challenges[]" value="Customer Complaint"> Customer Complaint</li>
+                                    <ul class="dropdown-menu p-3" aria-labelledby="dropdownMenuButton" id="challengeDropdown">
+                                        <li>
+                                            <label class="d-flex align-items-center gap-2 dropdown-option">
+                                                <input type="checkbox" name="challenges[]" value="Network Issue"> Network Issue
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="d-flex align-items-center gap-2 dropdown-option">
+                                                <input type="checkbox" name="challenges[]" value="System Crash"> System Crash
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="d-flex align-items-center gap-2 dropdown-option">
+                                                <input type="checkbox" name="challenges[]" value="Power Failure"> Power Failure
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="d-flex align-items-center gap-2 dropdown-option">
+                                                <input type="checkbox" name="challenges[]" value="Customer Complaint"> Customer Complaint
+                                            </label>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
+                    
+                        
+                        <script>
+                            // Prevent dropdown from closing when clicking on a checkbox
+                            document.getElementById('challengeDropdown').addEventListener('click', function(event) {
+                                event.stopPropagation();
+                            });
+                        </script>
+                        
                             
                             <div class="col-lg-4 col-md-6">
                                 <label class="form-label">Logout status</label>
@@ -516,9 +541,9 @@
             });
     
             // Validate on input change
-            $(document).on("input", ".count, .amount", function () {
-                validateFields(false);
-            });
+            // $(document).on("input", ".count, .amount", function () {
+            //     validateFields(false);
+            // });
     
             // Form Submission with Spinner Inside Button
             $('#transactionForm').on('submit', function (event) {
@@ -532,13 +557,13 @@
                 spinner.show();
                 submitButton.prop("disabled", true);
     
-                if (!validateFields(true)) {
-                    // Hide spinner and enable button if validation fails
-                    buttonText.show();
-                    spinner.hide();
-                    submitButton.prop("disabled", false);
-                    return;
-                }
+                // if (!validateFields(true)) {
+                //     // Hide spinner and enable button if validation fails
+                //     buttonText.show();
+                //     spinner.hide();
+                //     submitButton.prop("disabled", false);
+                //     return;
+                // }
     
                 var formData = $(this).serialize();
     
