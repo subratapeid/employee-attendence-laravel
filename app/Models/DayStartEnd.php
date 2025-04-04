@@ -23,5 +23,12 @@ class DayStartEnd extends Model
         'pending_transaction_count', 'device_issues', 
         'issue_details', 'logout_status', 'remarks', 'challenges'
     ];
+
+    public function user()
+{
+    return $this->belongsTo(User::class);
+}
     
 }
+
+

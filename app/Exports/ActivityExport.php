@@ -1,47 +1,67 @@
 <?php
+
 namespace App\Exports;
 
-use App\Models\User;
+use App\Models\DayStartEnd;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Carbon\Carbon;
 
-class ActivityExport implements FromCollection, WithHeadings, WithTitle
+class ActivityExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
-    protected $filter;
+    protected $date;
 
-    public function __construct($filter)
+    public function __construct($date = null)
     {
-        $this->filter = $filter;
+        $this->date = $date; // e.g. '2025-04-04'
     }
 
     public function collection()
     {
-        // Fetch activity data based on the filter
-        $query = User::query();
+        $query = DayStartEnd::with('user');
 
-        // Adjust query based on filter
-        if ($this->filter == 'today') {
-            $query->whereDate('created_at', now()->toDateString());
-        } elseif ($this->filter == 'this_week') {
-            $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
-        } elseif ($this->filter == 'this_month') {
-            $query->whereMonth('created_at', now()->month);
-        } elseif ($this->filter == 'this_year') {
-            $query->whereYear('created_at', now()->year);
+        // Handle different date filters
+        if ($this->date === 'today') {
+            $query->whereDate('created_at', Carbon::today());
+        } elseif ($this->date === 'yesterday') {
+            $query->whereDate('created_at', Carbon::yesterday());
+        } elseif ($this->isValidDateFormat($this->date, 'Y-m-d')) {
+            $query->whereDate('created_at', $this->date);
         }
 
-        // Get the activity data
-        return $query->get(['id', 'name', 'created_at']);
+        return $query->get()->map(function ($record) {
+            return [
+                'Name'       => $record->user->name ?? '',
+                'Email'      => $record->user->email ?? '',
+                'Emp ID'     => $record->user->emp_id ?? '',
+                'Phone'      => $record->user->phone ?? '',
+                'Start Time' => $record->start_time,
+                'End Time'   => $record->end_time,
+                'Date'       => $record->date,
+            ];
+        });
     }
 
     public function headings(): array
     {
-        return ['Employee ID', 'Employee Name', 'Activity', 'Activity Date'];
+        return [
+            'Name',
+            'Email',
+            'Emp ID',
+            'Phone',
+            'Start Time',
+            'End Time',
+            'Date',
+        ];
     }
 
-    public function title(): string
+    /**
+     * Validates if a date is in the specified format (default: Y-m-d)
+     */
+    private function isValidDateFormat($date, $format = 'Y-m-d')
     {
-        return 'Activity Report';
+        $d = \DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) === $date;
     }
 }

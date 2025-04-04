@@ -58,18 +58,19 @@ class ReportsController extends Controller implements HasMiddleware
     }
 
     // Export report using Maatwebsite Excel
-    public function exportCSV(Request $request)
-    {
-        $report = $request->input('report');
-        $filter = $request->input('filter');
+// In ReportsController.php
+public function exportCSV(Request $request)
+{
+    $report = $request->input('report');         // 'activity'
+    $filterDate = $request->input('filter');       // '2025-04-03' or 'today' or 'yesterday'
 
-        // Determine which export to use based on the report type
-        if ($report == 'attendance') {
-            return Excel::download(new AttendanceExport($filter), 'attendance_report_' . $filter . '.xlsx');
-        } else {
-            return Excel::download(new ActivityExport($filter), 'activity_report_' . $filter . '.xlsx');
-        }
+    if ($report == 'attendance') {
+        return Excel::download(new AttendanceExport($filterDate), 'attendance_report_' . $filterDate . '.xlsx');
+    } else {
+        return Excel::download(new ActivityExport($filterDate), 'activity_report_' . $filterDate . '.xlsx');
     }
+}
+
 
     private function getAttendanceData($filter)
     {

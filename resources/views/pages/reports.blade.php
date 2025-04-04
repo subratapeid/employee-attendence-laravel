@@ -8,56 +8,45 @@
             </ol>
         </nav>
     </div>
+    <div id="calendar-overlay" style="display: none;"></div>
 
     <section class="section report mt-4 min-vh-100">
-        {{-- <div class="container"> --}}
         <div class="row g-4">
-            <!-- Employee Attendance Report Card -->
+            <!-- Employee Attendance Report -->
             <div class="col-12 col-md-6">
                 <div class="card shadow-sm border-0 p-3 position-relative" id="attendance-card">
-                    <!-- Filter Dropdown for Employee Attendance -->
                     <div class="filter position-absolute top-0 end-0 m-3">
                         <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <li class="dropdown-header text-start">
-                                <h6>Filter</h6>
-                            </li>
-                            <li><a class="dropdown-item filter-option" data-filter="this_month" href="#"
-                                    data-report="attendance">This Month</a></li>
-                            <li><a class="dropdown-item filter-option" data-filter="previous_month" href="#"
-                                    data-report="attendance">Previous Month</a></li>
-                            <li><a class="dropdown-item filter-option" data-filter="this_year" href="#"
-                                    data-report="attendance">This Year</a></li>
-                            <li><a class="dropdown-item filter-option" data-filter="previous_year" href="#"
-                                    data-report="attendance">Previous Year</a></li>
+                            <li class="dropdown-header text-start"><h6>Filter</h6></li>
+                            <li><a class="dropdown-item filter-option" data-filter="this_month" href="#" data-report="attendance">This Month</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="previous_month" href="#" data-report="attendance">Previous Month</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="this_year" href="#" data-report="attendance">This Year</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="previous_year" href="#" data-report="attendance">Previous Year</a></li>
                         </ul>
                     </div>
 
                     <h5 class="report-card-title text-center pe-3">Employee Attendance Report</h5>
-                    <h6 class="report-card-title text-center text-muted" id="selected-filter-attendance">This Month
-                    </h6>
+                    <h6 class="report-card-title text-center text-muted" id="selected-filter-attendance">This Month</h6>
 
-                    <div
-                        class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 mb-4 mt-3">
-                        <!-- First Statistic -->
+                    <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 mb-4 mt-3">
                         <div class="d-flex align-items-center w-100">
                             <div class="card-icon bg-primary text-white p-3 rounded-circle me-3">
                                 <i class="bi bi-person-check" style="font-size: 2rem;"></i>
                             </div>
                             <div>
                                 <h6 class="mb-0">Total Attendance</h6>
-                                <h4 class="fw-bold" id="attendance-stat-1">150</h4>
+                                <h4 class="fw-bold" id="attendance-stat-1">0</h4>
                             </div>
                         </div>
 
-                        <!-- Second Statistic -->
                         <div class="d-flex align-items-center w-100">
                             <div class="card-icon bg-danger text-white p-3 rounded-circle me-3">
                                 <i class="bi bi-person-dash" style="font-size: 2rem;"></i>
                             </div>
                             <div>
                                 <h6 class="mb-0">Absent</h6>
-                                <h4 class="fw-bold" id="attendance-stat-2">10</h4>
+                                <h4 class="fw-bold" id="attendance-stat-2">0</h4>
                             </div>
                         </div>
                     </div>
@@ -68,55 +57,42 @@
                 </div>
             </div>
 
-            <!-- Employee Activity Report Card -->
+            <!-- Employee Activity Report -->
             <div class="col-12 col-md-6">
                 <div class="card shadow-sm border-0 p-3 position-relative" id="activity-card">
-                    <!-- Filter Dropdown for Employee Activity -->
                     <div class="filter position-absolute top-0 end-0 m-3">
                         <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <li class="dropdown-header text-start">
-                                <h6>Filter</h6>
-                            </li>
-
-                            <li><a class="dropdown-item filter-option" data-filter="this_month" href="#"
-                                    data-report="activity">This Month</a></li>
-                            <li><a class="dropdown-item filter-option" data-filter="previous_month" href="#"
-                                    data-report="activity">Previous Month</a></li>
-                            <li><a class="dropdown-item filter-option" data-filter="this_year" href="#"
-                                    data-report="activity">This Year</a></li>
-                            <li><a class="dropdown-item filter-option" data-filter="previous_year" href="#"
-                                    data-report="activity">Previous Year</a></li>
+                            <li class="dropdown-header text-start"><h6>Filter</h6></li>
+                            <li><a class="dropdown-item filter-option" data-filter="today" href="#" data-report="activity">Today</a></li>
+                            <li><a class="dropdown-item filter-option" data-filter="yesterday" href="#" data-report="activity">Yesterday</a></li>
+                            <li>
+                                <a class="dropdown-item" id="customDatePickerTrigger" href="#" data-report="activity" data-filter="custom">Custom Date</a>
+                              </li>
                         </ul>
                     </div>
 
                     <h5 class="report-card-title text-center">Employee Activity Report</h5>
-                    <h6 class="report-card-title text-center text-muted" id="selected-filter-activity">This Month
-                    </h6>
+                    <h6 class="report-card-title text-center text-muted" id="selected-filter-activity">Today</h6>
 
-                    {{-- <div class="d-flex align-items-center justify-content-center gap-5 mb-4 mt-4"> --}}
-                    <div
-                        class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 mb-4 mt-3">
-
-                        <!-- First Statistic -->
+                    <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 mb-4 mt-3">
                         <div class="d-flex align-items-center w-100">
                             <div class="card-icon bg-success text-white p-3 rounded-circle me-3">
                                 <i class="bi bi-check-circle" style="font-size: 2rem;"></i>
                             </div>
                             <div>
                                 <h6 class="mb-0">Total Transactions</h6>
-                                <h4 class="fw-bold" id="activity-stat-1">200</h4>
+                                <h4 class="fw-bold" id="activity-stat-1">0</h4>
                             </div>
                         </div>
 
-                        <!-- Second Statistic -->
                         <div class="d-flex align-items-center w-100">
                             <div class="card-icon bg-warning text-white p-3 rounded-circle me-3">
                                 <i class="bi bi-exclamation-circle" style="font-size: 2rem;"></i>
                             </div>
                             <div>
                                 <h6 class="mb-0">Total Enrolments</h6>
-                                <h4 class="fw-bold" id="activity-stat-2">5</h4>
+                                <h4 class="fw-bold" id="activity-stat-2">0</h4>
                             </div>
                         </div>
                     </div>
@@ -126,206 +102,178 @@
                     </a>
                 </div>
             </div>
+        </div>
+        {{-- <input type="date" id="hiddenCustomDateInput" style="opacity: 0; position: absolute; z-index: 9999; width: 1px; height: 1px; top: 0; left: 0;" /> --}}
+        <input type="text" id="hiddenCustomDateInput" class="form-control d-none" />
 
-        </div>
-        </div>
+
     </section>
+    <style>
+        /* Blur & dark background behind calendar */
+        #calendar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            backdrop-filter: blur(5px);
+            background-color: rgba(0, 0, 0, 0.342);
+            z-index: 99998;
+        }
+    
+        /* Center the calendar popup */
+        .flatpickr-calendar {
+            position: fixed !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            z-index: 99999 !important;
+        }
+        .flatpickr-day.flatpickr-disabled {
+        color: rgb(13 13 13 / 40%) !important; /* Light but readable */
+        /* background-color: #f9f9f9 !important; Slight grey background */
+        cursor: not-allowed !important;
+        }
+    </style>
+    
+    
 
-    <!-- jQuery Script to Handle Filter Change per Card and Export -->
-    <script>
-        // $(document).ready(function() {
-        //     // Default Filter on Page Load (This Month)
-        //     loadReportData('attendance', 'this_month');
-        //     loadReportData('activity', 'this_month');
+    <!-- jQuery Script -->
+    <!-- 👇 Hidden input for custom date -->
 
-        //     // When filter option is clicked for a specific card
-        //     $('.filter-option').on('click', function(e) {
-        //         e.preventDefault();
+<script>
+    $(document).ready(function () {
+        $('a[href="#"]').on('click', function (e) {
+    e.preventDefault(); // Stop that annoying # and page scroll
+});
 
-        //         var selectedFilter = $(this).data('filter'); // Get the selected filter
-        //         var reportName = $(this).data('report'); // Get the report name for the card
+        // 👇 Load default data for both cards
+        loadInitialReportData();
 
-        //         // Update the filter title for the specific card
-        //         $('#selected-filter-' + reportName).text(selectedFilter.charAt(0).toUpperCase() +
-        //             selectedFilter.slice(1).replace('_', ' '));
+        // 👇 Handle filter change
+        $('.filter-option').on('click', function (e) {
+            e.preventDefault();
+            const selectedFilter = $(this).data('filter');
+            const report = $(this).data('report');
 
-        //         // Remove 'active' class from all filter options and add to the selected one
-        //         $('.filter-option').removeClass('active'); // Remove 'active' from all filter options
-        //         $(this).addClass('active'); // Add 'active' to the clicked filter option
+            // Skip if custom filter
+            if (selectedFilter === 'custom') return;
 
-        //         // Load the data based on the selected filter
-        //         loadReportData(reportName, selectedFilter);
-        //     });
+            // Format label
+            const formatted = selectedFilter.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            $('#selected-filter-' + report).text(formatted);
 
-        //     // Export functionality for Attendance report
-        //     $('#attendance-export-btn').click(function() {
-        //         var filter = $('#selected-filter-attendance').text().toLowerCase().replace(' ', '_');
-        //         window.location.href = "/export/csv?report=attendance&filter=" + filter;
-        //     });
+            $('.filter-option').removeClass('active');
+            $(this).addClass('active');
 
-        //     // Export functionality for Activity report
-        //     $('#activity-export-btn').click(function() {
-        //         var filter = $('#selected-filter-activity').text().toLowerCase().replace(' ', '_');
-        //         window.location.href = "/export/csv?report=activity&filter=" + filter;
-        //     });
-        // });
+            loadReportData(report, selectedFilter);
+        });
+        
+        
+        const customDateInput = document.getElementById("hiddenCustomDateInput");
 
-        // // Function to Load Report Data based on Filter
-        // function loadReportData(report, filter) {
-        //     // Set Loading State
-        //     $('#' + report + '-stat-1').text('Loading...');
-        //     $('#' + report + '-stat-2').text('Loading...');
+const flatpickrInstance = flatpickr(customDateInput, {
+    dateFormat: "Y-m-d",
+    clickOpens: false,
+    defaultDate: null,
+    allowInput: true,
+    maxDate: "today",
 
-        //     $.ajax({
-        //         url: '/reports/filter', // Modify this URL with your controller's endpoint
-        //         type: 'GET',
-        //         data: {
-        //             report: report,
-        //             filter: filter
-        //         },
-        //         beforeSend: function() {
-        //             // Optionally show a loading spinner or message while waiting for response
-        //             console.log("Loading data for " + report + "...");
-        //         },
-        //         success: function(response) {
-        //             if (response && response.total !== undefined && response.pending !== undefined) {
-        //                 $('#' + report + '-stat-1').text(response.total); // Update total value
-        //                 $('#' + report + '-stat-2').text(response.pending); // Update pending value
-        //             } else {
-        //                 showError(report); // Show error if response data is unexpected
-        //             }
-        //         },
-        //         error: function(err) {
-        //             console.error("Error:", err);
-        //             showError(report); // Show error message in case of failure
-        //         }
-        //     });
-        // }
+    onChange: function (selectedDates, dateStr, instance) {
+        if (selectedDates.length > 0) {
+            $('#calendar-overlay').hide(); // ✅ hide overlay on selection
+            $('#selected-filter-activity').text("Date:" + dateStr);
+            loadReportData('activity', dateStr.replace(/-/g, '_'));
+        }
+    },
 
-        // // Function to Show Error State
-        // function showError(report) {
-        //     $('#' + report + '-stat-1').text('0'); // Default to 0 if error occurs
-        //     $('#' + report + '-stat-2').text('0'); // Default to 0 if error occurs
-        //     alert("Error loading data for " + report);
-        // }
+    onClose: function() {
+        $('#calendar-overlay').hide(); // just hide overlay, nothing else
+    }
+});
 
+$('#customDatePickerTrigger').click(function (e) {
+    e.preventDefault();
+    $('#calendar-overlay').show();
+    flatpickrInstance.open();
+});
 
+        
 
-        $(document).ready(function() {
-            // Load both reports' data on page load (This Month by default)
-            // loadInitialReportData();
-
-            // When filter option is clicked for a specific card
-            $('.filter-option').on('click', function(e) {
-                e.preventDefault();
-
-                var selectedFilter = $(this).data('filter'); // Get the selected filter
-                var reportName = $(this).data('report'); // Get the report name for the card
-
-                // Update the filter title for the specific card
-                $('#selected-filter-' + reportName).text(selectedFilter.charAt(0).toUpperCase() +
-                    selectedFilter.slice(1).replace('_', ' '));
-
-                // Remove 'active' class from all filter options and add to the selected one
-                $('.filter-option').removeClass('active'); // Remove 'active' from all filter options
-                $(this).addClass('active'); // Add 'active' to the clicked filter option
-
-                // Load the data based on the selected filter
-                loadReportData(reportName, selectedFilter);
-            });
-
-            // Export functionality for Attendance report
-            $('#attendance-export-btn').click(function() {
-                var filter = $('#selected-filter-attendance').text().toLowerCase().replace(' ', '_');
-                // window.location.href = "/export/csv?report=attendance&filter=" + filter;
-                window.location.href = "export-xls?report=attendance&filter=" + filter;
-
-            });
-
-            // Export functionality for Activity report
-            $('#activity-export-btn').click(function() {
-                var filter = $('#selected-filter-activity').text().toLowerCase().replace(' ', '_');
-                window.location.href = "export/csv?report=activity&filter=" + filter;
-            });
+        // 👇 Attendance Export
+        $('#attendance-export-btn').click(function () {
+            const filter = $('#selected-filter-attendance').text().toLowerCase().replace(/ /g, '_');
+            window.location.href = "export-xls?report=attendance&filter=" + filter;
         });
 
-        // Function to Load Both Report Data (attendance and activity) on Page Load
-        function loadInitialReportData() {
-            // Set Loading State
-            $('#attendance-stat-1, #attendance-stat-2').text('Loading...');
-            $('#activity-stat-1, #activity-stat-2').text('Loading...');
+        // 👇 Activity Export
+        $('#activity-export-btn').click(function () {
+            const filter = $('#selected-filter-activity').text().toLowerCase().replace(/ /g, '_').replace('date:', '').trim();
+            window.location.href = "export/csv?report=activity&filter=" + filter;
+        });
+    });
 
-            $.ajax({
-                url: '/reports/filter', // Modify this URL with your controller's endpoint
-                type: 'GET',
-                data: {
-                    report: 'both', // We'll use a special 'both' report flag to fetch both reports
-                    filter: 'this_month' // Default filter
-                },
-                beforeSend: function() {
-                    console.log("Loading both reports data...");
-                },
-                success: function(response) {
-                    // Handle the success response for both reports
-                    if (response.attendance && response.activity) {
-                        // Update stats for attendance
-                        $('#attendance-stat-1').text(response.attendance.total);
-                        $('#attendance-stat-2').text(response.attendance.pending);
-
-                        // Update stats for activity
-                        $('#activity-stat-1').text(response.activity.total);
-                        $('#activity-stat-2').text(response.activity.pending);
-                    } else {
-                        showError(); // Show error if response is not in the expected format
-                    }
-                },
-                error: function(err) {
-                    console.error("Error:", err);
-                    showError(); // Show error message in case of failure
+    function loadInitialReportData() {
+        $('#attendance-stat-1, #attendance-stat-2, #activity-stat-1, #activity-stat-2').text('Loading...');
+        $.ajax({
+            url: '/reports/filter',
+            method: 'GET',
+            data: { report: 'both', filter: 'this_month' },
+            success: function (res) {
+                if (res.attendance) {
+                    $('#attendance-stat-1').text(res.attendance.total);
+                    $('#attendance-stat-2').text(res.attendance.pending);
                 }
-            });
-        }
-
-        // Function to Load Report Data based on Filter for Each Report
-        function loadReportData(report, filter) {
-            // Set Loading State
-            $('#' + report + '-stat-1').text('Loading...');
-            $('#' + report + '-stat-2').text('Loading...');
-
-            $.ajax({
-                url: '/reports/filter', // Modify this URL with your controller's endpoint
-                type: 'GET',
-                data: {
-                    report: report, // Specify the report (attendance or activity)
-                    filter: filter // The selected filter
-                },
-                success: function(response) {
-                    if (response && response.total !== undefined && response.pending !== undefined) {
-                        $('#' + report + '-stat-1').text(response.total); // Update total value
-                        $('#' + report + '-stat-2').text(response.pending); // Update pending value
-                    } else {
-                        showError(report); // Show error if response data is unexpected
-                    }
-                },
-                error: function(err) {
-                    console.error("Error:", err);
-                    showError(report); // Show error message in case of failure
+                if (res.activity) {
+                    $('#activity-stat-1').text(res.activity.total);
+                    $('#activity-stat-2').text(res.activity.pending);
                 }
-            });
-        }
-
-        // Function to Show Error State
-        function showError(report) {
-            if (report) {
-                $('#' + report + '-stat-1').text('0'); // Default to 0 if error occurs
-                $('#' + report + '-stat-2').text('0'); // Default to 0 if error occurs
-            } else {
-                // Show error for both reports if needed
-                $('#attendance-stat-1, #attendance-stat-2').text('0');
-                $('#activity-stat-1, #activity-stat-2').text('0');
+            },
+            error: function () {
+                showError();
             }
-            alert("Error loading data. Please try again.");
-        }
-    </script>
+        });
+    }
 
+    function loadReportData(report, filter) {
+        $('#' + report + '-stat-1, #' + report + '-stat-2').text('Loading...');
+
+        $.ajax({
+            url: '/reports/filter',
+            method: 'GET',
+            data: {
+                report: report,
+                filter: filter
+            },
+            success: function (res) {
+                if (res.total !== undefined && res.pending !== undefined) {
+                    $('#' + report + '-stat-1').text(res.total);
+                    $('#' + report + '-stat-2').text(res.pending);
+                } else {
+                    // fallback for "both" response
+                    if (res[report]) {
+                        $('#' + report + '-stat-1').text(res[report].total);
+                        $('#' + report + '-stat-2').text(res[report].pending);
+                    } else {
+                        showError(report);
+                    }
+                }
+            },
+            error: function () {
+                showError(report);
+            }
+        });
+    }
+
+    function showError(report = null) {
+        if (report) {
+            $('#' + report + '-stat-1, #' + report + '-stat-2').text('0');
+        } else {
+            $('#attendance-stat-1, #attendance-stat-2, #activity-stat-1, #activity-stat-2').text('0');
+        }
+        alert('Error loading data. Please try again.');
+    }
+</script>
+
+    
 </x-app-layout>
