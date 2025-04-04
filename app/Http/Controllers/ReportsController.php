@@ -61,15 +61,40 @@ class ReportsController extends Controller implements HasMiddleware
 // In ReportsController.php
 public function exportCSV(Request $request)
 {
-    $report = $request->input('report');         // 'activity'
-    $filterDate = $request->input('filter');       // '2025-04-03' or 'today' or 'yesterday'
+    $report = $request->input('report');         // 'attendance' or 'activity'
+    $filterDate = $request->input('filter');     // '2025-04-03' or 'today' or 'yesterday'
 
-    if ($report == 'attendance') {
-        return Excel::download(new AttendanceExport($filterDate), 'attendance_report_' . $filterDate . '.xlsx');
+    $formattedDate = '';
+
+    if ($report === 'activity') {
+        // For activity, just one date in format: (04-April-2025)
+        if ($filterDate === 'today') {
+            $formattedDate = Carbon::today()->format('d-F-Y');
+        } elseif ($filterDate === 'yesterday') {
+            $formattedDate = Carbon::yesterday()->format('d-F-Y');
+        } else {
+            $formattedDate = Carbon::parse($filterDate)->format('d-F-Y');
+        }
+
+        $fileName = 'activity_report(' . $formattedDate . ').xlsx';
+        return Excel::download(new ActivityExport($filterDate), $fileName);
+
     } else {
-        return Excel::download(new ActivityExport($filterDate), 'activity_report_' . $filterDate . '.xlsx');
+        // For attendance, full month range: (01-April-2025 to 30-April-2025)
+        try {
+            $carbonDate = Carbon::parse($filterDate);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Invalid date provided.'], 400);
+        }
+
+        $startOfMonth = $carbonDate->copy()->startOfMonth()->format('d-F-Y');
+        $endOfMonth = $carbonDate->copy()->endOfMonth()->format('d-F-Y');
+
+        $fileName = 'attendance_report(' . $startOfMonth . ' to ' . $endOfMonth . ').xlsx';
+        return Excel::download(new AttendanceExport($filterDate), $fileName);
     }
 }
+
 
 
     private function getAttendanceData($filter)
