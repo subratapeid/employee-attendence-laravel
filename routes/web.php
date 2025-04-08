@@ -198,8 +198,19 @@ Route::get('/download/{filename}', function ($filename) {
 });
 
 
-// For changing app path
-// });
 
+
+// Storage Link (only for admin or super-admin)
+Route::get('/link-storage', function () {
+    Artisan::call('storage:link');
+    return '✅ Storage linked successfully!';
+})->middleware(['auth', 'role:Admin|Super Admin']);
+
+
+// Clear Cache (only for admin or super-admin)
+Route::get('/clear-cache', function () {
+    Artisan::call('optimize:clear');
+    return '♻️ All caches cleared!';
+})->middleware(['auth', 'role:Admin|Super Admin']);
 
 require __DIR__ . '/auth.php';
