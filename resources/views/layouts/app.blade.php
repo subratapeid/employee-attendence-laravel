@@ -29,26 +29,24 @@
 
 
     <!-- bootstrap style cdn -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('assets/cdn/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     {{-- toaster --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/cdn/toastr.min.css') }}">
     <!-- Template Main CSS File -->
     <link href="{{ asset('assets/css/style.css')}}" rel="stylesheet">
     <link href="{{ asset('assets/css/toggle.css')}}" rel="stylesheet">
     <!-- Material Design Icons (MDI) CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="{{ asset('assets/cdn/materialdesignicons.min.css') }}" rel="stylesheet">
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.css" />
+    <script src="{{ asset('assets/cdn/jquery-3.6.4.min.js') }}"></script>
+    <script src="{{ asset('assets/cdn/sweetalert2.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('assets/cdn/sweetalert2.css') }}" />
 
     <!-- Flatpickr CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
+<link rel="stylesheet" href="{{ asset('assets/cdn/flatpickr.min.css') }}">
+{{-- Define routes for js files --}}
+<script src="{{ url('/js/config.js') }}"></script>
 </head>
 
 <body class="font-sans antialiased">
@@ -131,43 +129,6 @@
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
 
-{{-- Define routes for js files --}}
-<script>
-    var getTime = "{{ route('get-time') }}";
-    var getDutyStatus = "{{ route('duty-status') }}";
-    var postDutyStatus = "{{ route('post-duty-status') }}";
-    var resolveDuty = "{{ route('resolve-duty') }}";
-    var startDutyDataSave = "{{ route('startDutyDataSave') }}";
-    var checkDataEntryStatus = "{{ route('checkDataEntryStatus') }}";
-
-    var dashboardData = "{{ route('dashboard-data') }}";
-    var getTotalWorkingHours = "{{ route('getTotalWorkingHours') }}";
-    var getAttendanceCount = "{{ route('getAttendanceCount') }}";
-    var getTotalLeaves = "{{ route('getTotalLeaves') }}";
-    var getLateArrivals = "{{ route('getLateArrivals') }}";
-    var getEarlyDepartures = "{{ route('getEarlyDepartures') }}";
-    var getOvertime = "{{ route('getOvertime') }}";
-
-    var getAdminDashboardData = "{{ route('getAdminDashboardData') }}";
-    var getAdminAttendanceCount = "{{ route('getAdminAttendanceCount') }}";
-    var getAdminTotalLeaves = "{{ route('getAdminTotalLeaves') }}";
-    var getAdminTotalAbsent = "{{ route('getAdminTotalAbsent') }}";
-    var getAdminLateArrivals = "{{ route('getAdminLateArrivals') }}";
-    var getAdminEarlyDepartures = "{{ route('getAdminEarlyDepartures') }}";
-    var getAdminOntime = "{{ route('getAdminOntime') }}";
-
-    var getCalendarData = "{{ route('getCalendarData') }}";
-    var getDuties = "{{ route('getDuties') }}";
-    var getAvailableOptions = "{{ route('getAvailableOptions') }}";
-
-    var transactionToday = "";
-    var transactions = "{{ route('transactions.index') }}";
-
-
-    var baseUrl = "{{ asset('public') }}";
-    
-</script>
-
     <!-- Vendor JS Files -->
     <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{ asset('assets/vendor/apexcharts/apexcharts.min.js')}}"></script>
@@ -178,9 +139,9 @@
     <script src="{{ asset('assets/vendor/tinymce/tinymce.min.js')}}"></script>
     <script src="{{ asset('assets/vendor/php-email-form/validate.js')}}"></script>
     {{-- Toaster --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="{{ asset('assets/cdn/toastr.min.js') }}"></script>
     <!-- Flatpickr JS -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="{{ asset('assets/cdn/flatpickr.js') }}"></script>
 
     <!-- Bootstrap Js CDN -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script> -->

@@ -26,7 +26,6 @@ class SecureHeaders
     "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; " .
     "img-src 'self' data: https:;"
 );
-
         $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
         return $response;
     }

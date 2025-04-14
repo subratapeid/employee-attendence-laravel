@@ -198,6 +198,9 @@ Route::get('/download/{filename}', function ($filename) {
 });
 
 
+Route::get('/js/config.js', function () {
+    return response()->view('js.config')->header('Content-Type', 'application/javascript');
+});
 
 
 // Storage Link (only for admin or super-admin)
